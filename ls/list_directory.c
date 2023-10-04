@@ -56,7 +56,6 @@ void list_directory(const char *dir, int op_a, int op_l)
         {
             permissions(file_stat);
 
-            char buff[20];
             struct tm *timeinfo = localtime(&(file_stat.st_mtime));
             strftime(buff, 20, "%b %d %H:%M", timeinfo);
 
