@@ -17,6 +17,9 @@
 
 void list_directory(const char *dir, int op_a, int op_l)
 {
+    struct dirent *d;
+    struct stat file_stat;
+    char filepath[512];
     DIR *dh = opendir(dir);
 
     if (!dh)
@@ -40,8 +43,38 @@ void list_directory(const char *dir, int op_a, int op_l)
         /* If hidden files are found we continue */
         if (!op_a && d->d_name[0] == '.')
             continue;
-        printf("%s  ", d->d_name);
-        if(op_l)
-            printf("\n");
+
+        snprintf(filepath, sizeof(filepath), "%s/%s", dir, d->d_name);
+        if (stat(filepath, &file_stat) == -1)
+        {
+            perror("stat");
+            exit(EXIT_FAILURE);
+        }
+
+        if (op_l)
+        {
+            permissions(file_stat);
+
+            char buff[20];
+            struct tm *timeinfo = localtime(&(file_stat.st_mtime));
+            strftime(buff, 20, "%b %d %H:%M", timeinfo);
+
+            printf(" %ld %s %s %ld %s %s\n",
+                   (long) file_stat.st_nlink,
+                   "root", "root", // You may want to get actual user and group here
+                   (long) file_stat.st_size,
+                   buff,
+                   d->d_name);
+        }
+        else
+        {
+            printf("%s  ", d->d_name);
+        }
     }
+    if(!op_l)
+    {
+        printf("\n");
+    }
+
+    closedir(dh);
 }
