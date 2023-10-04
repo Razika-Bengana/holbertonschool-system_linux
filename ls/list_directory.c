@@ -63,7 +63,7 @@ void list_directory(const char *dir, int op_a, int op_l)
             my_itoa((long) file_stat.st_size, size_str);
 
             ctime_str = ctime(&file_stat.st_mtime);
-            ctime_str[my_strlen(ctime_str) - 1] = '\0';  // Remove the trailing newline
+            ctime_str[my_strlen(ctime_str) - 1] = '\0';  /* Remove the trailing newline */
 
             printf(" %s %s %s %s %s %s\n",
                    nlink_str,
