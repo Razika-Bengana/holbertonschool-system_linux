@@ -22,6 +22,7 @@ void list_directory(const char *dir, int op_a, int op_l)
     char filepath[512];
     char nlink_str[20], size_str[20];
     char *ctime_str;
+
     DIR *dh = opendir(dir);
 
     if (!dh)
