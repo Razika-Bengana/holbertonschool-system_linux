@@ -47,4 +47,5 @@ int main(int argc, const char *argv[])
             list_directory(".",op_a,op_l);
         }
     }
+    return (0);
 }
