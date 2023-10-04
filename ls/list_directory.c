@@ -19,6 +19,7 @@ void list_directory(const char *dir, int op_a, int op_l)
 {
     struct dirent *d;
     struct stat file_stat;
+    struct tm *timeinfo = localtime(&(file_stat.st_mtime));
     char filepath[512];
     char buff[20];
     DIR *dh = opendir(dir);
@@ -56,7 +57,6 @@ void list_directory(const char *dir, int op_a, int op_l)
         {
             permissions(file_stat);
 
-            struct tm *timeinfo = localtime(&(file_stat.st_mtime));
             strftime(buff, 20, "%b %d %H:%M", timeinfo);
 
             printf(" %ld %s %s %ld %s %s\n",
