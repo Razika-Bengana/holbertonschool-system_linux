@@ -19,8 +19,9 @@ void list_directory(const char *dir, int op_a, int op_l)
 {
     struct dirent *d;
     struct stat file_stat;
-    char filepath[512];
-    char nlink_str[20], size_str[20];
+    char filepath[512] = "";
+    char nlink_str[20] = "";
+    char size_str[20] = "";
     char *ctime_str;
 
     DIR *dh = opendir(dir);
@@ -49,9 +50,9 @@ void list_directory(const char *dir, int op_a, int op_l)
         my_strcat(filepath, "/");
         my_strcat(filepath, d->d_name);
 
-        if (stat(filepath, &file_stat) == -1)
+        if (lstat(filepath, &file_stat) == -1)
         {
-            perror("stat");
+            perror("lstat");
             exit(EXIT_FAILURE);
         }
 
