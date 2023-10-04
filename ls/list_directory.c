@@ -20,6 +20,7 @@ void list_directory(const char *dir, int op_a, int op_l)
     struct dirent *d;
     struct stat file_stat;
     char filepath[512];
+    char buff[20];
     DIR *dh = opendir(dir);
 
     if (!dh)
@@ -61,7 +62,7 @@ void list_directory(const char *dir, int op_a, int op_l)
 
             printf(" %ld %s %s %ld %s %s\n",
                    (long) file_stat.st_nlink,
-                   "root", "root", // You may want to get actual user and group here
+                   "root", "root", /* get actual user and group here */
                    (long) file_stat.st_size,
                    buff,
                    d->d_name);
