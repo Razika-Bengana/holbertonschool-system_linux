@@ -1,5 +1,15 @@
 #include "main.h"
 
+/**
+ * permissions - program that prints file permissions like 'ls -l'
+ *
+ * this function takes a struct stat with file info and prints its permissions
+ *
+ * @file_stat: struct with file information
+ *
+ * Return: nothing (void)
+ */
+
 void permissions(struct stat file_stat)
 {
     printf((S_ISDIR(file_stat.st_mode)) ? "d" : "-");
