@@ -19,34 +19,35 @@ void list_directory(const char *dir, int op_a, int op_l)
 {
     struct dirent *d;
     struct stat file_stat;
-    struct tm *timeinfo = localtime(&(file_stat.st_mtime));
     char filepath[512];
-    char buff[20];
+    char nlink_str[20], size_str[20];
+    char *ctime_str;
     DIR *dh = opendir(dir);
 
     if (!dh)
     {
         if (errno == ENOENT)
         {
-            /* If the directory is not found */
             perror("Directory doesn't exist");
         }
         else
         {
-            /* If the directory is not readable, then print the error and exit */
             perror("Unable to read directory");
         }
         exit(EXIT_FAILURE);
     }
 
-    /* While the next entry is not readable, we will print directory files */
     while ((d = readdir(dh)) != NULL)
     {
-        /* If hidden files are found we continue */
+        filepath[0] = '\0';
+
         if (!op_a && d->d_name[0] == '.')
             continue;
 
-        snprintf(filepath, sizeof(filepath), "%s/%s", dir, d->d_name);
+        my_strcat(filepath, dir);
+        my_strcat(filepath, "/");
+        my_strcat(filepath, d->d_name);
+
         if (stat(filepath, &file_stat) == -1)
         {
             perror("stat");
@@ -57,13 +58,17 @@ void list_directory(const char *dir, int op_a, int op_l)
         {
             permissions(file_stat);
 
-            strftime(buff, 20, "%b %d %H:%M", timeinfo);
+            my_itoa((long) file_stat.st_nlink, nlink_str);
+            my_itoa((long) file_stat.st_size, size_str);
 
-            printf(" %ld %s %s %ld %s %s\n",
-                   (long) file_stat.st_nlink,
-                   "root", "root", /* get actual user and group here */
-                   (long) file_stat.st_size,
-                   buff,
+            ctime_str = ctime(&file_stat.st_mtime);
+            ctime_str[my_strlen(ctime_str) - 1] = '\0';  // Remove the trailing newline
+
+            printf(" %s %s %s %s %s %s\n",
+                   nlink_str,
+                   "root", "root",
+                   size_str,
+                   ctime_str,
                    d->d_name);
         }
         else
@@ -71,6 +76,7 @@ void list_directory(const char *dir, int op_a, int op_l)
             printf("%s  ", d->d_name);
         }
     }
+
     if(!op_l)
     {
         printf("\n");
