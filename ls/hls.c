@@ -22,30 +22,49 @@
 
 int main(int argc, const char *argv[])
 {
+    int op_a = 0, op_l = 0;
+    int i;
+    char *p;
+
     if (argc == 1)
     {
-        list_directory(".",0,0);
+        list_directory(argv[0], ".", op_a, op_l);
+        return (0);
     }
 
-    else if (argc == 2)
+    for (i = 1; i < argc; ++i)
     {
-        if (argv[1][0] == '-')
+        if (argv[i][0] == '-')
         {
-            /* Checking if option is passed */
-            int op_a = 0, op_l = 0;
-            char *p = (char*)(argv[1] + 1);
-            while(*p)
+            p = (char *)(argv[i] + 1);
+
+            while (*p)
             {
-                if(*p == 'a') op_a = 1;
-                else if(*p == 'l') op_l = 1;
-                else{
-                    perror("Option not available");
-                    exit(EXIT_FAILURE);
+                if (*p == 'a')
+                    op_a = 1;
+                else if (*p == 'l')
+                    op_l = 1;
+                else
+                {
+                    fprintf(stderr, "%s: invalid option -- '%c'\n", argv[0], *p);
+                    return (EXIT_FAILURE);
                 }
                 p++;
             }
-            list_directory(".",op_a,op_l);
+        }
+        else
+        {
+            DIR *dh = opendir(argv[i]);
+
+            if (!dh)
+            {
+                fprintf(stderr, "%s: %s: %s\n", argv[0], argv[i], strerror(errno));
+                continue;
+            }
+            list_directory(argv[0], argv[i], op_a, op_l);
+            closedir(dh);
         }
     }
+
     return (0);
 }
