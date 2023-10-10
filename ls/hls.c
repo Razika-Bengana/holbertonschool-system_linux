@@ -65,7 +65,11 @@ int main(int argc, const char *argv[])
         }
         else
         {
-            lstat(argv[i], &path_stat);
+            if (lstat(argv[i], &path_stat) == -1) /* Check lstat */
+            {
+                perror("lstat");
+                continue;
+            }
 
             if (S_ISDIR(path_stat.st_mode)) /* It's a directory */
             {
