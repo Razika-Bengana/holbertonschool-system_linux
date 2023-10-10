@@ -27,6 +27,7 @@ int main(int argc, const char *argv[])
     int i;
     char *p;
     DIR *dh;
+    struct stat path_stat;
 
     for (i = 1; i < argc; ++i)
     {
@@ -64,7 +65,6 @@ int main(int argc, const char *argv[])
         }
         else
         {
-            struct stat path_stat;
             lstat(argv[i], &path_stat);
 
             if (S_ISDIR(path_stat.st_mode)) /* It's a directory */
