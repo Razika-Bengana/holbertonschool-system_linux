@@ -32,6 +32,7 @@ void list_directory(const char *program_name, const char *dir, int op_a, int op_
         {
             fprintf(stderr, "%s: %s: No such file or directory\n", program_name, dir);
         }
+
         else
         {
             fprintf(stderr, "%s: %s: Permission denied\n", program_name, dir);
