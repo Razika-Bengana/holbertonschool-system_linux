@@ -85,7 +85,7 @@ int main(int argc, const char *argv[])
                 closedir(dh);
                 list_directory(argv[0], argv[i], op_a, op_l);
             }
-            else if (S_ISREG(path_stat.st_mode)) // C'est un fichier régulier
+            else if (S_ISREG(path_stat.st_mode)) /* It's a file */
             {
                 printf("%s\n", argv[i]);
             }
