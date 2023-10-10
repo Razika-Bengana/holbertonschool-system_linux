@@ -10,9 +10,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <time.h>
+#include <string.h>
 
 
-void list_directory(const char *dir, int op_a, int op_l);
+void list_directory(const char *program_name, const char *dir, int op_a, int op_l);
 void permissions(struct stat file_stat);
 void my_strcat(char *dest, const char *src);
 void my_itoa(long num, char *str);
