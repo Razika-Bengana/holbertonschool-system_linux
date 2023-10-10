@@ -65,6 +65,7 @@ int main(int argc, const char *argv[])
         }
         else
         {
+
             if (lstat(argv[i], &path_stat) == -1) /* Check lstat */
             {
                 fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], argv[i]);
@@ -99,6 +100,11 @@ int main(int argc, const char *argv[])
                 }
                 closedir(dh);
                 list_directory(argv[0], argv[i], op_a, op_l);
+
+                if (dir_count > 1)
+                {
+                    printf("\n");
+                }
             }
             else if (S_ISREG(path_stat.st_mode)) /* It's a file */
             {
