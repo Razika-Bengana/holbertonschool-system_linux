@@ -76,7 +76,7 @@ int main(int argc, const char *argv[])
 
                 dh = opendir(argv[i]);
 
-                if (!dh)
+                if (dh == NULL)
                 {
                     if (errno == ENOENT)
                     {
