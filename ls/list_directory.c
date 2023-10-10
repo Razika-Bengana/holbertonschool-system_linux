@@ -40,7 +40,7 @@ void list_directory(const char *program_name, const char *dir, int op_a, int op_
 
         sprintf(filepath, "%s/%s", dir, d->d_name);
 
-        if (stat(filepath, &file_stat) == -1)
+        if (lstat(filepath, &file_stat) == -1)
         {
             perror("lstat");
             exit(EXIT_FAILURE);

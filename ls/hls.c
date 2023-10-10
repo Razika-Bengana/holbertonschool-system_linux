@@ -64,21 +64,36 @@ int main(int argc, const char *argv[])
         }
         else
         {
-            if (dir_count > 1)
+            struct stat path_stat;
+            lstat(argv[i], &path_stat);
+
+            if (S_ISDIR(path_stat.st_mode)) /* It's a directory */
             {
-                printf("%s:\n", argv[i]);
+                if (dir_count > 1)
+                {
+                    printf("%s:\n", argv[i]);
+                }
+
+                dh = opendir(argv[i]);
+
+                if (!dh)
+                {
+                    fprintf(stderr, "%s: cannot access %s: ", argv[0], argv[i]);
+                    perror("");
+                    continue;
+                }
+                closedir(dh);
+                list_directory(argv[0], argv[i], op_a, op_l);
             }
-
-            dh = opendir(argv[i]);
-
-            if (!dh)
+            else if (S_ISREG(path_stat.st_mode)) // C'est un fichier régulier
+            {
+                printf("%s\n", argv[i]);
+            }
+            else
             {
                 fprintf(stderr, "%s: cannot access %s: ", argv[0], argv[i]);
                 perror("");
-                continue;
             }
-            closedir(dh);
-            list_directory(argv[0], argv[i], op_a, op_l);
         }
     }
     return (0);
