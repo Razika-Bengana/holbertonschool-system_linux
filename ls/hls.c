@@ -78,8 +78,19 @@ int main(int argc, const char *argv[])
 
                 if (!dh)
                 {
-                    fprintf(stderr, "%s: cannot access %s: ", argv[0], argv[i]);
-                    perror("");
+                    if (errno == ENOENT)
+                    {
+                        fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], argv[i]);
+                    }
+                    else if (errno == EACCES)
+                    {
+                        fprintf(stderr, "%s: cannot open directory %s: Permission denied\n", argv[0], argv[i]);
+                    }
+                    else
+                    {
+                        fprintf(stderr, "%s: cannot access %s: ", argv[0], argv[i]);
+                        perror("");
+                    }
                     continue;
                 }
                 closedir(dh);

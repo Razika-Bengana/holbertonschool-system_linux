@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <string.h>
+#include <errno.h>
 
 
 void list_directory(const char *program_name, const char *dir, int op_a, int op_l);
