@@ -26,6 +26,7 @@ int main(int argc, const char *argv[])
     int dir_count = 0;
     int i;
     char *p;
+    DIR *dh;
 
     for (i = 1; i < argc; ++i)
     {
@@ -68,7 +69,7 @@ int main(int argc, const char *argv[])
                 printf("%s:\n", argv[i]);
             }
 
-            DIR *dh = opendir(argv[i]);
+            dh = opendir(argv[i]);
 
             if (!dh)
             {
