@@ -23,13 +23,22 @@
 int main(int argc, const char *argv[])
 {
     int op_a = 0, op_l = 0;
+    int dir_count = 0;
     int i;
     char *p;
 
-    if (argc == 1)
+    for (i = 1; i < argc; ++i)
+    {
+        if (argv[i][0] != '-')
+        {
+            dir_count++;
+        }
+    }
+
+    if (dir_count == 0 && argc == 1)
     {
         list_directory(argv[0], ".", op_a, op_l);
-        return (0);
+        return 0;
     }
 
     for (i = 1; i < argc; ++i)
@@ -54,11 +63,17 @@ int main(int argc, const char *argv[])
         }
         else
         {
+            if (dir_count > 1)
+            {
+                printf("%s:\n", argv[i]);
+            }
+
             DIR *dh = opendir(argv[i]);
 
             if (!dh)
             {
-                perror(argv[0]);
+                fprintf(stderr, "%s: cannot access %s: ", argv[0], argv[i]);
+                perror("");
                 continue;
             }
             closedir(dh);
