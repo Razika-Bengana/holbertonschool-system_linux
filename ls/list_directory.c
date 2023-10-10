@@ -28,15 +28,7 @@ void list_directory(const char *program_name, const char *dir, int op_a, int op_
 
     if (!dh)
     {
-        if (errno == ENOENT)
-        {
-            fprintf(stderr, "%s: %s: No such file or directory\n", program_name, dir);
-        }
-
-        else
-        {
-            fprintf(stderr, "%s: %s: Permission denied\n", program_name, dir);
-        }
+        perror(program_name);
         exit(EXIT_FAILURE);
     }
 
@@ -48,7 +40,7 @@ void list_directory(const char *program_name, const char *dir, int op_a, int op_
 
         sprintf(filepath, "%s/%s", dir, d->d_name);
 
-        if (lstat(filepath, &file_stat) == -1)
+        if (stat(filepath, &file_stat) == -1)
         {
             perror("lstat");
             exit(EXIT_FAILURE);

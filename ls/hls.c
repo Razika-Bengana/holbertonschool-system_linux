@@ -58,13 +58,12 @@ int main(int argc, const char *argv[])
 
             if (!dh)
             {
-                fprintf(stderr, "%s: %s: %s\n", argv[0], argv[i], strerror(errno));
+                perror(argv[0]);
                 continue;
             }
-            list_directory(argv[0], argv[i], op_a, op_l);
             closedir(dh);
+            list_directory(argv[0], argv[i], op_a, op_l);
         }
     }
-
     return (0);
 }
