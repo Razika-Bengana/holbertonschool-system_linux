@@ -15,7 +15,7 @@
  * Return: nothing (void)
  */
 
-void list_directory(const char *dir, int op_a, int op_l)
+void list_directory(const char *program_name, const char *dir, int op_a, int op_l)
 {
     struct dirent *d;
     struct stat file_stat;
@@ -30,25 +30,22 @@ void list_directory(const char *dir, int op_a, int op_l)
     {
         if (errno == ENOENT)
         {
-            perror("Directory doesn't exist");
+            fprintf(stderr, "%s: %s: No such file or directory\n", program_name, dir);
         }
         else
         {
-            perror("Unable to read directory");
+            fprintf(stderr, "%s: %s: Permission denied\n", program_name, dir);
         }
         exit(EXIT_FAILURE);
     }
 
     while ((d = readdir(dh)) != NULL)
     {
-        filepath[0] = '\0';
 
         if (!op_a && d->d_name[0] == '.')
             continue;
 
-        my_strcat(filepath, dir);
-        my_strcat(filepath, "/");
-        my_strcat(filepath, d->d_name);
+        sprintf(filepath, "%s/%s", dir, d->d_name);
 
         if (lstat(filepath, &file_stat) == -1)
         {
@@ -60,8 +57,8 @@ void list_directory(const char *dir, int op_a, int op_l)
         {
             permissions(file_stat);
 
-            my_itoa((long) file_stat.st_nlink, nlink_str);
-            my_itoa((long) file_stat.st_size, size_str);
+            sprintf(nlink_str, "%ld", (long) file_stat.st_nlink);
+            sprintf(size_str, "%ld", (long) file_stat.st_size);
 
             ctime_str = ctime(&file_stat.st_mtime);
             ctime_str[my_strlen(ctime_str) - 1] = '\0';  /* Remove the trailing newline */
