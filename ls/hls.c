@@ -67,7 +67,7 @@ int main(int argc, const char *argv[])
         {
             if (lstat(argv[i], &path_stat) == -1) /* Check lstat */
             {
-                perror("lstat");
+                fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], argv[i]);
                 continue;
             }
 
