@@ -22,12 +22,12 @@
 
 int main(int argc, const char *argv[])
 {
-    int op_a = 0, op_l = 0;
+    struct Options opts = {0, 0, 0, 0};  /* op_a, op_l, op_1, op_A */
+    struct stat path_stat;
     int dir_count = 0;
     int i;
     char *p;
-    DIR *dh;
-    struct stat path_stat;
+    DIR *dh = NULL;
 
     for (i = 1; i < argc; ++i)
     {
@@ -39,8 +39,8 @@ int main(int argc, const char *argv[])
 
     if (dir_count == 0 && argc == 1)
     {
-        list_directory(argv[0], ".", op_a, op_l);
-        return 0;
+        list_directory(argv[0], ".", opts);
+        return (0);
     }
 
     for (i = 1; i < argc; ++i)
@@ -52,9 +52,13 @@ int main(int argc, const char *argv[])
             while (*p)
             {
                 if (*p == 'a')
-                    op_a = 1;
+                    opts.op_a = 1;
                 else if (*p == 'l')
-                    op_l = 1;
+                    opts.op_l = 1;
+                else if (*p == 'A')
+                    opts.op_A = 1;
+                else if (*p == '1')
+                    opts.op_1 = 1;
                 else
                 {
                     fprintf(stderr, "%s: invalid option -- '%c'\n", argv[0], *p);
@@ -66,7 +70,7 @@ int main(int argc, const char *argv[])
         else
         {
 
-            if (lstat(argv[i], &path_stat) == -1) /* Check lstat */
+            if (stat(argv[i], &path_stat) == -1) /* Check lstat */
             {
                 fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], argv[i]);
                 continue;
@@ -98,8 +102,7 @@ int main(int argc, const char *argv[])
                     }
                     continue;
                 }
-                closedir(dh);
-                list_directory(argv[0], argv[i], op_a, op_l);
+                list_directory(argv[0], argv[i], opts);
 
                 if (dir_count > 1)
                 {
@@ -116,6 +119,11 @@ int main(int argc, const char *argv[])
                 perror("");
             }
         }
+    }
+    if (dh)
+    {
+        closedir(dh);
+        dh = NULL;
     }
     return (0);
 }

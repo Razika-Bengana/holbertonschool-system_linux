@@ -1,6 +1,9 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,13 +15,19 @@
 #include <time.h>
 #include <string.h>
 #include <errno.h>
+#include <limits.h>
 
+struct Options {
+    int op_a;
+    int op_l;
+    int op_1;
+    int op_A;
+};
 
-void list_directory(const char *program_name, const char *dir, int op_a, int op_l);
+void list_directory(const char *program_name, const char *dir, struct Options opts);
 void permissions(struct stat file_stat);
-void my_strcat(char *dest, const char *src);
-void my_itoa(long num, char *str);
 size_t my_strlen(const char *str);
+int my_strcmp(const char *str1, const char *str2);
 
 
 #endif /* MAIN_H */

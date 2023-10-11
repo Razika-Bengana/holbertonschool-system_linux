@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -pedantic -Werror -Wextra -std=c99
 
 # Source files and object files
-SRCS = hls.c list_directory.c permissions.c my_strcat.c my_itoa.c my_strlen.c
+SRCS = hls.c list_directory.c permissions.c my_strlen.c my_strcmp.c
 OBJS = $(SRCS:.c=.o)
 
 # Executable name

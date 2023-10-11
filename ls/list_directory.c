@@ -15,38 +15,46 @@
  * Return: nothing (void)
  */
 
-void list_directory(const char *program_name, const char *dir, int op_a, int op_l)
+void list_directory(const char *program_name, const char *dir, struct Options opts)
 {
     struct dirent *d;
     struct stat file_stat;
-    char filepath[512] = "";
+    char filepath[PATH_MAX]; /* For portability */
     char nlink_str[20] = "";
     char size_str[20] = "";
     char *ctime_str;
 
     DIR *dh = opendir(dir);
 
-    if (!dh)
+    if (dh == NULL)
     {
         perror(program_name);
-        exit(EXIT_FAILURE);
+        return;
     }
-
     while ((d = readdir(dh)) != NULL)
     {
+        /* Skip hidden files if -a is not set */
+        if (!opts.op_a && d->d_name[0] == '.')
+            continue;
 
-        if (!op_a && d->d_name[0] == '.')
+        /* Skip the entries '.' and '..' if -A is set */
+        if (opts.op_A && (my_strcmp(d->d_name, ".") == 0 || my_strcmp(d->d_name, "..") == 0))
             continue;
 
         sprintf(filepath, "%s/%s", dir, d->d_name);
 
-        if (lstat(filepath, &file_stat) == -1)
+        if (stat(filepath, &file_stat) == -1)
         {
             perror("lstat");
-            exit(EXIT_FAILURE);
+            continue;
         }
 
-        if (op_l)
+        if (opts.op_1)
+        {
+            printf("%s\n", d->d_name);
+        }
+
+        else if (opts.op_l)
         {
             permissions(file_stat);
 
@@ -58,7 +66,7 @@ void list_directory(const char *program_name, const char *dir, int op_a, int op_
 
             printf(" %s %s %s %s %s %s\n",
                    nlink_str,
-                   "root", "root",
+                   "root", "root",  /* For user and group */
                    size_str,
                    ctime_str,
                    d->d_name);
@@ -69,10 +77,9 @@ void list_directory(const char *program_name, const char *dir, int op_a, int op_
         }
     }
 
-    if(!op_l)
+    if(!opts.op_l && !opts.op_1)
     {
         printf("\n");
     }
-
     closedir(dh);
 }
