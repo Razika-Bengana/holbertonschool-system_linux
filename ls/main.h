@@ -16,6 +16,7 @@
 #include <string.h>
 #include <errno.h>
 #include <limits.h>
+#include <stddef.h>
 
 struct Options {
     int op_a;
@@ -28,6 +29,7 @@ void list_directory(const char *program_name, const char *dir, struct Options op
 void permissions(struct stat file_stat);
 size_t my_strlen(const char *str);
 int my_strcmp(const char *str1, const char *str2);
+char *my_strncpy(char *dest, const char *src, size_t n);
 
 
 #endif /* MAIN_H */
