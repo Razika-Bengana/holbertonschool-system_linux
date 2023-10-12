@@ -125,6 +125,7 @@ int main(int argc, const char *argv[])
             }
         }
     }
+
     if (dh)
     {
         closedir(dh);
