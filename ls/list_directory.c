@@ -23,6 +23,7 @@ void list_directory(const char *program_name, const char *dir, struct Options op
     char nlink_str[20] = "";
     char size_str[20] = "";
     char *ctime_str;
+    char formatted_ctime[30];
 
     DIR *dh = opendir(dir);
 
@@ -43,7 +44,7 @@ void list_directory(const char *program_name, const char *dir, struct Options op
 
         sprintf(filepath, "%s/%s", dir, d->d_name);
 
-        if (stat(filepath, &file_stat) == -1)
+        if (lstat(filepath, &file_stat) == -1)
         {
             perror("lstat");
             continue;
@@ -64,11 +65,15 @@ void list_directory(const char *program_name, const char *dir, struct Options op
             ctime_str = ctime(&file_stat.st_mtime);
             ctime_str[my_strlen(ctime_str) - 1] = '\0';  /* Remove the trailing newline */
 
+            /* To format the date */
+            my_strncpy(formatted_ctime, &ctime_str[4], 12);
+            formatted_ctime[12] = '\0';
+
             printf(" %s %s %s %s %s %s\n",
                    nlink_str,
                    "root", "root",  /* For user and group */
                    size_str,
-                   ctime_str,
+                   formatted_ctime,
                    d->d_name);
         }
         else

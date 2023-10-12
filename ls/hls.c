@@ -29,6 +29,7 @@ int main(int argc, const char *argv[])
     char *p;
     DIR *dh = NULL;
 
+    /* Count the number of directories */
     for (i = 1; i < argc; ++i)
     {
         if (argv[i][0] != '-')
@@ -37,17 +38,12 @@ int main(int argc, const char *argv[])
         }
     }
 
-    if (dir_count == 0 && argc == 1)
-    {
-        list_directory(argv[0], ".", opts);
-        return (0);
-    }
-
+    /* Processing options */
     for (i = 1; i < argc; ++i)
     {
         if (argv[i][0] == '-')
         {
-            p = (char *)(argv[i] + 1);
+            p = (char *) (argv[i] + 1);
 
             while (*p)
             {
@@ -67,10 +63,19 @@ int main(int argc, const char *argv[])
                 p++;
             }
         }
-        else
-        {
+    }
+    if (dir_count == 0)
+    {
+        list_directory(argv[0], ".", opts);
+        return (0);
+    }
 
-            if (stat(argv[i], &path_stat) == -1) /* Check lstat */
+    /* Handling directories and files */
+    for (i = 1; i < argc; ++i)
+    {
+        if (argv[i][0] != '-')
+        {
+            if (lstat(argv[i], &path_stat) == -1) /* Check lstat */
             {
                 fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], argv[i]);
                 continue;
