@@ -125,6 +125,10 @@ int main(int argc, const char *argv[])
             }
         }
     }
-
+    if (dh)
+    {
+        closedir(dh);
+        dh = NULL;
+    }
     return (0);
 }
