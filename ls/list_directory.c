@@ -57,6 +57,11 @@ void list_directory(const char *program_name, const char *dir, struct Options op
 
         else if (opts.op_l)
         {
+            struct passwd *pw = getpwuid(file_stat.st_uid);
+            struct group  *gr = getgrgid(file_stat.st_gid);
+            const char *username = pw ? pw->pw_name : "unknown";
+            const char *groupname = gr ? gr->gr_name : "unknown";
+
             permissions(file_stat);
 
             sprintf(nlink_str, "%ld", (long) file_stat.st_nlink);
@@ -71,7 +76,8 @@ void list_directory(const char *program_name, const char *dir, struct Options op
 
             printf(" %s %s %s %s %s %s\n",
                    nlink_str,
-                   "root", "root",  /* For user and group */
+                   username,
+                   groupname,
                    size_str,
                    formatted_ctime,
                    d->d_name);

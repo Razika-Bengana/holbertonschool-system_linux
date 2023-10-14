@@ -1,9 +1,11 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+
 #ifndef PATH_MAX
 #define PATH_MAX 4096
 #endif
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,6 +19,8 @@
 #include <errno.h>
 #include <limits.h>
 #include <stddef.h>
+#include <pwd.h>
+#include <grp.h>
 
 struct Options {
     int op_a;
