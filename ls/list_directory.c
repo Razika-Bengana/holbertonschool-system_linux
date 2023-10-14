@@ -59,6 +59,8 @@ void list_directory(const char *program_name, const char *dir, struct Options op
         {
             struct passwd *pw = getpwuid(file_stat.st_uid);
             struct group  *gr = getgrgid(file_stat.st_gid);
+            const char *username = pw ? pw->pw_name : "unknown";
+            const char *groupname = gr ? gr->gr_name : "unknown";
 
             permissions(file_stat);
 
@@ -74,8 +76,8 @@ void list_directory(const char *program_name, const char *dir, struct Options op
 
             printf(" %s %s %s %s %s %s\n",
                    nlink_str,
-                   (pw ? pw->pw_name : "unknown"),  /* UID */
-                   (gr ? gr->gr_name : "unknown"),  /* GID */
+                   username,
+                   groupname,
                    size_str,
                    formatted_ctime,
                    d->d_name);
