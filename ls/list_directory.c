@@ -78,7 +78,7 @@ void list_directory(const char *program_name, const char *dir, struct Options op
 
             if (groupname)
             {
-                strncpy(gid_str, groupname, sizeof(gid_str));
+                my_strncpy(gid_str, groupname, sizeof(gid_str));
                 gid_str[sizeof(gid_str) - 1] = '\0';
             }
             else
