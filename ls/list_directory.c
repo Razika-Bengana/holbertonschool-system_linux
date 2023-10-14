@@ -92,7 +92,7 @@ void list_directory(const char *program_name, const char *dir, struct Options op
             sprintf(size_str, "%ld", (long) file_stat.st_size);
 
             ctime_str = ctime(&file_stat.st_mtime);
-            ctime_str[my_strlen(ctime_str) - 1] = '\0';  /* Remove the trailing newline */
+            ctime_str[my_strlen(ctime_str)] = '\0';
 
             /* To format the date */
             my_strncpy(formatted_ctime, &ctime_str[4], 12);
