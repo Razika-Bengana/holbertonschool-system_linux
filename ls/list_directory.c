@@ -59,8 +59,8 @@ void list_directory(const char *program_name, const char *dir, struct Options op
         {
             struct passwd *pw = getpwuid(file_stat.st_uid);
             struct group  *gr = getgrgid(file_stat.st_gid);
-            const char *username = pw ? pw->pw_name : "unknown";
-            const char *groupname = gr ? gr->gr_name : "unknown";
+            const char *username = pw ? pw->pw_name : NULL;
+            const char *groupname = gr ? gr->gr_name : NULL;
 
             permissions(file_stat);
 
@@ -74,13 +74,26 @@ void list_directory(const char *program_name, const char *dir, struct Options op
             my_strncpy(formatted_ctime, &ctime_str[4], 12);
             formatted_ctime[12] = '\0';
 
-            printf(" %s %s %s %s %s %s\n",
-                   nlink_str,
-                   username,
-                   groupname,
-                   size_str,
-                   formatted_ctime,
-                   d->d_name);
+            if (username && groupname)
+            {
+                printf(" %s %s %s %s %s %s\n",
+                       nlink_str,
+                       username,
+                       groupname,
+                       size_str,
+                       formatted_ctime,
+                       d->d_name);
+            }
+            else
+            {
+                printf(" %s %s %s %s %s %s\n",
+                       nlink_str,
+                       "unknown",
+                       "unknown",
+                       size_str,
+                       formatted_ctime,
+                       d->d_name);
+            }
         }
         else
         {
