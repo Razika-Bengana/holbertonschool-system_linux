@@ -34,12 +34,12 @@ void list_directory(const char *program_name, const char *dir, struct Options op
     }
     while ((d = readdir(dh)) != NULL)
     {
-        /* Skip hidden files if -a is not set */
-        if (!opts.op_a && d->d_name[0] == '.')
+        /* Skip hidden files if neither -a nor -A is set */
+        if (d->d_name[0] == '.' && !opts.op_a && !opts.op_A)
             continue;
 
-        /* Skip the entries '.' and '..' if -A is set */
-        if (opts.op_A && (my_strcmp(d->d_name, ".") == 0 || my_strcmp(d->d_name, "..") == 0))
+        /* Show all except for '.' and '..' if -A is set */
+        if (opts.op_A && (strcmp(d->d_name, ".") == 0 || strcmp(d->d_name, "..") == 0))
             continue;
 
         sprintf(filepath, "%s/%s", dir, d->d_name);
