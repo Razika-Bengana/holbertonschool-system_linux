@@ -74,10 +74,10 @@ void list_directory(const char *program_name, const char *dir, struct Options op
             my_strncpy(formatted_ctime, &ctime_str[4], 12);
             formatted_ctime[12] = '\0';
 
-            printf(" %s %s %s %s %s %s\n",
+            printf(" %s %d %d %s %s %s\n",
                    nlink_str,
-                   username,
-                   groupname,
+                   file_stat.st_uid,  // UID
+                   file_stat.st_gid,  // GID
                    size_str,
                    formatted_ctime,
                    d->d_name);
