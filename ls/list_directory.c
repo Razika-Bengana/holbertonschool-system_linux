@@ -68,7 +68,8 @@ void list_directory(const char *program_name, const char *dir, struct Options op
 
             if (username)
             {
-                sprintf(uid_str, "%s", username);
+                my_strncpy(uid_str, username, sizeof(uid_str));
+                uid_str[sizeof(uid_str) - 1] = '\0';
             }
             else
             {
@@ -77,7 +78,8 @@ void list_directory(const char *program_name, const char *dir, struct Options op
 
             if (groupname)
             {
-                sprintf(gid_str, "%s", groupname);
+                strncpy(gid_str, groupname, sizeof(gid_str));
+                gid_str[sizeof(gid_str) - 1] = '\0';
             }
             else
             {
