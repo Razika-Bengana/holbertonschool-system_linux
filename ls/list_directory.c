@@ -39,7 +39,7 @@ void list_directory(const char *program_name, const char *dir, struct Options op
             continue;
 
         /* Show all except for '.' and '..' if -A is set */
-        if (opts.op_A && (strcmp(d->d_name, ".") == 0 || strcmp(d->d_name, "..") == 0))
+        if (opts.op_A && (my_strcmp(d->d_name, ".") == 0 || my_strcmp(d->d_name, "..") == 0))
             continue;
 
         sprintf(filepath, "%s/%s", dir, d->d_name);
