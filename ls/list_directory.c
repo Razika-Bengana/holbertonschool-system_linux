@@ -22,7 +22,7 @@ void list_directory(const char *program_name, const char *dir, struct Options op
     char filepath[PATH_MAX]; /* For portability */
     char nlink_str[20] = "";
     char size_str[20] = "";
-    char *ctime_str;
+    char *ctime_str = NULL;
     char formatted_ctime[30];
 
     DIR *dh = opendir(dir);
@@ -116,5 +116,11 @@ void list_directory(const char *program_name, const char *dir, struct Options op
     {
         printf("\n");
     }
+
+    if (ctime_str != NULL)
+    {
+        free(ctime_str);
+    }
+
     closedir(dh);
 }
