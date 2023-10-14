@@ -117,10 +117,5 @@ void list_directory(const char *program_name, const char *dir, struct Options op
         printf("\n");
     }
 
-    if (ctime_str != NULL)
-    {
-        free(ctime_str);
-    }
-
     closedir(dh);
 }
