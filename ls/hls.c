@@ -105,15 +105,12 @@ int main(int argc, const char *argv[])
             {
                 if (dir_count > 1)
                 {
-                    if (firstDir)
-                    {
-                        firstDir = 0;
-                    }
-                    else
+                    if (!firstDir)
                     {
                         printf("\n");  /* Empty line added between directories */
                     }
                     printf("%s:\n", argv[i]);
+                    firstDir = 0;
                 }
 
                 dh = opendir(argv[i]);
