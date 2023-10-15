@@ -29,8 +29,6 @@ int main(int argc, const char *argv[])
     char *p;
     DIR *dh = NULL;
 
-    int firstDir = 1; /* Variable to track if this is the first output */
-
     int processedDirCount = 0;
 
     /* Count the number of directories */
