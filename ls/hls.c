@@ -133,6 +133,11 @@ int main(int argc, const char *argv[])
 
                 list_directory(argv[0], argv[i], opts);
 
+                if (dir_count > 1)
+                {
+                    printf("\n");
+                }
+
                 closedir(dh);
                 dh = NULL;
 
