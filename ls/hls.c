@@ -134,6 +134,7 @@ int main(int argc, const char *argv[])
                 }
 
                 list_directory(argv[0], argv[i], opts);
+                printf("\n");
 
                 closedir(dh);
                 dh = NULL;
