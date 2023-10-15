@@ -112,7 +112,7 @@ void list_directory(const char *program_name, const char *dir, struct Options op
         }
     }
 
-    if(opts.op_A && !opts.op_l && !opts.op_1)
+    if(!opts.op_l && !opts.op_1)
     {
         printf("\n");
     }
