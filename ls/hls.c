@@ -103,7 +103,10 @@ int main(int argc, const char *argv[])
 
             if (S_ISDIR(path_stat.st_mode)) /* It's a directory */
             {
-                printf("%s:\n", argv[i]);
+                if (dir_count > 1)
+                {
+                    printf("%s:\n", argv[i]);
+                }
 
                 dh = opendir(argv[i]);
 
