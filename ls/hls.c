@@ -104,6 +104,12 @@ int main(int argc, const char *argv[])
         }
     }
 
+    /* Add a newline if files have already been displayed */
+    if (file_count > 0)
+    {
+        printf("\n");
+    }
+
     /* Processing directories afterwards */
     for (i = 1; i < argc; ++i)
     {
