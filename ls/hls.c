@@ -28,7 +28,6 @@ int main(int argc, const char *argv[])
     int i;
     char *p;
     DIR *dh = NULL;
-    bool firstEntry = true;
 
     /* Count the number of directories */
     for (i = 1; i < argc; ++i)
@@ -85,13 +84,7 @@ int main(int argc, const char *argv[])
 
             if (S_ISREG(path_stat.st_mode)) /* It's a file */
             {
-                if (!firstEntry)
-                {
-                    printf("\n");  /* New line if it's not the first element */
-                }
-
-                printf("%s", argv[i]);
-                firstEntry = false;
+                printf("%s\n", argv[i]);
             }
         }
     }
@@ -108,10 +101,6 @@ int main(int argc, const char *argv[])
 
             if (S_ISDIR(path_stat.st_mode)) /* It's a directory */
             {
-                if (!firstEntry)
-                {
-                    printf("\n");  /* New line if it's not the first element */
-                }
                 if (dir_count > 1)
                 {
                     printf("%s:\n", argv[i]);
@@ -138,7 +127,6 @@ int main(int argc, const char *argv[])
                 }
 
                 list_directory(argv[0], argv[i], opts);
-                firstEntry = false;
 
                 closedir(dh);
                 dh = NULL;
