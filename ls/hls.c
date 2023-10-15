@@ -131,10 +131,6 @@ int main(int argc, const char *argv[])
                 closedir(dh);
                 dh = NULL;
 
-                if (dir_count > 1)
-                {
-                    printf("\n");
-                }
             }
         }
     }
