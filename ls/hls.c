@@ -29,6 +29,9 @@ int main(int argc, const char *argv[])
     char *p;
     DIR *dh = NULL;
 
+    bool firstDirectory = true;
+    bool lastEntry = false;
+
     /* Count the number of directories */
     for (i = 1; i < argc; ++i)
     {
@@ -94,6 +97,10 @@ int main(int argc, const char *argv[])
     {
         if (argv[i][0] != '-')
         {
+            if (i == argc - 1)  /* For the last argument */
+            {
+                lastEntry = true;
+            }
             if (lstat(argv[i], &path_stat) == -1)
             {
                 continue;
@@ -101,6 +108,14 @@ int main(int argc, const char *argv[])
 
             if (S_ISDIR(path_stat.st_mode)) /* It's a directory */
             {
+                if (!firstDirectory && !lastEntry)
+                {
+                    printf("\n");
+                }
+                else if (firstDirectory)
+                {
+                    firstDirectory = false;
+                }
                 if (dir_count > 1)
                 {
                     printf("%s:\n", argv[i]);
