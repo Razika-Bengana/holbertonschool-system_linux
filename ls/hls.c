@@ -31,6 +31,8 @@ int main(int argc, const char *argv[])
 
     int firstDir = 1; /* Variable to track if this is the first output */
 
+    int file_count = 0; /* Adding a counter for files */
+
     /* Count the number of directories */
     for (i = 1; i < argc; ++i)
     {
@@ -87,6 +89,7 @@ int main(int argc, const char *argv[])
             if (S_ISREG(path_stat.st_mode)) /* It's a file */
             {
                 printf("%s\n", argv[i]);
+                file_count++;
             }
         }
     }
@@ -103,7 +106,7 @@ int main(int argc, const char *argv[])
 
             if (S_ISDIR(path_stat.st_mode)) /* It's a directory */
             {
-                if (dir_count > 1)
+                if (dir_count > 1 || file_count > 0)
                 {
                     if (firstDir)
                     {
