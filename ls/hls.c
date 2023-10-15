@@ -30,7 +30,7 @@ int main(int argc, const char *argv[])
     DIR *dh = NULL;
     int firstDir = 1;
 
-    int first_output = 1; /* Variable to track if this is the first output */
+    int firstDir = 1; /* Variable to track if this is the first output */
 
     /* Count the number of directories */
     for (i = 1; i < argc; ++i)
