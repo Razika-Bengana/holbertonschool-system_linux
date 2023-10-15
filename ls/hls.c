@@ -64,20 +64,38 @@ int main(int argc, const char *argv[])
             }
         }
     }
+    /* If no directory is provided, list the current directory */
     if (dir_count == 0)
     {
         list_directory(argv[0], ".", opts);
         return (0);
     }
 
-    /* Handling directories and files */
+    /* Processing files first */
     for (i = 1; i < argc; ++i)
     {
         if (argv[i][0] != '-')
         {
-            if (lstat(argv[i], &path_stat) == -1) /* Check lstat */
+            if (lstat(argv[i], &path_stat) == -1)
             {
                 fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], argv[i]);
+                continue;
+            }
+
+            if (S_ISREG(path_stat.st_mode)) /* It's a file */
+            {
+                printf("%s\n", argv[i]);
+            }
+        }
+    }
+
+    /* Processing directories afterwards */
+    for (i = 1; i < argc; ++i)
+    {
+        if (argv[i][0] != '-')
+        {
+            if (lstat(argv[i], &path_stat) == -1)
+            {
                 continue;
             }
 
@@ -107,26 +125,23 @@ int main(int argc, const char *argv[])
                     }
                     continue;
                 }
-                list_directory(argv[0], argv[i], opts);
 
-                closedir(dh);
-                dh = NULL;
+                list_directory(argv[0], argv[i], opts);
 
                 if (dir_count > 1)
                 {
                     printf("\n");
                 }
             }
-            else if (S_ISREG(path_stat.st_mode)) /* It's a file */
-            {
-                printf("%s\n", argv[i]);
-            }
-            else
-            {
-                fprintf(stderr, "%s: cannot access %s: ", argv[0], argv[i]);
-                perror("");
-            }
         }
     }
+
+    /* Free the memory associated with the directory descriptor */
+    if (dh)
+    {
+        closedir(dh);
+        dh = NULL;
+    }
+
     return (0);
 }
