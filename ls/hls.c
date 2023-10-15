@@ -35,6 +35,8 @@ int main(int argc, const char *argv[])
 
     int firstFile = 1;
 
+    int needNewLine = 0;
+
     /* Count the number of directories */
     for (i = 1; i < argc; ++i)
     {
@@ -90,15 +92,12 @@ int main(int argc, const char *argv[])
 
             if (S_ISREG(path_stat.st_mode)) /* It's a file */
             {
-                if (firstFile)
-                {
-                    firstFile = 0;
-                }
-                else
+                if (needNewLine)
                 {
                     printf("\n");
                 }
-                printf("%s", argv[i]);
+                printf("%s\n", argv[i]);
+                needNewLine = 1;
                 file_count++;
             }
         }
@@ -122,6 +121,13 @@ int main(int argc, const char *argv[])
 
             if (S_ISDIR(path_stat.st_mode)) /* It's a directory */
             {
+                if (needNewLine)
+                {
+                    printf("\n");
+                }
+                printf("%s:\n", argv[i]);
+                needNewLine = 1;
+
                 if (dir_count > 1 || (file_count > 0 && firstDir))
                 {
                     if (firstDir)
