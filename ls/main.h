@@ -21,7 +21,6 @@
 #include <stddef.h>
 #include <pwd.h>
 #include <grp.h>
-#include <stdbool.h>
 
 struct Options {
     int op_a;
