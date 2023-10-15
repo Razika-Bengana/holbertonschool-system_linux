@@ -33,6 +33,8 @@ int main(int argc, const char *argv[])
 
     int file_count = 0; /* Adding a counter for files */
 
+    int firstFile = 1;
+
     /* Count the number of directories */
     for (i = 1; i < argc; ++i)
     {
@@ -88,7 +90,15 @@ int main(int argc, const char *argv[])
 
             if (S_ISREG(path_stat.st_mode)) /* It's a file */
             {
-                printf("%s\n", argv[i]);
+                if (firstFile)
+                {
+                    firstFile = 0;
+                }
+                else
+                {
+                    printf("\n");
+                }
+                printf("%s", argv[i]);
                 file_count++;
             }
         }
@@ -106,7 +116,7 @@ int main(int argc, const char *argv[])
 
             if (S_ISDIR(path_stat.st_mode)) /* It's a directory */
             {
-                if (dir_count > 1 || file_count > 0)
+                if (dir_count > 1 || (file_count > 0 && firstDir))
                 {
                     if (firstDir)
                     {
@@ -114,7 +124,14 @@ int main(int argc, const char *argv[])
                     }
                     else
                     {
-                        printf("\n");  /* Empty line added between directories */
+                        if (firstFile == 0) /* Si des fichiers ont déjà été affichés, ne pas ajouter de ligne vide */
+                        {
+                            firstFile = 1;  /* Réinitialise pour les prochains fichiers */
+                        }
+                        else
+                        {
+                            printf("\n");  /* Ligne vide ajoutée entre les répertoires */
+                        }
                     }
                     printf("%s:\n", argv[i]);
                 }
