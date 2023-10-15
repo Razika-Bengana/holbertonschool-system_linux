@@ -106,8 +106,13 @@ int main(int argc, const char *argv[])
                 if (dir_count > 1)
                 {
                     if (firstDir)
+                    {
                         firstDir = 0;
-                    else printf("\n");  /* Empty line added between directories */
+                    }
+                    else
+                    {
+                        printf("\n");  /* Empty line added between directories */
+                    }
                     printf("%s:\n", argv[i]);
                 }
 
@@ -132,11 +137,6 @@ int main(int argc, const char *argv[])
                 }
 
                 list_directory(argv[0], argv[i], opts);
-
-                if (dir_count > 1)
-                {
-                    printf("\n");
-                }
 
                 closedir(dh);
                 dh = NULL;
