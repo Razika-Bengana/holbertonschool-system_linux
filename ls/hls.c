@@ -28,7 +28,6 @@ int main(int argc, const char *argv[])
     int i;
     char *p;
     DIR *dh = NULL;
-    int firstDir = 1;
 
     int firstDir = 1; /* Variable to track if this is the first output */
 
