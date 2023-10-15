@@ -30,6 +30,7 @@ int main(int argc, const char *argv[])
     DIR *dh = NULL;
 
     int processedDirCount = 0;
+    int processedFileCount = 0;
 
     /* Count the number of directories */
     for (i = 1; i < argc; ++i)
@@ -87,8 +88,13 @@ int main(int argc, const char *argv[])
             if (S_ISREG(path_stat.st_mode)) /* It's a file */
             {
                 printf("%s\n", argv[i]);
+                processedFileCount++;
             }
         }
+    }
+    if (processedFileCount > 0 && dir_count > 0) /* Check if an extra line is necessary */
+    {
+        printf("\n");
     }
 
     /* Processing directories afterwards */
