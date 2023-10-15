@@ -28,6 +28,9 @@ int main(int argc, const char *argv[])
     int i;
     char *p;
     DIR *dh = NULL;
+    int firstDir = 1;
+
+    int first_output = 1; /* Variable to track if this is the first output */
 
     /* Count the number of directories */
     for (i = 1; i < argc; ++i)
@@ -103,6 +106,9 @@ int main(int argc, const char *argv[])
             {
                 if (dir_count > 1)
                 {
+                    if (firstDir)
+                        firstDir = 0;
+                    else printf("\n");  /* Empty line added between directories */
                     printf("%s:\n", argv[i]);
                 }
 
@@ -127,11 +133,6 @@ int main(int argc, const char *argv[])
                 }
 
                 list_directory(argv[0], argv[i], opts);
-
-                if (dir_count > 1)
-                {
-                    printf("\n");
-                }
 
                 closedir(dh);
                 dh = NULL;
