@@ -29,6 +29,8 @@ int main(int argc, const char *argv[])
     char *p;
     DIR *dh = NULL;
 
+    int processedDirs = 0;
+
     /* Count the number of directories */
     for (i = 1; i < argc; ++i)
     {
@@ -101,6 +103,11 @@ int main(int argc, const char *argv[])
 
             if (S_ISDIR(path_stat.st_mode)) /* It's a directory */
             {
+                if (processedDirs > 0 && dir_count > 1)
+                {
+                    printf("\n");
+                }
+
                 if (dir_count > 1)
                 {
                     printf("%s:\n", argv[i]);
@@ -127,6 +134,8 @@ int main(int argc, const char *argv[])
                 }
 
                 list_directory(argv[0], argv[i], opts);
+
+                processedDirs++;
 
                 closedir(dh);
                 dh = NULL;
