@@ -128,6 +128,9 @@ int main(int argc, const char *argv[])
 
                 list_directory(argv[0], argv[i], opts);
 
+                closedir(dh);
+                dh = NULL;
+
                 if (dir_count > 1)
                 {
                     printf("\n");
@@ -135,13 +138,5 @@ int main(int argc, const char *argv[])
             }
         }
     }
-
-    /* Free the memory associated with the directory descriptor */
-    if (dh)
-    {
-        closedir(dh);
-        dh = NULL;
-    }
-
     return (0);
 }
