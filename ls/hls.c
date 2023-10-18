@@ -1,21 +1,22 @@
 #include "main.h"
 
 /**
- * main - the entry point
+ * main - the entry point of the program
  *
- * program for a custom command-line utility to list files and directories
- *
- * this function processes command-line arguments and calls the 'list_directory' function
- * to display the contents of the specified directory with optional options
+ * this program is a custom command-line utility designed to list files and directories;
+ * the main function processes command-line arguments and calls the 'list_directory' function
+ * to display the contents of the specified directory with optional options;
  *
  * @argc: the number of command-line arguments
  * @argv: an array of strings representing the command-line arguments
  *
  * if no command-line arguments are provided, it lists the contents of the current directory without options;
- * if one command-line argument is provided, it checks if it starts with a hyphen '-' to interpret it as options;
+ * if one command-line argument is provided, it checks if it starts with a hyphen '-' to interpret it as options:
  *   - 'a' option: display hidden files;
  *   - 'l' option: display the results in list mode (one entry per line);
- * Ii an invalid option is encountered, it displays an error message and exits with an error code
+ *   - 'A' option: show all entries except for '.' and '..' (when used with '-l');
+ *   - '1' option: display each entry on a separate line;
+ * if an invalid option is encountered, it displays an error message and exits with an error code
  *
  * Return: nothing (void)
  */

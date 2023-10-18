@@ -1,16 +1,23 @@
 #include "main.h"
 
 /**
- * list_directory - program that list the files and directories in a specified directory
+ * list_directory - program that lists the files and directories in a specified directory
  *
- * this function takes a directory path as input and provides options to display its contents;
- * it opens the specified directory, reads its contents, and prints them to the console;
- * it can filter out hidden files based on the 'op_a' parameter and format the output as a list if 'op_l' is set;
- * if the directory is not found or not readable, appropriate error messages are displayed
+ * this function takes a directory path as input and provides options to display its contents:
+ * - it opens the specified directory, reads its contents, and prints them to the console;
+ * - it can filter out hidden files (those starting with '.') based on the 'op_a' parameter;
+ * - it can format the output as a list if 'op_l' is set;
+ * - it can display each entry on a separate line if 'op_1' is set;
+ * - it can show all entries except for '.' and '..' if 'op_A' is set;
+ * - it handles errors appropriately, such as when the directory is not found or not readable;
  *
+ * @program_name: a pointer to a string representing the name of the program invoking this function
  * @dir: a pointer to a string representing the directory to list
- * @op_a: an indicator (0 or 1) to specify whether to display hidden files (starting with '.')
- * @op_l: an indicator (0 or 1) to specify whether to display the results in list mode (one entry per line)
+ * @opts: a struct containing options for listing, including:
+ *        - op_a (hidden files),
+ *        - op_l (list format),
+ *        - op_1 (one entry per line),
+ *        - op_A (show all except for '.' and '..');
  *
  * Return: nothing (void)
  */
