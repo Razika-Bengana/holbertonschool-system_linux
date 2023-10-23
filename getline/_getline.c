@@ -18,52 +18,59 @@
 
 char *_getline(const int fd)
 {
-    int read_count = 0;
-    size_t buffer_len = 0;
-    size_t buffer_size = READ_SIZE;
-    ssize_t bytes_read;
-    char *buffer = malloc(buffer_size);
-    char *new_buffer;
-    char c;
+    static char *buffer = NULL;
+    static size_t buffer_len = 0;
+    static size_t buffer_size = 1024;
+    static size_t read_pos = 0;
+    size_t line_len = 0;
+    char *line;
 
-    if (!buffer)
+    if (buffer == NULL)
     {
-        return (NULL);
+        buffer = malloc(buffer_size);
+
+        if (buffer == NULL)
+            return NULL;
     }
-    while ((bytes_read = read(fd, &c, 1)) > 0)
+
+    while (read_pos < buffer_len || (buffer_len = read(fd, buffer, buffer_size)) > 0)
     {
-        read_count++;
-        if (buffer_len >= buffer_size)
+        if (buffer_len == buffer_size)
         {
             buffer_size *= 2;
-            new_buffer = realloc(buffer, buffer_size);
-
-            if (!new_buffer)
+            char *new_buffer = realloc(buffer, buffer_size);
+            if (new_buffer == NULL)
             {
                 free(buffer);
                 return (NULL);
             }
-
             buffer = new_buffer;
         }
 
-        buffer[buffer_len] = c;
-        buffer_len++;
-
-        if (c == '\n')
+        for (; read_pos < buffer_len; ++read_pos)
         {
-            buffer[buffer_len -1] = '\0';
-            break;
+            if (buffer[read_pos] == '\n')
+            {
+                line = malloc(line_len + 1);
+                if (line == NULL)
+                    return (NULL);
+
+                strncpy(line, buffer, line_len);
+                line[line_len] = '\0';
+
+                memmove(buffer, buffer + read_pos + 1, buffer_len - (read_pos + 1));
+                buffer_len -= (read_pos + 1);
+                read_pos = 0;
+
+                return (line);
+            }
+            ++line_len;
         }
     }
-
-    if (bytes_read <= 0 && buffer_len == 0)
+    if (buffer_len <= 0)
     {
         free(buffer);
-        return (NULL);
+        buffer = NULL;
     }
-
-    buffer[buffer_len] = '\0';
-
-    return (buffer);
+    return (NULL);
 }
