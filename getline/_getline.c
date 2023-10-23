@@ -1,6 +1,6 @@
 #include "_getline.h"
 
-#define BUFFER_SIZE 1024
+#define READ_SIZE 1024
 
 /**
  * _getline - program that reads a line from a file descriptor and returns it as a string
@@ -18,9 +18,8 @@
 
 char *_getline(const int fd)
 {
-    int read_count = 0;
     size_t buffer_len = 0;
-    size_t buffer_size = BUFFER_SIZE;
+    size_t buffer_size = READ_SIZE;
     ssize_t bytes_read;
     char *buffer = malloc(buffer_size);
     char *new_buffer;
@@ -32,8 +31,6 @@ char *_getline(const int fd)
     }
     while ((bytes_read = read(fd, &c, 1)) > 0)
     {
-        read_count++;
-
         if (buffer_len >= buffer_size)
         {
             buffer_size *= 2;
