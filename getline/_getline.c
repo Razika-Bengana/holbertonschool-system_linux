@@ -16,6 +16,31 @@
  * or end-of-file is reached
  */
 
+void my_memmove(char *dest, char *src, size_t n)
+{
+    size_t i;
+
+    if (dest == src || n == 0)
+    {
+        return;
+    }
+
+    if (dest < src)
+    {
+        for (i = 0; i < n; i++)
+        {
+            dest[i] = src[i];
+        }
+    }
+    else
+    {
+        for (i = n; i > 0; i--)
+        {
+            dest[i - 1] = src[i - 1];
+        }
+    }
+}
+
 char *_getline(const int fd)
 {
     static char *buffer = NULL;
@@ -59,7 +84,7 @@ char *_getline(const int fd)
                 strncpy(line, buffer, line_len);
                 line[line_len] = '\0';
 
-                memmove(buffer, buffer + read_pos + 1, buffer_len - (read_pos + 1));
+                my_memmove(buffer, buffer + read_pos + 1, buffer_len - (read_pos + 1));
                 buffer_len -= (read_pos + 1);
                 read_pos = 0;
 
