@@ -16,6 +16,7 @@
  * or end-of-file is reached
  */
 
+static int read_count = 0;  /* Static variable to keep count across calls */
 
 char *_getline(const int fd)
 {
@@ -32,6 +33,8 @@ char *_getline(const int fd)
     }
     while ((bytes_read = read(fd, &c, 1)) > 0)
     {
+        read_count++;
+
         if (buffer_len >= buffer_size)
         {
             buffer_size *= 2;
