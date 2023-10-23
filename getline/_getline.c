@@ -18,6 +18,7 @@
 
 char *_getline(const int fd)
 {
+    int read_count = 0;
     size_t buffer_len = 0;
     size_t buffer_size = READ_SIZE;
     ssize_t bytes_read;
@@ -31,6 +32,7 @@ char *_getline(const int fd)
     }
     while ((bytes_read = read(fd, &c, 1)) > 0)
     {
+        read_count++;
         if (buffer_len >= buffer_size)
         {
             buffer_size *= 2;
