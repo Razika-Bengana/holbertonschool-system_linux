@@ -4,6 +4,10 @@ void read_elf_header(int fd, Elf64_Ehdr *header);
 void print_magic(Elf64_Ehdr *header);
 void print_class(Elf64_Ehdr *header);
 void print_data(Elf64_Ehdr *header);
+void print_version(Elf64_Ehdr *header);
+void print_os_abi(Elf64_Ehdr *header);
+void print_abi_version(Elf64_Ehdr *header);
+void print_type(Elf64_Ehdr *header);
 void print_machine_type(Elf64_Ehdr *header);
 void print_header_details(Elf64_Ehdr *header);
 
@@ -31,6 +35,10 @@ int main(int argc, char **argv)
     print_magic(&header);
     print_class(&header);
     print_data(&header);
+    print_version(&header);
+    print_os_abi(&header);
+    print_abi_version(&header);
+    print_type(&header);
     print_machine_type(&header);
     print_header_details(&header);
 
@@ -43,7 +51,6 @@ void read_elf_header(int fd, Elf64_Ehdr *header)
     if (read(fd, header, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr))
     {
         perror("Error reading ELF header");
-        close(fd);
         exit(EXIT_FAILURE);
     }
 }
@@ -51,7 +58,6 @@ void read_elf_header(int fd, Elf64_Ehdr *header)
 void print_magic(Elf64_Ehdr *header)
 {
     int i;
-
     printf("  Magic:   ");
     for (i = 0; i < EI_NIDENT; i++)
     {
@@ -70,6 +76,77 @@ void print_data(Elf64_Ehdr *header)
 {
     printf("  Data:                              %s\n",
            header->e_ident[EI_DATA] == ELFDATA2LSB ? "2's complement, little endian" : "Invalid");
+}
+
+void print_version(Elf64_Ehdr *header)
+{
+    printf("  Version:                           %d (current)\n", header->e_ident[EI_VERSION]);
+}
+
+void print_os_abi(Elf64_Ehdr *header)
+{
+    printf("  OS/ABI:                            ");
+    switch (header->e_ident[EI_OSABI])
+    {
+        case ELFOSABI_NONE:
+            printf("UNIX - System V\n");
+            break;
+        case ELFOSABI_HPUX:
+            printf("UNIX - HP-UX\n");
+            break;
+        case ELFOSABI_NETBSD:
+            printf("UNIX - NetBSD\n");
+            break;
+        case ELFOSABI_LINUX:
+            printf("UNIX - Linux\n");
+            break;
+        case ELFOSABI_SOLARIS:
+            printf("UNIX - Solaris\n");
+            break;
+        case ELFOSABI_IRIX:
+            printf("UNIX - IRIX\n");
+            break;
+        case ELFOSABI_FREEBSD:
+            printf("UNIX - FreeBSD\n");
+            break;
+        case ELFOSABI_TRU64:
+            printf("UNIX - TRU64\n");
+            break;
+        default:
+            printf("Unknown\n");
+    }
+}
+
+
+void print_abi_version(Elf64_Ehdr *header)
+{
+    printf("  ABI Version:                       %d\n", header->e_ident[EI_ABIVERSION]);
+}
+
+void print_type(Elf64_Ehdr *header)
+{
+    printf("  Type:                              ");
+    switch (header->e_type)
+    {
+        case ET_NONE:
+            printf("NONE (No file type)\n");
+            break;
+        case ET_REL:
+            printf("REL (Relocatable file)\n");
+            break;
+        case ET_EXEC:
+            printf("EXEC (Executable file)\n");
+            break;
+        case ET_DYN:
+            printf("DYN (Shared object file)\n");
+            break;
+        case ET_CORE:
+            printf("CORE (Core file)\n");
+            break;
+        default:
+            printf("Unknown\n");
+            break;
+    }
 }
 
 void print_machine_type(Elf64_Ehdr *header)
@@ -99,10 +176,13 @@ void print_machine_type(Elf64_Ehdr *header)
             printf("Intel 80860\n");
             break;
         case EM_MIPS:
-            printf("MIPS R3000\n");
+            printf("MIPS RS3000 Big-Endian\n");
             break;
         case EM_PARISC:
-            printf("HP/PA\n");
+            printf("Hewlett-Packard PA-RISC\n");
+            break;
+        case EM_VPP500:
+            printf("Fujitsu VPP500\n");
             break;
         case EM_SPARC32PLUS:
             printf("SPARC with enhanced instruction set\n");
@@ -114,13 +194,13 @@ void print_machine_type(Elf64_Ehdr *header)
             printf("PowerPC 64-bit\n");
             break;
         case EM_S390:
-            printf("IBM S/390\n");
+            printf("IBM S390\n");
             break;
         case EM_ARM:
             printf("ARM\n");
             break;
         case EM_SH:
-            printf("SuperH\n");
+            printf("Renesas SH\n");
             break;
         case EM_SPARCV9:
             printf("SPARC V9 64-bit\n");
@@ -131,8 +211,8 @@ void print_machine_type(Elf64_Ehdr *header)
         case EM_X86_64:
             printf("Advanced Micro Devices X86-64\n");
             break;
-        case EM_VAX:
-            printf("DEC Vax\n");
+        case EM_AARCH64:
+            printf("ARM64\n");
             break;
         default:
             printf("Unknown\n");
@@ -142,10 +222,6 @@ void print_machine_type(Elf64_Ehdr *header)
 
 void print_header_details(Elf64_Ehdr *header)
 {
-    printf("  Version:                           %d (current)\n", header->e_ident[EI_VERSION]);
-    printf("  OS/ABI:                            UNIX - System V\n");
-    printf("  ABI Version:                       %d\n", header->e_ident[EI_ABIVERSION]);
-    printf("  Type:                              %d\n", header->e_type);
     printf("  Version:                           0x%x\n", header->e_version);
     printf("  Entry point address:               0x%lx\n", header->e_entry);
     printf("  Start of program headers:          %ld (bytes into file)\n", header->e_phoff);
