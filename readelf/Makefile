@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic
+CFLAGS = -Wall -Werror -Wextra -pedantic -std=c99
 DEBUGFLAGS = -g
 TARGET = 0-hreadelf
 SOURCE = elf_header.c
