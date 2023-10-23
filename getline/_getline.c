@@ -24,6 +24,7 @@ char *_getline(const int fd)
     static size_t read_pos = 0;
     size_t line_len = 0;
     char *line;
+    char *new_buffer;
 
     if (buffer == NULL)
     {
@@ -38,7 +39,7 @@ char *_getline(const int fd)
         if (buffer_len == buffer_size)
         {
             buffer_size *= 2;
-            char *new_buffer = realloc(buffer, buffer_size);
+            new_buffer = realloc(buffer, buffer_size);
             if (new_buffer == NULL)
             {
                 free(buffer);
