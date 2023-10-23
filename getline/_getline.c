@@ -1,5 +1,7 @@
 #include "_getline.h"
 
+#define BUFFER_SIZE 1024
+
 /**
  * _getline - program that reads a line from a file descriptor and returns it as a string
  *
@@ -13,9 +15,6 @@
  * Return: a pointer to the string read, or NULL if an error occurs
  * or end-of-file is reached
  */
-
-
-#define BUFFER_SIZE 1024
 
 
 char *_getline(const int fd)
