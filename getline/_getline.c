@@ -25,6 +25,7 @@ char *_getline(const int fd)
     char *buffer = malloc(buffer_size);
     char *new_buffer;
     char temp_buffer[READ_SIZE];
+    int i;
 
     if (!buffer)
     {
@@ -50,7 +51,7 @@ char *_getline(const int fd)
         memcpy(buffer + buffer_len, temp_buffer, bytes_read);
         buffer_len += bytes_read;
 
-        for (int i = 0; i < bytes_read; i++)
+        for (i = 0; i < bytes_read; i++)
         {
             if (temp_buffer[i] == '\n')
             {
