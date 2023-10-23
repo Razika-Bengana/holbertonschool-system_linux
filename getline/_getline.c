@@ -1,6 +1,22 @@
 #include "_getline.h"
 
+/**
+ * _getline - program that reads a line from a file descriptor and returns it as a string
+ *
+ * @fd: the file descriptor from which to read
+ *
+ * the function allocates memory for the string, which must be freed by the caller;
+ * it reads one character at a time from the file descriptor, and dynamically
+ * reallocates the buffer to hold the string;
+ * the string will not include the trailing newline character;
+ *
+ * Return: a pointer to the string read, or NULL if an error occurs
+ * or end-of-file is reached
+ */
+
+
 #define BUFFER_SIZE 1024
+
 
 char *_getline(const int fd)
 {
