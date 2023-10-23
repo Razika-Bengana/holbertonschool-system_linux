@@ -16,10 +16,9 @@
  * or end-of-file is reached
  */
 
-static int read_count = 0;  /* Static variable to keep count across calls */
-
 char *_getline(const int fd)
 {
+    int read_count = 0;
     size_t buffer_len = 0;
     size_t buffer_size = BUFFER_SIZE;
     ssize_t bytes_read;
