@@ -9,20 +9,22 @@ void print_header_details(Elf64_Ehdr *header);
 
 int main(int argc, char **argv)
 {
+    int fd;
+    Elf64_Ehdr header;
+
     if (argc < 2)
     {
         fprintf(stderr, "Usage: %s elf_filename\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
-    int fd = open(argv[1], O_RDONLY);
+    fd = open(argv[1], O_RDONLY);
     if (fd == -1)
     {
         perror("Error opening file");
         exit(EXIT_FAILURE);
     }
 
-    Elf64_Ehdr header;
     read_elf_header(fd, &header);
 
     printf("ELF Header:\n");
@@ -48,8 +50,10 @@ void read_elf_header(int fd, Elf64_Ehdr *header)
 
 void print_magic(Elf64_Ehdr *header)
 {
+    int i;
+
     printf("  Magic:   ");
-    for (int i = 0; i < EI_NIDENT; i++)
+    for (i = 0; i < EI_NIDENT; i++)
     {
         printf("%02x ", header->e_ident[i]);
     }
