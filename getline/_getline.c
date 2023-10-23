@@ -44,11 +44,14 @@ char *buffer_append(char *buffer, char *append, size_t len)
 
 char *_getline(const int fd)
 {
-    static char *remainder;
+    static char *remainder = NULL;
     char *line = NULL;
     char buf[READ_SIZE];
+
     ssize_t bytes_read;
     size_t i, start;
+
+    memset(buf, 0, READ_SIZE);
 
     if (remainder)
     {
