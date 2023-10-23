@@ -24,16 +24,17 @@ char *_getline(const int fd)
     ssize_t bytes_read;
     char *buffer = malloc(buffer_size);
     char *new_buffer;
-    char c;
+    char temp_buffer[READ_SIZE];
 
     if (!buffer)
     {
         return (NULL);
     }
-    while ((bytes_read = read(fd, &c, 1)) > 0)
+
+    while ((bytes_read = read(fd, temp_buffer, READ_SIZE)) > 0)
     {
         read_count++;
-        if (buffer_len >= buffer_size)
+        if (buffer_len + bytes_read >= buffer_size)
         {
             buffer_size *= 2;
             new_buffer = realloc(buffer, buffer_size);
@@ -46,14 +47,16 @@ char *_getline(const int fd)
 
             buffer = new_buffer;
         }
+        memcpy(buffer + buffer_len, temp_buffer, bytes_read);
+        buffer_len += bytes_read;
 
-        buffer[buffer_len] = c;
-        buffer_len++;
-
-        if (c == '\n')
+        for (int i = 0; i < bytes_read; i++)
         {
-            buffer[buffer_len -1] = '\0';
-            break;
+            if (temp_buffer[i] == '\n')
+            {
+                buffer[buffer_len - 1] = '\0';
+                break;
+            }
         }
     }
 
