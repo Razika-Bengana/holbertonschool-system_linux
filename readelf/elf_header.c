@@ -157,11 +157,24 @@ void print_machine_type(void *header, int is_elf64)
         case EM_MIPS:
             printf("MIPS R3000\n");
             break;
+        case EM_SPARC:
+            printf("SPARC\n");
+            break;
+        case EM_POWERPC:
+            printf("PowerPC\n");
+            break;
+        case EM_IA_64:
+            printf("Intel Itanium\n");
+            break;
+        case EM_S390:
+            printf("IBM S/390\n");
+            break;
         default:
             printf("Unknown (%d)\n", machine_type);
             break;
     }
 }
+
 
 void print_header_details(void *header, int is_elf64)
 {
