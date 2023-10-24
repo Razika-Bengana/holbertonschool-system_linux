@@ -18,56 +18,60 @@
 
 int main(int argc, char *argv[])
 {
-    void *header = NULL;
+	void *header = NULL;
 
-    if (argc != 2)
-    {
-        printf("Usage: %s <ELF_FILE>\n", argv[0]);
-        return (1);
-    }
+	if (argc != 2)
+	{
+		printf("Usage: %s <ELF_FILE>\n", argv[0]);
+		return (1);
+	}
 
-    FILE *file = fopen(argv[1], "rb");
-    if (file == NULL)
-    {
-        perror("Error opening file");
-        return (1);
-    }
+	FILE *file = fopen(argv[1], "rb");
 
-    unsigned char e_ident[EI_NIDENT];
-    if (fread(e_ident, EI_NIDENT, 1, file) != 1)
-    {
-        perror("Error reading e_ident");
-        fclose(file);
-        return 1;
-    }
+	if (file == NULL)
+	{
+		perror("Error opening file");
+		return (1);
+	}
 
-    int is_elf64 = (e_ident[EI_CLASS] == ELFCLASS64);
-    header = is_elf64 ? (void *)malloc(sizeof(Elf64_Ehdr)) : (void *)malloc(sizeof(Elf32_Ehdr));
+	unsigned char e_ident[EI_NIDENT];
 
-    if (header == NULL)
-    {
-        perror("Error allocating memory for header");
-        fclose(file);
-        return 1;
-    }
+	if (fread(e_ident, EI_NIDENT, 1, file) != 1)
+	{
+		perror("Error reading e_ident");
+		fclose(file);
+		return (1);
+	}
 
-    fseek(file, 0, SEEK_SET);
+	int is_elf64 = (e_ident[EI_CLASS] == ELFCLASS64);
 
-    read_elf_header(file, header, is_elf64);
+	header = is_elf64 ? (void *)malloc(sizeof(Elf64_Ehdr)) :
+		(void *)malloc(sizeof(Elf32_Ehdr));
 
-    printf("ELF Header:\n");
-    print_magic(header, is_elf64);
-    print_class(header, is_elf64);
-    print_data(header, is_elf64);
-    print_version(header, is_elf64);
-    print_os_abi(header, is_elf64);
-    print_abi_version(header, is_elf64);
-    print_type(header, is_elf64);
-    print_machine_type(header, is_elf64);
-    print_header_details(header, is_elf64);
+	if (header == NULL)
+	{
+		perror("Error allocating memory for header");
+		fclose(file);
+		return (1);
+	}
 
-    free(header);
-    fclose(file);
+	fseek(file, 0, SEEK_SET);
 
-    return (0);
+	read_elf_header(file, header, is_elf64);
+
+	printf("ELF Header:\n");
+	print_magic(header, is_elf64);
+	print_class(header, is_elf64);
+	print_data(header, is_elf64);
+	print_version(header, is_elf64);
+	print_os_abi(header, is_elf64);
+	print_abi_version(header, is_elf64);
+	print_type(header, is_elf64);
+	print_machine_type(header, is_elf64);
+	print_header_details(header, is_elf64);
+
+	free(header);
+	fclose(file);
+
+	return (0);
 }
