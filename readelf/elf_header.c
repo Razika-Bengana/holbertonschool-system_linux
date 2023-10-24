@@ -160,17 +160,11 @@ void print_machine_type(void *header, int is_elf64)
         case EM_SPARC:
             printf("SPARC\n");
             break;
-        case EM_POWERPC:
-            printf("PowerPC\n");
-            break;
         case EM_IA_64:
             printf("Intel IA-64\n");
             break;
         case EM_S390:
             printf("IBM S/390\n");
-            break;
-        case EM_RISCV:
-            printf("RISC-V\n");
             break;
         default:
             printf("Unknown (%d)\n", machine_type);
