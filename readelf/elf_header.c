@@ -160,9 +160,6 @@ void print_machine_type(void *header, int is_elf64)
         case EM_SPARC:
             printf("SPARC\n");
             break;
-        case EM_POWERPC:
-            printf("PowerPC\n");
-            break;
         case EM_IA_64:
             printf("Intel Itanium\n");
             break;
