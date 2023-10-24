@@ -36,6 +36,7 @@ void* initialize_elf_header(FILE *file, int *is_elf64_ptr)
     return (header);
 }
 
+
 /**
  * print_elf_header_details - program that prints the details of the ELF header
  *
@@ -63,6 +64,7 @@ void print_elf_header_details(void *header, int is_elf64)
     print_machine_type(header, is_elf64);
     print_header_details(header, is_elf64);
 }
+
 
 /**
  * main - the entry point

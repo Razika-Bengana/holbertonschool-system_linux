@@ -27,6 +27,7 @@ void print_header_details_64(Elf64_Ehdr *header)
         printf("  Section header string table index: %d\n", header->e_shstrndx);
 }
 
+
 /**
  * print_header_details_32 - program that prints the ELF header details for 32-bit files
  *
@@ -53,6 +54,7 @@ void print_header_details_32(Elf32_Ehdr *header)
         printf("  Number of section headers:         %d\n", header->e_shnum);
         printf("  Section header string table index: %d\n", header->e_shstrndx);
 }
+
 
 /**
  * print_header_details - program that prints the ELF header details for either 32-bit or 64-bit files

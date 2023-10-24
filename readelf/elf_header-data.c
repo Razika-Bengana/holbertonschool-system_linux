@@ -28,6 +28,7 @@ void swap_fields_64(Elf64_Ehdr *hdr64)
     swap_bytes(&hdr64->e_shstrndx, sizeof(hdr64->e_shstrndx));
 }
 
+
 /**
  * swap_fields_32 - program that swaps the byte order of various fields in a 32-bit ELF header
  *
@@ -56,6 +57,7 @@ void swap_fields_32(Elf32_Ehdr *hdr32)
     swap_bytes(&hdr32->e_shstrndx, sizeof(hdr32->e_shstrndx));
 }
 
+
 /**
  * print_data_encoding - program that prints the data encoding of an ELF file
  *
@@ -83,6 +85,7 @@ void print_data_encoding(unsigned char elf_data)
             break;
     }
 }
+
 
 /**
  * print_data - program that prints the data encoding of the ELF file and swaps the byte order if necessary
