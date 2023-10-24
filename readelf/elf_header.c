@@ -97,7 +97,7 @@ void print_os_abi(void *header, int is_elf64)
             printf("UNIX - FreeBSD\n");
             break;
         default:
-            printf("Unknown (%d)\n", elf_osabi);
+            printf("<unknown: %d>\n", elf_osabi);
             break;
     }
 }
