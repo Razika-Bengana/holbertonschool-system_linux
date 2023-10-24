@@ -12,7 +12,7 @@
 
 /* task 0: ELF file header */
 
-void* initialize_elf_header(FILE *file, int *is_elf64_ptr);
+void y*initialize_elf_header(FILE *file, int *is_elf64_ptr);
 void print_elf_header_details(void *header, int is_elf64);
 
 void swap_bytes(void *value, size_t size);
