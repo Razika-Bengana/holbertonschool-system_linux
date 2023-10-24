@@ -221,7 +221,7 @@ void print_machine_type(void *header, int is_elf64)
             printf("MIPS R3000\n");
             break;
         case EM_SPARC:
-            printf("SPARC\n");
+            printf("Sparc\n");
             break;
         case EM_IA_64:
             printf("Intel IA-64\n");
