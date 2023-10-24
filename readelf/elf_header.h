@@ -8,17 +8,18 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+
 /* task 0: ELF file header */
-void read_elf_header(int fd, Elf64_Ehdr *header);
-void print_magic(Elf64_Ehdr *header);
-void print_class(Elf64_Ehdr *header);
-void print_data(Elf64_Ehdr *header);
-void print_version(Elf64_Ehdr *header);
-void print_os_abi(Elf64_Ehdr *header);
-void print_abi_version(Elf64_Ehdr *header);
-void print_type(Elf64_Ehdr *header);
-void print_machine_type(Elf64_Ehdr *header);
-void print_header_details(Elf64_Ehdr *header);
+void read_elf_header(FILE *file, void *header, int is_elf64);
+void print_magic(void *header, int is_elf64);
+void print_class(void *header, int is_elf64);
+void print_data(void *header, int is_elf64);
+void print_version(void *header, int is_elf64);
+void print_os_abi(void *header, int is_elf64);
+void print_abi_version(void *header, int is_elf64);
+void print_type(void *header, int is_elf64);
+void print_machine_type(void *header, int is_elf64);
+void print_header_details(void *header, int is_elf64);
 
 
 #endif /* ELF_HEADER_H */
