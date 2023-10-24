@@ -7,9 +7,14 @@
 #include <elf.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdint.h>
 
 
 /* task 0: ELF file header */
+void swap_bytes(void *value, size_t size);
+int system_is_little_endian();
+int system_is_big_endian();
+
 void read_elf_header(FILE *file, void *header, int is_elf64);
 void print_magic(void *header, int is_elf64);
 void print_class(void *header, int is_elf64);

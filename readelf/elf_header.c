@@ -1,5 +1,32 @@
 #include "elf_header.h"
 
+
+#include <stdint.h>
+
+void swap_bytes(void *value, size_t size)
+{
+    uint8_t *ptr = value;
+    for (size_t i = 0; i < size / 2; i++)
+    {
+        uint8_t tmp = ptr[i];
+        ptr[i] = ptr[size - 1 - i];
+        ptr[size - 1 - i] = tmp;
+    }
+}
+
+int system_is_big_endian()
+{
+    uint16_t number = 1;
+    char *numPtr = (char*)&number;
+    return (numPtr[0] == 0);
+}
+
+int system_is_little_endian()
+{
+    return !system_is_big_endian();
+}
+
+
 void read_elf_header(FILE *file, void *header, int is_elf64)
 {
     if (is_elf64)
@@ -44,6 +71,42 @@ void print_class(void *header, int is_elf64)
 void print_data(void *header, int is_elf64)
 {
     unsigned char elf_data = is_elf64 ? ((Elf64_Ehdr *)header)->e_ident[EI_DATA] : ((Elf32_Ehdr *)header)->e_ident[EI_DATA];
+
+    if ((system_is_big_endian() && elf_data == ELFDATA2LSB) || (system_is_little_endian() && elf_data == ELFDATA2MSB))
+    {
+        if (is_elf64)
+        {
+            Elf64_Ehdr *hdr64 = (Elf64_Ehdr *)header;
+            swap_bytes(&hdr64->e_type, sizeof(hdr64->e_type));
+            swap_bytes(&hdr64->e_machine, sizeof(hdr64->e_machine));
+            swap_bytes(&hdr64->e_version, sizeof(hdr64->e_version));
+            swap_bytes(&hdr64->e_entry, sizeof(hdr64->e_entry));
+            swap_bytes(&hdr64->e_phoff, sizeof(hdr64->e_phoff));
+            swap_bytes(&hdr64->e_shoff, sizeof(hdr64->e_shoff));
+            swap_bytes(&hdr64->e_flags, sizeof(hdr64->e_flags));
+            swap_bytes(&hdr64->e_ehsize, sizeof(hdr64->e_ehsize));
+            swap_bytes(&hdr64->e_phentsize, sizeof(hdr64->e_phentsize));
+            swap_bytes(&hdr64->e_phnum, sizeof(hdr64->e_phnum));
+            swap_bytes(&hdr64->e_shentsize, sizeof(hdr64->e_shentsize));
+            swap_bytes(&hdr64->e_shnum, sizeof(hdr64->e_shnum));
+            swap_bytes(&hdr64->e_shstrndx, sizeof(hdr64->e_shstrndx));
+        } else {
+            Elf32_Ehdr *hdr32 = (Elf32_Ehdr *)header;
+            swap_bytes(&hdr32->e_type, sizeof(hdr32->e_type));
+            swap_bytes(&hdr32->e_machine, sizeof(hdr32->e_machine));
+            swap_bytes(&hdr32->e_version, sizeof(hdr32->e_version));
+            swap_bytes(&hdr32->e_entry, sizeof(hdr32->e_entry));
+            swap_bytes(&hdr32->e_phoff, sizeof(hdr32->e_phoff));
+            swap_bytes(&hdr32->e_shoff, sizeof(hdr32->e_shoff));
+            swap_bytes(&hdr32->e_flags, sizeof(hdr32->e_flags));
+            swap_bytes(&hdr32->e_ehsize, sizeof(hdr32->e_ehsize));
+            swap_bytes(&hdr32->e_phentsize, sizeof(hdr32->e_phentsize));
+            swap_bytes(&hdr32->e_phnum, sizeof(hdr32->e_phnum));
+            swap_bytes(&hdr32->e_shentsize, sizeof(hdr32->e_shentsize));
+            swap_bytes(&hdr32->e_shnum, sizeof(hdr32->e_shnum));
+            swap_bytes(&hdr32->e_shstrndx, sizeof(hdr32->e_shstrndx));
+        }
+    }
     printf("  Data:                              ");
     switch (elf_data)
     {
@@ -210,6 +273,8 @@ void print_header_details(void *header, int is_elf64)
 
 int main(int argc, char *argv[])
 {
+    void *header = NULL;
+
     if (argc != 2)
     {
         printf("Usage: %s <ELF_FILE>\n", argv[0]);
@@ -224,13 +289,24 @@ int main(int argc, char *argv[])
     }
 
     unsigned char e_ident[EI_NIDENT];
-    fread(e_ident, EI_NIDENT, 1, file);
-
-    fseek(file, 0, SEEK_SET);
+    if (fread(e_ident, EI_NIDENT, 1, file) != 1)
+    {
+        perror("Error reading e_ident");
+        fclose(file);
+        return 1;
+    }
 
     int is_elf64 = (e_ident[EI_CLASS] == ELFCLASS64);
+    header = is_elf64 ? (void *)malloc(sizeof(Elf64_Ehdr)) : (void *)malloc(sizeof(Elf32_Ehdr));
 
-    void *header = is_elf64 ? (void *)malloc(sizeof(Elf64_Ehdr)) : (void *)malloc(sizeof(Elf32_Ehdr));
+    if (header == NULL)
+    {
+        perror("Error allocating memory for header");
+        fclose(file);
+        return 1;
+    }
+
+    fseek(file, 0, SEEK_SET);
 
     read_elf_header(file, header, is_elf64);
 
@@ -250,3 +326,4 @@ int main(int argc, char *argv[])
 
     return (0);
 }
+
