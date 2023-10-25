@@ -20,8 +20,19 @@ void print_flags(unsigned long flags, char *buf)
         buf[index++] = 'X';
     }
 
+    if (flags & SHF_MERGE)
+    {
+        buf[index++] = 'M';
+    }
+
+    if (flags & SHF_STRINGS)
+    {
+        buf[index++] = 'S';
+    }
+
     buf[index] = '\0';
 }
+
 
 
 
