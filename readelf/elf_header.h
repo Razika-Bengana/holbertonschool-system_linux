@@ -12,6 +12,15 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+typedef struct
+{
+    void *elf_header;
+    void *shdr;
+    int count;
+    char *strtab;
+    int is_64bit;
+} SectionHeaderInfo;
+
 
 /* task 0: ELF file header */
 
@@ -44,6 +53,8 @@ void print_machine_type(void *header, int is_elf64);
 /* task 1: ELF sections' headers */
 void print_flags(unsigned long flags, char *buf);
 char* section_type_to_string(uint32_t type);
+void print_section_headers(SectionHeaderInfo *info);
+void handle_elf(char *mem, size_t fileSize, int is_64bit);
 
 
 #endif /* ELF_HEADER_H */
