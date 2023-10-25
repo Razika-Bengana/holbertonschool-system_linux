@@ -8,6 +8,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdint.h>
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 
 /* task 0: ELF file header */
@@ -39,6 +42,8 @@ void print_machine_type(void *header, int is_elf64);
 
 
 /* task 1: ELF sections' headers */
+void print_flags(unsigned long flags, char *buf);
+char* section_type_to_string(uint32_t type);
 
 
 #endif /* ELF_HEADER_H */
