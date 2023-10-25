@@ -73,9 +73,16 @@ char* section_type_to_string(uint32_t type)
         case SHT_GROUP: return "GROUP";
         case SHT_SYMTAB_SHNDX: return "SYMTAB_SHNDX";
         case SHT_NUM: return "NUM";
+        case 0x6ffffff0: return "VERSYM";
+        case 0x6ffffffc: return "VERDEF";
+        case 0x6ffffffd: return "VERNEED";
+        case 0x6ffffffe: return "VERNEEDNUM";
+        case 0x60000000: return "LOOS";
+        case 0x60000001: return "LOUSER";
         default: return "UNKNOWN";
     }
 }
+
 
 
 void print_section_headers(SectionHeaderInfo *info)
