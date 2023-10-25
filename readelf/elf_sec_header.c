@@ -76,9 +76,11 @@ char* section_type_to_string(uint32_t type)
         case 0x6ffffff0: return "VERSYM";
         case 0x6ffffffc: return "VERDEF";
         case 0x6ffffffd: return "VERNEED";
-        case 0x6ffffffe: return "VERNEEDNUM";
+        case 0x6ffffffE: return "VERNEEDNUM";
         case 0x6FFFFFF6: return "GNU_HASH";
         case 0x60000000: return "LOOS";
+        case 0x60000000 + 0xFFFFFF3: return "LOOS+FFFFFF3";
+        case 0x60000000 + 0xFFFFFF1: return "LOOS+FFFFFF1";
         case 0x60000001: return "LOUSER";
         default: return "UNKNOWN";
     }
