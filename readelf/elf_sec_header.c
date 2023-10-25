@@ -108,7 +108,7 @@ void print_section_headers(SectionHeaderInfo *info)
         {
             Elf64_Shdr *section = &((Elf64_Shdr *)info->shdr)[i];
             print_flags(section->sh_flags, flag_str);
-            printf("  [%2d] %-17s %-15s %016lx %06lx %06lx %02lx %4s %2d %3u %2lu\n",
+            printf("  [%2d] %-17s %-15s %016lx %06lx %06lx %02lx %3s %2d %3u %2lu\n",
                    i,
                    info->strtab + section->sh_name,
                    section_type_to_string(section->sh_type),
