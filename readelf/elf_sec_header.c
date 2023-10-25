@@ -45,6 +45,11 @@ void print_flags(unsigned long flags, char *buf)
         buf[index++] = 'O';
     }
 
+    if (flags & SHF_EXCLUDE)
+    {
+        buf[index++] = 'E';
+    }
+
     buf[index] = '\0';
 }
 
