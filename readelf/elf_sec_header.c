@@ -91,33 +91,24 @@ void print_section_headers(SectionHeaderInfo *info)
 {
     int num_headers;
     Elf64_Off offset;
-    char flag_str[4];
+    char flag_str[5];
 
     if (info->is_64bit)
     {
         Elf64_Ehdr *ehdr = (Elf64_Ehdr *)info->elf_header;
         num_headers = ehdr->e_shnum;
         offset = ehdr->e_shoff;
-    }
-    else
-    {
-        Elf32_Ehdr *ehdr = (Elf32_Ehdr *)info->elf_header;
-        num_headers = ehdr->e_shnum;
-        offset = ehdr->e_shoff;
-    }
 
-    printf("There are %d section headers, starting at offset 0x%lx:\n", num_headers, offset);
-    printf("\n");
-    printf("Section Headers:\n");
-    printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
+        printf("There are %d section headers, starting at offset 0x%lx:\n", num_headers, offset);
+        printf("\n");
+        printf("Section Headers:\n");
+        printf("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n");
 
-    for (int i = 0; i < info->count; i++)
-    {
-        if (info->is_64bit)
+        for (int i = 0; i < info->count; i++)
         {
             Elf64_Shdr *section = &((Elf64_Shdr *)info->shdr)[i];
             print_flags(section->sh_flags, flag_str);
-            printf("  [%2d] %-17s %-15s %016lx %06lx %06lx %02lx %3s %2d %3u %2lu\n",
+            printf("  [%2d] %-17s %-15s %016lx %06lx %06lx %02lx %4s %2d %3u %2lu\n",
                    i,
                    info->strtab + section->sh_name,
                    section_type_to_string(section->sh_type),
@@ -130,7 +121,24 @@ void print_section_headers(SectionHeaderInfo *info)
                    section->sh_info,
                    section->sh_addralign);
         }
-        else
+
+        printf("Key to Flags:\n");
+        printf("  W (write), A (alloc), X (execute), M (merge), S (strings), l (large)\n");
+        printf("  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n");
+        printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n");
+    }
+    else
+    {
+        Elf32_Ehdr *ehdr = (Elf32_Ehdr *)info->elf_header;
+        num_headers = ehdr->e_shnum;
+        offset = ehdr->e_shoff;
+
+        printf("There are %d section headers, starting at offset 0x%lx:\n", num_headers, offset);
+        printf("\n");
+        printf("Section Headers:\n");
+        printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
+
+        for (int i = 0; i < info->count; i++)
         {
             Elf32_Shdr *section = &((Elf32_Shdr *)info->shdr)[i];
             print_flags(section->sh_flags, flag_str);
@@ -147,12 +155,12 @@ void print_section_headers(SectionHeaderInfo *info)
                    (unsigned long) section->sh_info,
                    (unsigned long) section->sh_addralign);
         }
-    }
 
-    printf("Key to Flags:\n");
-    printf("  W (write), A (alloc), X (execute), M (merge), S (strings)\n");
-    printf("  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n");
-    printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n");
+        printf("Key to Flags:\n");
+        printf("  W (write), A (alloc), X (execute), M (merge), S (strings)\n");
+        printf("  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n");
+        printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n");
+    }
 }
 
 
