@@ -30,6 +30,21 @@ void print_flags(unsigned long flags, char *buf)
         buf[index++] = 'S';
     }
 
+    if (flags & SHF_INFO_LINK)
+    {
+        buf[index++] = 'I';
+    }
+
+    if (flags & SHF_LINK_ORDER)
+    {
+        buf[index++] = 'L';
+    }
+
+    if (flags & SHF_OS_NONCONFORMING)
+    {
+        buf[index++] = 'O';
+    }
+
     buf[index] = '\0';
 }
 
