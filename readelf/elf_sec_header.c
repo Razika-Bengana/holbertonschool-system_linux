@@ -1,5 +1,6 @@
 #include "elf_header.h"
 
+
 void print_flags(unsigned long flags, char *buf)
 {
     buf[0] = (flags & SHF_WRITE) ? 'W' : ' ';
@@ -7,6 +8,7 @@ void print_flags(unsigned long flags, char *buf)
     buf[2] = (flags & SHF_EXECINSTR) ? 'X' : ' ';
     buf[3] = '\0';
 }
+
 
 char* section_type_to_string(uint32_t type)
 {
@@ -103,6 +105,7 @@ void print_section_headers(SectionHeaderInfo *info)
     printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n");
 }
 
+
 void handle_elf(char *mem, size_t fileSize, int is_64bit)
 {
     size_t sh_size = is_64bit ? sizeof(Elf64_Shdr) : sizeof(Elf32_Shdr);
@@ -129,6 +132,7 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit)
 
     print_section_headers(&info);
 }
+
 
 int main(int argc, char *argv[])
 {
