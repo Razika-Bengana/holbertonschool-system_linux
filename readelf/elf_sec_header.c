@@ -84,7 +84,7 @@ void print_section_headers(SectionHeaderInfo *info)
         {
             Elf32_Shdr *section = &((Elf32_Shdr *)info->shdr)[i];
             print_flags(section->sh_flags, flag_str);
-            printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx  %-3s %3d %3d %2d\n",
+            printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx  %-3s %3lu %3lu %2lu\n",
                    i,
                    info->strtab + section->sh_name,
                    section_type_to_string(section->sh_type),
