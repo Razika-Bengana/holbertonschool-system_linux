@@ -3,11 +3,26 @@
 
 void print_flags(unsigned long flags, char *buf)
 {
-    buf[0] = (flags & SHF_WRITE) ? 'W' : ' ';
-    buf[1] = (flags & SHF_ALLOC) ? 'A' : ' ';
-    buf[2] = (flags & SHF_EXECINSTR) ? 'X' : ' ';
-    buf[3] = '\0';
+    int index = 0;
+
+    if (flags & SHF_WRITE)
+    {
+        buf[index++] = 'W';
+    }
+
+    if (flags & SHF_ALLOC)
+    {
+        buf[index++] = 'A';
+    }
+
+    if (flags & SHF_EXECINSTR)
+    {
+        buf[index++] = 'X';
+    }
+
+    buf[index] = '\0';
 }
+
 
 
 char* section_type_to_string(uint32_t type)
@@ -67,7 +82,7 @@ void print_section_headers(SectionHeaderInfo *info)
         {
             Elf64_Shdr *section = &((Elf64_Shdr *)info->shdr)[i];
             print_flags(section->sh_flags, flag_str);
-            printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx %-2s %2d %2u %2lu\n",
+            printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx %3s %2d %3u %2lu\n",
                    i,
                    info->strtab + section->sh_name,
                    section_type_to_string(section->sh_type),
@@ -84,7 +99,7 @@ void print_section_headers(SectionHeaderInfo *info)
         {
             Elf32_Shdr *section = &((Elf32_Shdr *)info->shdr)[i];
             print_flags(section->sh_flags, flag_str);
-            printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx %-2s %2lu %2lu %2lu\n",
+            printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx %3s %2lu %3lu %2lu\n",
                    i,
                    info->strtab + section->sh_name,
                    section_type_to_string(section->sh_type),
@@ -164,11 +179,15 @@ int main(int argc, char *argv[])
     }
 
     Elf64_Ehdr *ehdr = (Elf64_Ehdr *) mem;
-    if (ehdr->e_ident[EI_CLASS] == ELFCLASS32) {
+    if (ehdr->e_ident[EI_CLASS] == ELFCLASS32)
+    {
         handle_elf((char *)mem, (size_t)sb.st_size, 0);
-    } else if (ehdr->e_ident[EI_CLASS] == ELFCLASS64) {
+    } else if (ehdr->e_ident[EI_CLASS] == ELFCLASS64)
+    {
         handle_elf((char *)mem, (size_t)sb.st_size, 1);
-    } else {
+    }
+    else
+    {
         fprintf(stderr, "Unsupported ELF file class.\n");
         return (1);
     }
