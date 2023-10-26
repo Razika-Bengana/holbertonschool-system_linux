@@ -329,10 +329,10 @@ int main(int argc, char *argv[])
 
     int host_endianness = (__BYTE_ORDER == __LITTLE_ENDIAN) ? ELFDATA2LSB : ELFDATA2MSB;
 
-    /*if (file_endianness != host_endianness)
+    if (file_endianness != host_endianness)
     {
         fprintf(stderr, "Warning: File endianness does not match host endianness.\n");
-    }*/
+    }
 
     if (file_class == ELFCLASS32)
     {
