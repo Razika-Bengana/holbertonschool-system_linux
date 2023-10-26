@@ -194,7 +194,7 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit)
     int host_endianness = (__BYTE_ORDER == __LITTLE_ENDIAN) ? ELFDATA2LSB : ELFDATA2MSB;
 
     /* Debug: afficher les valeurs d'endianness */
-    fprintf(stderr, "Debug: file_endianness = %d, host_endianness = %d\n", file_endianness, host_endianness);
+    /* fprintf(stderr, "Debug: file_endianness = %d, host_endianness = %d\n", file_endianness, host_endianness);*/
 
     if (file_endianness != host_endianness)
     {
