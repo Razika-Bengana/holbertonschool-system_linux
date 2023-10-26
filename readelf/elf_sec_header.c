@@ -198,7 +198,7 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit)
 
     if (file_endianness != host_endianness)
     {
-        fprintf(stderr, "Warning: File endianness does not match host endianness.\n");
+        /*fprintf(stderr, "Warning: File endianness does not match host endianness.\n");*/
         if (is_64bit)
         {
             Elf64_Ehdr *header = (Elf64_Ehdr *)elf_header;
@@ -243,7 +243,7 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit)
     uint16_t count = is_64bit ? ((Elf64_Ehdr *)elf_header)->e_shnum : ((Elf32_Ehdr *)elf_header)->e_shnum;
 
 
-    fprintf(stderr, "Debug: sh_size: %zu, e_shoff: %lu, count: %u, fileSize: %zu\n", sh_size, e_shoff, count, fileSize);
+    /* fprintf(stderr, "Debug: sh_size: %zu, e_shoff: %lu, count: %u, fileSize: %zu\n", sh_size, e_shoff, count, fileSize);*/
 
     if (e_shoff == 0 || count == 0 || e_shoff + sh_size * count > fileSize)
     {
