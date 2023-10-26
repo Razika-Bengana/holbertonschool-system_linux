@@ -3,16 +3,11 @@
 
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <elf.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdint.h>
-#include <sys/mman.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <endian.h>
-#include <byteswap.h>
+#include <sys/mman.h>
+#include <elf.h>
 
 typedef struct
 {
