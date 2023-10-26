@@ -169,22 +169,107 @@ void print_section_headers(SectionHeaderInfo *info)
     }
 }
 
-
 void handle_elf(char *mem, size_t fileSize, int is_64bit)
 {
-    size_t sh_size = is_64bit ? sizeof(Elf64_Shdr) : sizeof(Elf32_Shdr);
-    void *elf_header = (void *) mem;
-    void *shdr = mem + (is_64bit ? ((Elf64_Ehdr *)elf_header)->e_shoff : ((Elf32_Ehdr *)elf_header)->e_shoff);
-    int count = is_64bit ? ((Elf64_Ehdr *)elf_header)->e_shnum : ((Elf32_Ehdr *)elf_header)->e_shnum;
+    void *elf_header = (void *)mem;
+    if (is_64bit && fileSize < sizeof(Elf64_Ehdr))
+    {
+        fprintf(stderr, "The file is too small to be a valid ELF-64 file.\n");
+        return;
+    }
+    if (!is_64bit && fileSize < sizeof(Elf32_Ehdr))
+    {
+        fprintf(stderr, "The file is too small to be a valid ELF-32 file.\n");
+        return;
+    }
 
-    if ((size_t)(((char *)shdr - mem) + sh_size * count) > fileSize)
+    /* Vérification de l'endianness du fichier */
+    int file_endianness = ((Elf64_Ehdr *)mem)->e_ident[EI_DATA];
+
+    if (file_endianness != ELFDATA2LSB && file_endianness != ELFDATA2MSB)
+    {
+        fprintf(stderr, "Invalid file endianness in ELF header.\n");
+        return;
+    }
+    int host_endianness = (__BYTE_ORDER == __LITTLE_ENDIAN) ? ELFDATA2LSB : ELFDATA2MSB;
+
+    /* Debug: afficher les valeurs d'endianness */
+    fprintf(stderr, "Debug: file_endianness = %d, host_endianness = %d\n", file_endianness, host_endianness);
+
+    if (file_endianness != host_endianness)
+    {
+        fprintf(stderr, "Warning: File endianness does not match host endianness.\n");
+        if (is_64bit)
+        {
+            Elf64_Ehdr *header = (Elf64_Ehdr *)elf_header;
+
+            header->e_type      = __bswap_16(header->e_type);
+            header->e_machine   = __bswap_16(header->e_machine);
+            header->e_version   = __bswap_32(header->e_version);
+            header->e_entry     = __bswap_64(header->e_entry);
+            header->e_phoff     = __bswap_64(header->e_phoff);
+            header->e_shoff     = __bswap_64(header->e_shoff);
+            header->e_flags     = __bswap_32(header->e_flags);
+            header->e_ehsize    = __bswap_16(header->e_ehsize);
+            header->e_phentsize = __bswap_16(header->e_phentsize);
+            header->e_phnum     = __bswap_16(header->e_phnum);
+            header->e_shentsize = __bswap_16(header->e_shentsize);
+            header->e_shnum     = __bswap_16(header->e_shnum);
+            header->e_shstrndx  = __bswap_16(header->e_shstrndx);
+
+        }
+        else
+        {
+            Elf32_Ehdr *header = (Elf32_Ehdr *)elf_header;
+
+            header->e_type      = __bswap_16(header->e_type);
+            header->e_machine   = __bswap_16(header->e_machine);
+            header->e_version   = __bswap_32(header->e_version);
+            header->e_entry     = __bswap_32(header->e_entry);
+            header->e_phoff     = __bswap_32(header->e_phoff);
+            header->e_shoff     = __bswap_32(header->e_shoff);
+            header->e_flags     = __bswap_32(header->e_flags);
+            header->e_ehsize    = __bswap_16(header->e_ehsize);
+            header->e_phentsize = __bswap_16(header->e_phentsize);
+            header->e_phnum     = __bswap_16(header->e_phnum);
+            header->e_shentsize = __bswap_16(header->e_shentsize);
+            header->e_shnum     = __bswap_16(header->e_shnum);
+            header->e_shstrndx  = __bswap_16(header->e_shstrndx);
+        }
+    }
+
+    size_t sh_size = is_64bit ? sizeof(Elf64_Shdr) : sizeof(Elf32_Shdr);
+    uint64_t e_shoff = is_64bit ? ((Elf64_Ehdr *)elf_header)->e_shoff : ((Elf32_Ehdr *)elf_header)->e_shoff;
+    uint16_t count = is_64bit ? ((Elf64_Ehdr *)elf_header)->e_shnum : ((Elf32_Ehdr *)elf_header)->e_shnum;
+
+
+    fprintf(stderr, "Debug: sh_size: %zu, e_shoff: %lu, count: %u, fileSize: %zu\n", sh_size, e_shoff, count, fileSize);
+
+    if (e_shoff == 0 || count == 0 || e_shoff + sh_size * count > fileSize)
     {
         fprintf(stderr, "Section header table goes past end of file.\n");
         return;
     }
 
-    char *strtab = (char *)(mem + (is_64bit ? ((Elf64_Shdr *)shdr)[((Elf64_Ehdr *)elf_header)->e_shstrndx].sh_offset
-                                            : ((Elf32_Shdr *)shdr)[((Elf32_Ehdr *)elf_header)->e_shstrndx].sh_offset));
+    void *shdr = mem + e_shoff;
+
+    uint16_t e_shstrndx = is_64bit ? ((Elf64_Ehdr *)elf_header)->e_shstrndx : ((Elf32_Ehdr *)elf_header)->e_shstrndx;
+
+    if (e_shstrndx >= count)
+    {
+        fprintf(stderr, "Invalid string table index.\n");
+        return;
+    }
+
+    uint64_t strtab_offset = is_64bit ? ((Elf64_Shdr *)(shdr))[e_shstrndx].sh_offset : ((Elf32_Shdr *)(shdr))[e_shstrndx].sh_offset;
+
+    if (strtab_offset == 0 || strtab_offset >= fileSize)
+    {
+        fprintf(stderr, "Invalid string table offset.\n");
+        return;
+    }
+
+    char *strtab = (char *)(mem + strtab_offset);
 
     SectionHeaderInfo info = {
             .elf_header = elf_header,
@@ -196,6 +281,7 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit)
 
     print_section_headers(&info);
 }
+
 
 
 int main(int argc, char *argv[])
@@ -217,27 +303,49 @@ int main(int argc, char *argv[])
     if (fstat(fd, &sb) == -1)
     {
         perror("fstat");
+        close(fd);
         return (1);
+    }
+    if (sb.st_size < (off_t)sizeof(Elf64_Ehdr))
+    {
+        fprintf(stderr, "The file is too small to be a valid ELF file.\n");
+        close(fd);
+        return 1;
     }
 
     void *mem = mmap(NULL, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+
     if (mem == MAP_FAILED)
     {
         perror("mmap");
+        close(fd);
         return (1);
     }
 
-    Elf64_Ehdr *ehdr = (Elf64_Ehdr *) mem;
-    if (ehdr->e_ident[EI_CLASS] == ELFCLASS32)
+    unsigned char *e_ident = ((unsigned char *)mem + EI_CLASS);
+    int file_class = *e_ident;
+    int file_endianness = *(e_ident + EI_DATA - 1);
+
+    int host_endianness = (__BYTE_ORDER == __LITTLE_ENDIAN) ? ELFDATA2LSB : ELFDATA2MSB;
+
+    if (file_endianness != host_endianness)
     {
-        handle_elf((char *)mem, (size_t)sb.st_size, 0);
-    } else if (ehdr->e_ident[EI_CLASS] == ELFCLASS64)
+        fprintf(stderr, "Warning: File endianness does not match host endianness.\n");
+    }
+
+    if (file_class == ELFCLASS32)
     {
-        handle_elf((char *)mem, (size_t)sb.st_size, 1);
+        handle_elf(mem, (size_t)sb.st_size, 0);
+    }
+    else if (file_class == ELFCLASS64)
+    {
+        handle_elf(mem, (size_t)sb.st_size, 1);
     }
     else
     {
         fprintf(stderr, "Unsupported ELF file class.\n");
+        munmap(mem, sb.st_size);
+        close(fd);
         return (1);
     }
 

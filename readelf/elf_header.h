@@ -11,6 +11,8 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <endian.h>
+#include <byteswap.h>
 
 typedef struct
 {
