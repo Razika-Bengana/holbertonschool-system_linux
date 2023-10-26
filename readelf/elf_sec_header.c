@@ -184,8 +184,9 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit)
     }
 
     /* Vérification de l'endianness du fichier */
-    int file_endianness = ((Elf64_Ehdr *)mem)->e_ident[EI_DATA];
-
+    /* Correcting Endianness Check for 32-bit and 64-bit files */
+    int file_endianness = is_64bit ? ((Elf64_Ehdr *)mem)->e_ident[EI_DATA]
+                                   : ((Elf32_Ehdr *)mem)->e_ident[EI_DATA];
     if (file_endianness != ELFDATA2LSB && file_endianness != ELFDATA2MSB)
     {
         fprintf(stderr, "Invalid file endianness in ELF header.\n");
@@ -328,10 +329,10 @@ int main(int argc, char *argv[])
 
     int host_endianness = (__BYTE_ORDER == __LITTLE_ENDIAN) ? ELFDATA2LSB : ELFDATA2MSB;
 
-    if (file_endianness != host_endianness)
+    /*if (file_endianness != host_endianness)
     {
         fprintf(stderr, "Warning: File endianness does not match host endianness.\n");
-    }
+    }*/
 
     if (file_class == ELFCLASS32)
     {
