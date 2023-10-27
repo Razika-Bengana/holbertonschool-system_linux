@@ -8,6 +8,8 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <elf.h>
+#include <stdint.h>
+#include <netinet/in.h>
 
 typedef struct
 {
@@ -52,7 +54,11 @@ void print_machine_type(void *header, int is_elf64);
 void print_flags(unsigned long flags, char *buf);
 char* section_type_to_string(uint32_t type);
 void print_section_headers(SectionHeaderInfo *info);
-void handle_elf(char *mem, size_t fileSize, int is_64bit);
+uint16_t swap_uint16(uint16_t val);
+uint32_t swap_uint32(uint32_t val);
+uint64_t swap_uint64(uint64_t val);
+void handle_elf(char *mem, size_t fileSize, int is_64bit, int is_big_endian);
+
 
 
 #endif /* ELF_HEADER_H */
