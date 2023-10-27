@@ -274,7 +274,6 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit, int is_big_endian)
 {
     void *elf_header = (void *)mem;
 
-    // Early checks for file size validity
     if (is_64bit && fileSize < sizeof(Elf64_Ehdr))
     {
         fprintf(stderr, "The file is too small to be a valid ELF-64 file.\n");
@@ -286,18 +285,15 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit, int is_big_endian)
         return;
     }
 
-    // Initialize variables to read from header
     uint64_t e_shoff = is_64bit ? ((Elf64_Ehdr *)elf_header)->e_shoff : ((Elf32_Ehdr *)elf_header)->e_shoff;
     uint16_t count = is_64bit ? ((Elf64_Ehdr *)elf_header)->e_shnum : ((Elf32_Ehdr *)elf_header)->e_shnum;
 
-    // Swap endianness if the file is big-endian
     if (is_big_endian)
     {
         e_shoff = is_64bit ? swap_uint64(e_shoff) : swap_uint32((uint32_t)e_shoff);
         count = swap_uint16(count);
     }
 
-    // More validations
     size_t sh_size = is_64bit ? sizeof(Elf64_Shdr) : sizeof(Elf32_Shdr);
     if (e_shoff == 0 || count == 0 || e_shoff + sh_size * count > fileSize)
     {
@@ -305,12 +301,10 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit, int is_big_endian)
         return;
     }
 
-    // Locate the section header table
     void *shdr = mem + e_shoff;
 
     uint16_t e_shstrndx = is_64bit ? ((Elf64_Ehdr *)elf_header)->e_shstrndx : ((Elf32_Ehdr *)elf_header)->e_shstrndx;
 
-    // Swap endianness if the file is big-endian
     if (is_big_endian)
     {
         e_shstrndx = swap_uint16(e_shstrndx);
@@ -322,12 +316,10 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit, int is_big_endian)
         return;
     }
 
-    // Locate the section header string table
     uint64_t strtab_offset = is_64bit ?
                              ((Elf64_Shdr *)((char *)shdr + e_shstrndx * sh_size))->sh_offset :
                              ((Elf32_Shdr *)((char *)shdr + e_shstrndx * sh_size))->sh_offset;
 
-    // Swap endianness if the file is big-endian
     if (is_big_endian)
     {
         strtab_offset = is_64bit ? swap_uint64(strtab_offset) : swap_uint32((uint32_t)strtab_offset);
@@ -357,14 +349,14 @@ int main(int argc, char *argv[])
     if (argc < 2)
     {
         fprintf(stderr, "Usage: %s elf_filename\n", argv[0]);
-        return 1;
+        return (1);
     }
 
     int fd = open(argv[1], O_RDONLY);
     if (fd == -1)
     {
         perror("open");
-        return 1;
+        return (1);
     }
 
     struct stat sb;
@@ -372,14 +364,14 @@ int main(int argc, char *argv[])
     {
         perror("fstat");
         close(fd);
-        return 1;
+        return (1);
     }
 
     if (sb.st_size < (off_t)sizeof(Elf64_Ehdr))
     {
         fprintf(stderr, "The file is too small to be a valid ELF file.\n");
         close(fd);
-        return 1;
+        return (1);
     }
 
     void *mem = mmap(NULL, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
@@ -387,7 +379,7 @@ int main(int argc, char *argv[])
     {
         perror("mmap");
         close(fd);
-        return 1;
+        return (1);
     }
 
     unsigned char *e_ident = ((unsigned char *)mem);
@@ -408,16 +400,16 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Unsupported ELF file class.\n");
         munmap(mem, sb.st_size);
         close(fd);
-        return 1;
+        return (1);
     }
 
     if (munmap(mem, sb.st_size) == -1)
     {
         perror("munmap");
-        return 1;
+        return (1);
     }
 
     close(fd);
-    return 0;
+    return (0);
 }
 
