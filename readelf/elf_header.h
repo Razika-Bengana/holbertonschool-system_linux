@@ -53,7 +53,7 @@ void print_machine_type(void *header, int is_elf64);
 
 /* task 1: ELF sections' headers */
 void print_flags(unsigned long flags, char *buf);
-char* section_type_to_string(uint32_t type);
+char *section_type_to_string(uint32_t type);
 void print_section_headers(SectionHeaderInfo *info);
 uint16_t swap_uint16(uint16_t val);
 uint32_t swap_uint32(uint32_t val);

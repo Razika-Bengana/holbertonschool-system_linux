@@ -56,7 +56,7 @@ void print_flags(unsigned long flags, char *buf)
 
 
 
-char* section_type_to_string(uint32_t type)
+char *section_type_to_string(uint32_t type)
 {
     switch (type)
     {
