@@ -14,11 +14,11 @@
 
 typedef struct
 {
-    void *elf_header;
-    void *shdr;
-    int count;
-    char *strtab;
-    int is_64bit;
+        void *elf_header;
+        void *shdr;
+        int count;
+        char *strtab;
+        int is_64bit;
 } SectionHeaderInfo;
 
 
@@ -59,7 +59,6 @@ uint16_t swap_uint16(uint16_t val);
 uint32_t swap_uint32(uint32_t val);
 uint64_t swap_uint64(uint64_t val);
 void handle_elf(char *mem, size_t fileSize, int is_64bit, int is_big_endian);
-
 
 
 #endif /* ELF_HEADER_H */
