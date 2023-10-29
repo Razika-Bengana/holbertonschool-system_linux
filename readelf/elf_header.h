@@ -180,7 +180,7 @@ void get_section_header_info(void *elf_header, size_t fileSize, int is_64bit,
 			     uint16_t *count);
 
 
-/* task 2 */
+/* task 2: ELF program headers --> only 1 main function */
 
 
 #endif /* ELF_HEADER_H */
