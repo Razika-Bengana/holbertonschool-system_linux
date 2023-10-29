@@ -63,7 +63,7 @@ void *map_file(int fd, struct stat *sb)
 
 
 /**
- * handle_elf_file - program that handles the mapped ELF file
+ * process_elf_file - program that handles the mapped ELF file
  *
  * this function determines whether the file is ELF32 or ELF64 and calls
  * the corresponding function to handle it further;
@@ -75,7 +75,7 @@ void *map_file(int fd, struct stat *sb)
  * Return: nothing (void)
  */
 
-void handle_elf_file(void *mem, struct stat *sb)
+void process_elf_file(void *mem, struct stat *sb)
 {
 	unsigned char *e_ident = ((unsigned char *)mem);
 	int file_class = e_ident[EI_CLASS];
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 
-	handle_elf_file(mem, &sb);
+	process_elf_file(mem, &sb);
 
 	if (munmap(mem, sb.st_size) == -1)
 	{

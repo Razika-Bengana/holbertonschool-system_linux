@@ -85,30 +85,41 @@ void print_machine_type(void *header, int is_elf64);
 /* task 1: ELF sections' headers */
 void print_flags(unsigned long flags, char *buf);
 
+void swap_and_assign_section_data_32(Elf32_Shdr *section,
+                                     ConvertedSectionHeader32 *converted,
+                                     int isLittleEndian);
+void handle_32bit_section(SectionHeaderInfo *info, int isLittleEndian);
+
+void swap_and_assign_section_data_64(Elf64_Shdr *section,
+                                     ConvertedSectionHeader64 *converted,
+                                     int isLittleEndian);
+void handle_64bit_section(SectionHeaderInfo *info, int isLittleEndian);
+
+void get_string_table_index(void *elf_header, uint16_t *e_shstrndx,
+                            int is_64bit, int is_big_endian);
+SectionHeaderInfo init_section_header_info(void *elf_header, void *shdr, uint16_t count, char *strtab, int is_64bit);
+uint64_t compute_strtab_offset(void *shdr, uint16_t e_shstrndx, size_t sh_size, int is_64bit, int is_big_endian);
+void handle_elf(char *mem, size_t fileSize, int is_64bit, int is_big_endian);
+
 int open_file(const char *filename);
 int check_file_stat(int fd, struct stat *sb);
 void *map_file(int fd, struct stat *sb);
-void handle_elf_file(void *mem, struct stat *sb);
+void process_elf_file(void *mem, struct stat *sb);
 
 void print_common_headers(int num_headers, Elf64_Off offset, int is_64bit);
 void print_flags_section(int is_64bit);
-void swap_and_assign_section_data_64(Elf64_Shdr *section, ConvertedSectionHeader64 *converted, int isLittleEndian);
-void handle_64bit_section(SectionHeaderInfo *info, int isLittleEndian);
-void swap_and_assign_section_data_32(Elf32_Shdr *section, ConvertedSectionHeader32 *converted, int isLittleEndian);
-void handle_32bit_section(SectionHeaderInfo *info, int isLittleEndian);
 void print_section_headers(SectionHeaderInfo *info);
 
 uint16_t swap_uint16(uint16_t val);
 uint32_t swap_uint32(uint32_t val);
 uint64_t swap_uint64(uint64_t val);
 
-void validate_file_size(size_t fileSize, int is_64bit);
-void get_section_header_info(void *elf_header, size_t fileSize, int is_64bit, int is_big_endian, uint64_t *e_shoff, uint16_t *count);
-void get_string_table_index(void *elf_header, uint16_t *e_shstrndx, int is_64bit, int is_big_endian);
-void handle_elf(char *mem, size_t fileSize, int is_64bit, int is_big_endian);
-
 char *section_type_to_string(uint32_t type);
 
+void validate_file_size(size_t fileSize, int is_64bit);
+void get_section_header_info(void *elf_header, size_t fileSize, int is_64bit,
+                             int is_big_endian, uint64_t *e_shoff,
+                             uint16_t *count);
 
 
 /* task 2 */
