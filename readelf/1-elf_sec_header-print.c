@@ -47,8 +47,10 @@ void print_flags_section(int is_64bit)
 		printf(", l (large)");
 	}
 	printf("\n");
-	printf("  I (info), L (link order), G (group), T (TLS), E (exclude),x (unknown)\n");
-	printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n");
+	printf("  I (info), L (link order), G (group), T (TLS), E (exclude),");
+	printf("x (unknown)\n");
+	printf("  O (extra OS processing required) o (OS specific), ");
+	printf("p (processor specific)\n");
 }
 
 
