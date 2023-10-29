@@ -16,16 +16,16 @@
 
 void validate_file_size(size_t fileSize, int is_64bit)
 {
-    if (is_64bit && fileSize < sizeof(Elf64_Ehdr))
-    {
-        fprintf(stderr, "The file is too small to be a valid ELF-64 file.\n");
-        exit(EXIT_FAILURE);
-    }
-    if (!is_64bit && fileSize < sizeof(Elf32_Ehdr))
-    {
-        fprintf(stderr, "The file is too small to be a valid ELF-32 file.\n");
-        exit(EXIT_FAILURE);
-    }
+	if (is_64bit && fileSize < sizeof(Elf64_Ehdr))
+	{
+		fprintf(stderr, "The file is too small to be a valid ELF-64 file.\n");
+		exit(EXIT_FAILURE);
+	}
+	if (!is_64bit && fileSize < sizeof(Elf32_Ehdr))
+	{
+		fprintf(stderr, "The file is too small to be a valid ELF-32 file.\n");
+		exit(EXIT_FAILURE);
+	}
 }
 
 
@@ -49,30 +49,30 @@ void validate_file_size(size_t fileSize, int is_64bit)
  */
 
 void get_section_header_info(void *elf_header, size_t fileSize, int is_64bit,
-                             int is_big_endian, uint64_t *e_shoff,
-                             uint16_t *count)
+			     int is_big_endian, uint64_t *e_shoff,
+			     uint16_t *count)
 {
-    *e_shoff = is_64bit ?
-               ((Elf64_Ehdr *)elf_header)->e_shoff :
-               ((Elf32_Ehdr *)elf_header)->e_shoff;
-    *count = is_64bit ?
-             ((Elf64_Ehdr *)elf_header)->e_shnum :
-             ((Elf32_Ehdr *)elf_header)->e_shnum;
+	*e_shoff = is_64bit ?
+		((Elf64_Ehdr *)elf_header)->e_shoff :
+		((Elf32_Ehdr *)elf_header)->e_shoff;
+	*count = is_64bit ?
+		((Elf64_Ehdr *)elf_header)->e_shnum :
+		((Elf32_Ehdr *)elf_header)->e_shnum;
 
-    if (is_big_endian)
-    {
-        *e_shoff = is_64bit ?
-                   swap_uint64(*e_shoff) :
-                   swap_uint32((uint32_t)*e_shoff);
-        *count = swap_uint16(*count);
-    }
+	if (is_big_endian)
+	{
+		*e_shoff = is_64bit ?
+			swap_uint64(*e_shoff) :
+			swap_uint32((uint32_t)*e_shoff);
+		*count = swap_uint16(*count);
+	}
 
-    size_t sh_size = is_64bit ? sizeof(Elf64_Shdr) : sizeof(Elf32_Shdr);
+	size_t sh_size = is_64bit ? sizeof(Elf64_Shdr) : sizeof(Elf32_Shdr);
 
-    if (*e_shoff == 0 || *count == 0 ||
-        *e_shoff + sh_size * *count > fileSize)
-    {
-        fprintf(stderr, "Section header table goes past end of file.\n");
-        exit(EXIT_FAILURE);
-    }
+	if (*e_shoff == 0 || *count == 0 ||
+	    *e_shoff + sh_size * *count > fileSize)
+	{
+		fprintf(stderr, "Section header table goes past end of file.\n");
+		exit(EXIT_FAILURE);
+	}
 }

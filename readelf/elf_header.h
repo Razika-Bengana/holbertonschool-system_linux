@@ -30,11 +30,11 @@
 
 typedef struct
 {
-        void *elf_header;
-        void *shdr;
-        int count;
-        char *strtab;
-        int is_64bit;
+	void *elf_header;
+	void *shdr;
+	int count;
+	char *strtab;
+	int is_64bit;
 } SectionHeaderInfo;
 
 
@@ -60,16 +60,16 @@ typedef struct
 
 typedef struct
 {
-    uint32_t sh_name;
-    uint32_t sh_type;
-    uint64_t sh_addr;
-    uint64_t sh_offset;
-    uint64_t sh_size;
-    uint64_t sh_entsize;
-    uint64_t sh_flags;
-    uint32_t sh_link;
-    uint32_t sh_info;
-    uint64_t sh_addralign;
+	uint32_t sh_name;
+	uint32_t sh_type;
+	uint64_t sh_addr;
+	uint64_t sh_offset;
+	uint64_t sh_size;
+	uint64_t sh_entsize;
+	uint64_t sh_flags;
+	uint32_t sh_link;
+	uint32_t sh_info;
+	uint64_t sh_addralign;
 } ConvertedSectionHeader64;
 
 
@@ -95,16 +95,16 @@ typedef struct
 
 typedef struct
 {
-    uint32_t sh_name;
-    uint32_t sh_type;
-    uint32_t sh_addr;
-    uint32_t sh_offset;
-    uint32_t sh_size;
-    uint32_t sh_entsize;
-    uint32_t sh_flags;
-    uint32_t sh_link;
-    uint32_t sh_info;
-    uint32_t sh_addralign;
+	uint32_t sh_name;
+	uint32_t sh_type;
+	uint32_t sh_addr;
+	uint32_t sh_offset;
+	uint32_t sh_size;
+	uint32_t sh_entsize;
+	uint32_t sh_flags;
+	uint32_t sh_link;
+	uint32_t sh_info;
+	uint32_t sh_addralign;
 } ConvertedSectionHeader32;
 
 
@@ -141,19 +141,22 @@ void print_machine_type(void *header, int is_elf64);
 void print_flags(unsigned long flags, char *buf);
 
 void swap_and_assign_section_data_32(Elf32_Shdr *section,
-                                     ConvertedSectionHeader32 *converted,
-                                     int isLittleEndian);
+				     ConvertedSectionHeader32 *converted,
+				     int isLittleEndian);
 void handle_32bit_section(SectionHeaderInfo *info, int isLittleEndian);
 
 void swap_and_assign_section_data_64(Elf64_Shdr *section,
-                                     ConvertedSectionHeader64 *converted,
-                                     int isLittleEndian);
+				     ConvertedSectionHeader64 *converted,
+				     int isLittleEndian);
 void handle_64bit_section(SectionHeaderInfo *info, int isLittleEndian);
 
 void get_string_table_index(void *elf_header, uint16_t *e_shstrndx,
-                            int is_64bit, int is_big_endian);
-SectionHeaderInfo init_section_header_info(void *elf_header, void *shdr, uint16_t count, char *strtab, int is_64bit);
-uint64_t compute_strtab_offset(void *shdr, uint16_t e_shstrndx, size_t sh_size, int is_64bit, int is_big_endian);
+			    int is_64bit, int is_big_endian);
+SectionHeaderInfo init_section_header_info(void *elf_header, void *shdr,
+					   uint16_t count, char *strtab,
+					   int is_64bit);
+uint64_t compute_strtab_offset(void *shdr, uint16_t e_shstrndx, size_t sh_size,
+			       int is_64bit, int is_big_endian);
 void handle_elf(char *mem, size_t fileSize, int is_64bit, int is_big_endian);
 
 int open_file(const char *filename);
@@ -173,8 +176,8 @@ char *section_type_to_string(uint32_t type);
 
 void validate_file_size(size_t fileSize, int is_64bit);
 void get_section_header_info(void *elf_header, size_t fileSize, int is_64bit,
-                             int is_big_endian, uint64_t *e_shoff,
-                             uint16_t *count);
+			     int is_big_endian, uint64_t *e_shoff,
+			     uint16_t *count);
 
 
 /* task 2 */
