@@ -87,7 +87,7 @@ void print_flags(unsigned long flags, char *buf);
 
 int open_file(const char *filename);
 int check_file_stat(int fd, struct stat *sb);
-void* map_file(int fd, struct stat *sb);
+void *map_file(int fd, struct stat *sb);
 void handle_elf_file(void *mem, struct stat *sb);
 
 void print_common_headers(int num_headers, Elf64_Off offset, int is_64bit);
@@ -109,6 +109,9 @@ void handle_elf(char *mem, size_t fileSize, int is_64bit, int is_big_endian);
 
 char *section_type_to_string(uint32_t type);
 
+
+
+/* task 2 */
 
 
 #endif /* ELF_HEADER_H */
