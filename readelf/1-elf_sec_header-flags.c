@@ -1,12 +1,14 @@
 #include "elf_header.h"
 
 /**
- * print_flags - program that populates a buffer with flag characters representing the properties of an ELF section
+ * print_flags - program that populates a buffer with flag characters
+ * representing the properties of an ELF section
  *
- * the function examines each flag bit in the 'flags' parameter to determine which attributes
- * are set for the ELF section;
+ * the function examines each flag bit in the 'flags' parameter to determine
+ * which attributes are set for the ELF section;
  * these attributes are then represented by specific characters
- * ('W' for SHF_WRITE, 'A' for SHF_ALLOC, etc.), which are placed into the provided buffer;
+ * ('W' for SHF_WRITE, 'A' for SHF_ALLOC, etc.), which are placed into
+ * the provided buffer;
  *
  * Flag representations:
  * - 'W': SHF_WRITE, the section contains writable data;
@@ -27,43 +29,43 @@
 
 void print_flags(unsigned long flags, char *buf)
 {
-    int index = 0;
+	int index = 0;
 
-    if (flags & SHF_WRITE)
-    {
-        buf[index++] = 'W';
-    }
-    if (flags & SHF_ALLOC)
-    {
-        buf[index++] = 'A';
-    }
-    if (flags & SHF_EXECINSTR)
-    {
-        buf[index++] = 'X';
-    }
-    if (flags & SHF_MERGE)
-    {
-        buf[index++] = 'M';
-    }
-    if (flags & SHF_STRINGS)
-    {
-        buf[index++] = 'S';
-    }
-    if (flags & SHF_INFO_LINK)
-    {
-        buf[index++] = 'I';
-    }
-    if (flags & SHF_LINK_ORDER)
-    {
-        buf[index++] = 'L';
-    }
-    if (flags & SHF_OS_NONCONFORMING)
-    {
-        buf[index++] = 'O';
-    }
-    if (flags & SHF_EXCLUDE)
-    {
-        buf[index++] = 'E';
-    }
-    buf[index] = '\0';
+	if (flags & SHF_WRITE)
+	{
+		buf[index++] = 'W';
+	}
+	if (flags & SHF_ALLOC)
+	{
+		buf[index++] = 'A';
+	}
+	if (flags & SHF_EXECINSTR)
+	{
+		buf[index++] = 'X';
+	}
+	if (flags & SHF_MERGE)
+	{
+		buf[index++] = 'M';
+	}
+	if (flags & SHF_STRINGS)
+	{
+		buf[index++] = 'S';
+	}
+	if (flags & SHF_INFO_LINK)
+	{
+		buf[index++] = 'I';
+	}
+	if (flags & SHF_LINK_ORDER)
+	{
+		buf[index++] = 'L';
+	}
+	if (flags & SHF_OS_NONCONFORMING)
+	{
+		buf[index++] = 'O';
+	}
+	if (flags & SHF_EXCLUDE)
+	{
+		buf[index++] = 'E';
+	}
+	buf[index] = '\0';
 }
