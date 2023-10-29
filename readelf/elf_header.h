@@ -13,6 +13,21 @@
 #include <netinet/in.h>
 
 
+/**
+ * SectionHeaderInfo - structure that stores information related
+ * to ELF section headers
+ *
+ * this structure is used for handling the ELF section headers
+ * efficiently
+ *
+ * @elf_header: a pointer to the ELF header
+ * @shdr: a pointer to the section header table
+ * @count: the number of section headers
+ * @strtab: a pointer to the section header string table
+ * @is_64bit: the flag to check if ELF file is 64-bit
+ *
+ */
+
 typedef struct
 {
         void *elf_header;
@@ -22,6 +37,26 @@ typedef struct
         int is_64bit;
 } SectionHeaderInfo;
 
+
+/**
+ * ConvertedSectionHeader64 - structure for storing ELF64 section header
+ * fields
+ *
+ * this structure is used to hold converted and endianness-corrected
+ * fields for 64-bit ELF section headers
+ *
+ * @sh_name: section name
+ * @sh_type: section type
+ * @sh_addr: section virtual address at execution
+ * @sh_offset: section file offset
+ * @sh_size: section size in bytes
+ * @sh_entsize: size of one entry in section
+ * @sh_flags: section flags
+ * @sh_link: link to another section
+ * @sh_info: additional section information
+ * @sh_addralign: section alignment
+ *
+ */
 
 typedef struct
 {
@@ -37,6 +72,26 @@ typedef struct
     uint64_t sh_addralign;
 } ConvertedSectionHeader64;
 
+
+/**
+ * ConvertedSectionHeader32 - structure for storing ELF32 section header
+ * fields
+ *
+ * this structure is used to hold converted and endianness-corrected fields
+ * for 32-bit ELF section headers
+ *
+ * @sh_name: section name
+ * @sh_type: section type
+ * @sh_addr: section virtual address at execution
+ * @sh_offset: section file offset
+ * @sh_size: section size in bytes
+ * @sh_entsize: size of one entry in section
+ * @sh_flags: section flags
+ * @sh_link: link to another section
+ * @sh_info: additional section information
+ * @sh_addralign: section alignment
+ *
+ */
 
 typedef struct
 {
