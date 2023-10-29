@@ -136,8 +136,8 @@ void print_type(void *header, int is_elf64);
 void print_machine_type(void *header, int is_elf64);
 
 
-
 /* task 1: ELF sections' headers */
+
 void print_flags(unsigned long flags, char *buf);
 
 void swap_and_assign_section_data_32(Elf32_Shdr *section,
