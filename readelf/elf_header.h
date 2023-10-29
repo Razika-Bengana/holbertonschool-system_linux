@@ -14,7 +14,7 @@
 
 
 /**
- * struct SectionHeaderInfo - structure that stores information related
+ * @struct SectionHeaderInfo - structure that stores information related
  * to ELF section headers
  *
  * this structure is used for handling the ELF section headers
@@ -39,7 +39,7 @@ typedef struct
 
 
 /**
- * struct ConvertedSectionHeader64 - structure for storing ELF64 section header
+ * @struct ConvertedSectionHeader64 - structure for storing ELF64 section header
  * fields
  *
  * this structure is used to hold converted and endianness-corrected
@@ -74,7 +74,7 @@ typedef struct
 
 
 /**
- * struct ConvertedSectionHeader32 - structure for storing ELF32 section header
+ * @struct ConvertedSectionHeader32 - structure for storing ELF32 section header
  * fields
  *
  * this structure is used to hold converted and endianness-corrected fields
