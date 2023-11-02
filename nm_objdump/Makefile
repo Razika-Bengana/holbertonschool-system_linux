@@ -5,7 +5,7 @@ DEBUGFLAGS = -g
 TARGET_0 = hnm
 TARGET_1 =
 
-SOURCE_0 = 0-nm_main.c 0-nm_symbols.c 0-nm_endianness.c
+SOURCE_0 = test2.c test3.c nm-main.c main.h
 SOURCE_1 =
 
 
