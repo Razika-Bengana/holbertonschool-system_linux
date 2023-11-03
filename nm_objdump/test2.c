@@ -4,40 +4,68 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
 {
     int symbol_count = section_header->sh_size / sizeof(Elf64_Sym);
     int i;
-
     for (i = 0; i < symbol_count; i++)
     {
         Elf64_Sym symbol = symbol_table[i];
         char *symbol_name = string_table + symbol.st_name;
-
-        if (symbol.st_name != 0 && symbol.st_info != STT_FILE)
+        if (symbol.st_name != 0 && ELF64_ST_TYPE(symbol.st_info) != STT_FILE)
         {
-            char symbol_type;
+            char symbol_type = '?';
             switch (ELF64_ST_TYPE(symbol.st_info))
             {
                 case STT_NOTYPE:
-                    symbol_type = 'U'; /* pour undefined */
+                    if (ELF64_ST_BIND(symbol.st_info) == STB_GLOBAL || ELF64_ST_BIND(symbol.st_info) == STB_WEAK)
+                    {
+                        symbol_type = 'w';
+                    }
+                    else
+                    {
+                        symbol_type = 'n';
+                    }
                     break;
                 case STT_OBJECT:
-                    symbol_type = 'd'; /* pour data object */
+                    symbol_type = (ELF64_ST_BIND(symbol.st_info) == STB_GLOBAL) ? 'D' : 'd';
                     break;
                 case STT_FUNC:
-                    symbol_type = 't'; /* pour Text symbol */
+                    symbol_type = (ELF64_ST_BIND(symbol.st_info) == STB_GLOBAL) ? 'T' : 't';
                     break;
                 case STT_SECTION:
-                    symbol_type = 'S'; /* pour section */
+                    symbol_type = 's';
                     break;
                 case STT_FILE:
-                    symbol_type = 'F'; /* pour file */
+                    symbol_type = 'f';
                     break;
-                default:
-                    symbol_type = '?'; /* Unknown ---> type inconnu */
+                case STT_TLS:
+                    symbol_type = (ELF64_ST_BIND(symbol.st_info) == STB_GLOBAL) ? 'D' : 'd';
                     break;
+                case STT_LOOS:
+                    symbol_type = 'B';
+                    break;
+                case STT_HIOS:
+                    symbol_type = 'b';
+                    break;
+                case STT_LOPROC:
+                    symbol_type = 'R';
+                    break;
+                case STT_HIPROC:
+                    symbol_type = 'r';
+                    break;
+            }
+            if (symbol.st_shndx == SHN_UNDEF)
+            {
+                symbol_type = 'U';
+            }
+            /* weak symbols */
+            if (ELF64_ST_BIND(symbol.st_info) == STB_WEAK)
+            {
+                symbol_type = (symbol_type == 'D' || symbol_type == 'd') ? 'W' : 'w';
             }
             printf("%016lx %c %s\n", symbol.st_value, symbol_type, symbol_name);
         }
     }
 }
+
+
 
 void process_elf_file64(char *file_path)
 {
@@ -119,7 +147,7 @@ void process_elf_file64(char *file_path)
     fread(string_table, string_table_header.sh_size, 1, file);
 
     /* printer la table des symboles */
-    printf("Adresse      Type Symbole\n");
+    printf("Adresse       Type Symbole\n");
     print_symbol_table64(&symbol_table_header, symbol_table, string_table);
 
     fclose(file);
