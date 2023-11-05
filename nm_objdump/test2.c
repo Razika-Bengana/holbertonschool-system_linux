@@ -146,7 +146,6 @@ void process_elf_file64(char *file_path)
     fread(string_table, string_table_header.sh_size, 1, file);
 
     /* printer la table des symboles */
-    printf("Adresse       Type Symbole\n");
     print_symbol_table64(&symbol_table_header, symbol_table, string_table, section_headers);
 
 
