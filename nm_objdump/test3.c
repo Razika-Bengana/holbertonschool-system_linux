@@ -79,7 +79,7 @@ void process_elf_file32(char *file_path)
 
     if (file == NULL)
     {
-        printf("Erreur pour l'ouverture du fichier\n");
+        printf("./hnm: %s: failed to open file\n", file_path);
         return;
     }
 
@@ -89,7 +89,7 @@ void process_elf_file32(char *file_path)
     /* il faut vérifier le type de fichier ELF */
     if (elf_header.e_ident[EI_CLASS] != ELFCLASS32 && elf_header.e_ident[EI_CLASS] != ELFCLASS64)
     {
-        printf("Type de format ELF non pris en charge\n");
+        printf("./hnm: %s: unsupported ELF file format\n", file_path);
         fclose(file);
         return;
     }
@@ -99,7 +99,7 @@ void process_elf_file32(char *file_path)
     int is_big_endian = (elf_header.e_ident[EI_DATA] == ELFDATA2MSB);
     if (!is_little_endian && !is_big_endian)
     {
-        printf("Endianness du fichier ELF non pris en charge\n");
+        printf("./hnm: %s: unsupported ELF file endianness\n", file_path);
         fclose(file);
         return;
     }
@@ -108,7 +108,7 @@ void process_elf_file32(char *file_path)
     Elf32_Shdr *section_headers = malloc(elf_header.e_shentsize * elf_header.e_shnum);
     if (section_headers == NULL)
     {
-        printf("Erreur pour l'allocation de mémoire pour section_headers\n");
+        printf("./hnm: %s: memory allocation error for section_headers\n", file_path);
         fclose(file);
         return;
     }
@@ -131,7 +131,7 @@ void process_elf_file32(char *file_path)
 
     if (symbol_table_index == -1)
     {
-        printf("Aucune table des symboles trouvée\n");
+        printf("./hnm: %s: no symbols\n", file_path);
         fclose(file);
         free(section_headers);
         return;
