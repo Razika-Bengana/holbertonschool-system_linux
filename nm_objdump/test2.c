@@ -49,7 +49,15 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
                 symbol_type = tolower(symbol_type);
             }
 
-            printf("%016lx %c %s\n", symbol.st_value, symbol_type, symbol_name);
+            /* Ne pas afficher l'adresse du symbole si elle équivaut à 0 */
+            if (symbol.st_value != 0)
+            {
+                printf("%016lx %c %s\n", symbol.st_value, symbol_type, symbol_name);
+            }
+            else
+            {
+                printf("                 %c %s\n", symbol_type, symbol_name);
+            }
         }
     }
 }
@@ -136,7 +144,6 @@ void process_elf_file64(char *file_path)
 
     /* printer la table des symboles */
     printf("Adresse       Type Symbole\n");
-    // Supposons que section_headers est votre tableau d'en-têtes de section.
     print_symbol_table64(&symbol_table_header, symbol_table, string_table, section_headers);
 
 
