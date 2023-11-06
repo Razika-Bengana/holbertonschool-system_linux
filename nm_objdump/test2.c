@@ -58,7 +58,7 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
                 symbol_type = tolower(symbol_type);
             }
 
-            /* Ne pas afficher l'adresse du symbole si elle équivaut à 0 */
+            /* Ne pas afficher l'adresse du symbole si elle équivaut à U ou w */
             if (symbol_type != 'U' && symbol_type != 'w')
             {
                 printf("%016lx %c %s\n", symbol.st_value, symbol_type, symbol_name);

@@ -60,8 +60,8 @@ void print_symbol_table32(Elf32_Shdr *section_header, Elf32_Sym *symbol_table, c
                 symbol_type = tolower(symbol_type);
             }
 
-            /* Afficher l'adresse du symbole sauf si son type est 'U' (non défini) */
-            if (symbol_type != 'U')
+            /* Ne pas afficher l'adresse du symbole si elle équivaut à U ou w */
+            if (symbol_type != 'U' && symbol_type != 'w')
             {
                 printf("%08x %c %s\n", symbol.st_value, symbol_type, symbol_name);
             }
