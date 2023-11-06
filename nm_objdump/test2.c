@@ -4,12 +4,10 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
 {
     int i;
     int symbol_count = section_header->sh_size / sizeof(Elf64_Sym);
-
     for (i = 0; i < symbol_count; i++)
     {
         Elf64_Sym symbol = symbol_table[i];
         char *symbol_name = string_table + symbol.st_name;
-
         /* On s'assure que le nom du symbole n'est pas nul et en plus qu'il ne s'agit pas d'un fichier */
         if (symbol.st_name != 0 && ELF64_ST_TYPE(symbol.st_info) != STT_FILE)
         {
@@ -17,9 +15,20 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
             /* on s'assure que les symboles faibles non définis sont correctement marqués comme 'w' avant d'attribuer 'U' aux symboles indéfinis */
             if (ELF64_ST_BIND(symbol.st_info) == STB_WEAK)
             {
-                symbol_type = symbol.st_shndx == SHN_UNDEF ? 'w' : 'W';
+                if (symbol.st_shndx == SHN_UNDEF)
+                {
+                    symbol_type = 'w'; /* symbole weak indéfini */
+                }
+                else if (ELF64_ST_TYPE(symbol.st_info) == STT_OBJECT)
+                {
+                    symbol_type = 'V'; /* symbole weak objet */
+                }
+                else
+                {
+                    symbol_type = 'W'; /* symbole weak défini */
+                }
             }
-            /* indices de sections speciales */
+                /* indices de sections speciales */
             else if (symbol.st_shndx == SHN_UNDEF)
             {
                 symbol_type = 'U';
@@ -36,7 +45,6 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
             {
                 /* S'il ne s'agit pas d'une section spéciale, récupérer alors l'en-tête de la section */
                 Elf64_Shdr symbol_section = section_headers[symbol.st_shndx];
-
                 /* Vérifier les symboles faibles et uniques */
                 if (ELF64_ST_BIND(symbol.st_info) == STB_GNU_UNIQUE)
                 {
@@ -71,7 +79,6 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
                     symbol_type = 't';
                 }
             }
-
             /* Convertir en minuscule si le symbole est local */
             if (ELF64_ST_BIND(symbol.st_info) == STB_LOCAL)
             {
