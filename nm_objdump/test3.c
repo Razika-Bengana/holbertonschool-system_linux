@@ -15,15 +15,17 @@ void print_symbol_table32(Elf32_Shdr *section_header, Elf32_Sym *symbol_table, c
         {
             char symbol_type = '?';
 
-            /* Vérifier d'abord les indices de section spéciale pour le format 32 bits, contrairement au 64 format */
-            if (symbol.st_shndx == SHN_UNDEF)
-                symbol_type = 'U';
-            else if (symbol.st_shndx == SHN_ABS)
-                symbol_type = 'A';
-            else if (symbol.st_shndx == SHN_COMMON)
-                symbol_type = 'C';
-            else if (symbol.st_shndx < SHN_LORESERVE)
+            if (symbol.st_shndx < SHN_LORESERVE)
             {
+                /* Vérifier d'abord les indices de section spéciale pour le format 32 bits, contrairement au 64 format */
+                if (symbol.st_shndx == SHN_UNDEF)
+                    symbol_type = 'U';
+                else if (symbol.st_shndx == SHN_ABS)
+                    symbol_type = 'A';
+                else if (symbol.st_shndx == SHN_COMMON)
+                    symbol_type = 'C';
+
+
                 /* S'il ne s'agit pas d'une section spéciale, récupèrer alors l'en-tête de la section */
                 Elf32_Shdr symbol_section = section_headers[symbol.st_shndx];
 
@@ -46,11 +48,10 @@ void print_symbol_table32(Elf32_Shdr *section_header, Elf32_Sym *symbol_table, c
                         symbol_type = 'D';
                     else if (symbol_section.sh_flags == (SHF_ALLOC | SHF_EXECINSTR))
                         symbol_type = 'T';
+                    else if (symbol_section.sh_type == SHT_DYNAMIC)
+                        symbol_type = 'D';
                 }
-                else if (symbol_section.sh_type == SHT_DYNAMIC)
-                    symbol_type = 'D';
             }
-
             /* Convertir en minuscule si le symbole est local */
             if (ELF32_ST_BIND(symbol.st_info) == STB_LOCAL)
             {
