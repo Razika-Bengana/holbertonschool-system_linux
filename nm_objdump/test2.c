@@ -38,13 +38,15 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
                 /* Vérifier les types de section et les flags */
                 else if (symbol_section.sh_type == SHT_NOBITS && symbol_section.sh_flags == (SHF_ALLOC | SHF_WRITE))
                     symbol_type = 'B';
-                else if (symbol_section.sh_type == SHT_PROGBITS && symbol_section.sh_flags == SHF_ALLOC)
-                    symbol_type = 'R';
-                else if (symbol_section.sh_type == SHT_PROGBITS && symbol_section.sh_flags == (SHF_ALLOC | SHF_WRITE))
-                    symbol_type = 'D';
-                else if (symbol_section.sh_type == SHT_PROGBITS &&
-                         symbol_section.sh_flags == (SHF_ALLOC | SHF_EXECINSTR))
-                    symbol_type = 'T';
+                else if (symbol_section.sh_type == SHT_PROGBITS)
+                {
+                    if (symbol_section.sh_flags == SHF_ALLOC)
+                        symbol_type = 'R';
+                    else if (symbol_section.sh_flags == (SHF_ALLOC | SHF_WRITE))
+                        symbol_type = 'D';
+                    else if (symbol_section.sh_flags == (SHF_ALLOC | SHF_EXECINSTR))
+                        symbol_type = 'T';
+                }
                 else if (symbol_section.sh_type == SHT_DYNAMIC)
                     symbol_type = 'D';
                 else
