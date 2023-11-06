@@ -8,7 +8,8 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
     {
         Elf64_Sym symbol = symbol_table[i];
         char *symbol_name = string_table + symbol.st_name;
-        /* On s'assure que le nom du symbole n'est pas nul et en plus qu'il ne s'agit pas d'un fichier */
+        /* Le symbole doit avoir un nom (!= 0), et le symbole ne doit pas être le nom d'un fichier source */
+        /* on ignore donc les symboles sans nom et ceux qui servent uniquement à indiquer le nom d'un fichier source */
         if (symbol.st_name != 0 && ELF64_ST_TYPE(symbol.st_info) != STT_FILE)
         {
             char symbol_type = '?';
@@ -41,6 +42,7 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
             {
                 symbol_type = 'C';
             }
+            /* cette condition dans le code vérifie si le symbole est associé à une section normale (et non à une section spéciale) */
             else if (symbol.st_shndx < SHN_LORESERVE)
             {
                 /* S'il ne s'agit pas d'une section spéciale, récupérer alors l'en-tête de la section */

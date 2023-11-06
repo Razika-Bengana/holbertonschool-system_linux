@@ -9,7 +9,8 @@ void print_symbol_table32(Elf32_Shdr *section_header, Elf32_Sym *symbol_table, c
         Elf32_Sym symbol = symbol_table[i];
         char *symbol_name = string_table + symbol.st_name;
 
-        /* On s'assure que le nom du symbole n'est pas nul et en plus qu'il ne s'agit pas d'un fichier */
+        /* Le symbole doit avoir un nom (!= 0), et le symbole ne doit pas être le nom d'un fichier source */
+        /* on ignore donc les symboles sans nom et ceux qui servent uniquement à indiquer le nom d'un fichier source */
         if (symbol.st_name != 0 && ELF32_ST_TYPE(symbol.st_info) != STT_FILE)
         {
             char symbol_type = '?';
