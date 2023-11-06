@@ -15,7 +15,7 @@ void print_symbol_table32(Elf32_Shdr *section_header, Elf32_Sym *symbol_table, c
         {
             char symbol_type = '?';
 
-            /* Vérifier d'abord les indices de section spéciale pour le format 32 bits, contrairement au 64 format */
+            /* Vérifier d'abord les indices de section spéciale */
             if (symbol.st_shndx == SHN_UNDEF)
                 symbol_type = 'U';
             else if (symbol.st_shndx == SHN_ABS)
