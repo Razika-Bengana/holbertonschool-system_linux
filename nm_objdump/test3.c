@@ -8,6 +8,7 @@ void print_symbol_table32(Elf32_Shdr *section_header, Elf32_Sym *symbol_table, c
     {
         Elf32_Sym symbol = symbol_table[i];
         char *symbol_name = string_table + symbol.st_name;
+
         /* On s'assure que le nom du symbole n'est pas nul et en plus qu'il ne s'agit pas d'un fichier */
         if (symbol.st_name != 0 && ELF32_ST_TYPE(symbol.st_info) != STT_FILE)
         {
@@ -15,7 +16,18 @@ void print_symbol_table32(Elf32_Shdr *section_header, Elf32_Sym *symbol_table, c
             /* on s'assure que les symboles faibles non définis sont correctement marqués comme 'w' avant d'attribuer 'U' aux symboles indéfinis */
             if (ELF32_ST_BIND(symbol.st_info) == STB_WEAK)
             {
-                symbol_type = symbol.st_shndx == SHN_UNDEF ? 'w' : 'W';
+                if (symbol.st_shndx == SHN_UNDEF)
+                {
+                    symbol_type = 'w'; /* symbole weak indéfini */
+                }
+                else if (ELF32_ST_TYPE(symbol.st_info) == STT_OBJECT)
+                {
+                    symbol_type = 'V'; /* symbole weak objet */
+                }
+                else
+                {
+                    symbol_type = 'W'; /* symbole weak défini */
+                }
             }
                 /* indices de sections speciales */
             else if (symbol.st_shndx == SHN_UNDEF)
@@ -34,12 +46,13 @@ void print_symbol_table32(Elf32_Shdr *section_header, Elf32_Sym *symbol_table, c
             {
                 /* S'il ne s'agit pas d'une section spéciale, récupérer alors l'en-tête de la section */
                 Elf32_Shdr symbol_section = section_headers[symbol.st_shndx];
+
                 /* Vérifier les symboles faibles et uniques */
                 if (ELF32_ST_BIND(symbol.st_info) == STB_GNU_UNIQUE)
                 {
                     symbol_type = 'u';
                 }
-                    /* Vérifier les types de section et les flags */
+                /* Vérifier les types de section et les flags */
                 else if (symbol_section.sh_type == SHT_NOBITS && symbol_section.sh_flags == (SHF_ALLOC | SHF_WRITE))
                 {
                     symbol_type = 'B';
