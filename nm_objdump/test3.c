@@ -23,7 +23,7 @@ void print_symbol_table32(Elf32_Shdr *section_header, Elf32_Sym *symbol_table, c
             else if (symbol.st_shndx == SHN_COMMON)
                 symbol_type = 'C';
 
-            else if (symbol.st_shndx < SHN_LORESERVE)
+            if (symbol.st_shndx < SHN_LORESERVE)
             {
                 /* S'il ne s'agit pas d'une section spéciale, récupèrer alors l'en-tête de la section */
                 Elf32_Shdr symbol_section = section_headers[symbol.st_shndx];
