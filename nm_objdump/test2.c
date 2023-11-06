@@ -48,10 +48,10 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
                         symbol_type = 'T';
                     else if (symbol_section.sh_type == SHT_DYNAMIC)
                         symbol_type = 'D';
+                    else
+                        /* type par défaut pour les symboles qui ne correspondent à aucun autre cas spécifique testé dans le code */
+                        symbol_type = 't';
                 }
-                else
-                    /* type par défaut pour les symboles qui ne correspondent à aucun autre cas spécifique testé dans le code */
-                    symbol_type = 't';
             }
 
             /* convertir en minuscule si le symbole est local */
