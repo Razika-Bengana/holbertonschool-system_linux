@@ -4,49 +4,74 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
 {
     int i;
     int symbol_count = section_header->sh_size / sizeof(Elf64_Sym);
+
     for (i = 0; i < symbol_count; i++)
     {
         Elf64_Sym symbol = symbol_table[i];
         char *symbol_name = string_table + symbol.st_name;
+
         /* On s'assure que le nom du symbole n'est pas nul et en plus qu'il ne s'agit pas d'un fichier */
         if (symbol.st_name != 0 && ELF64_ST_TYPE(symbol.st_info) != STT_FILE)
         {
             char symbol_type = '?';
-            /* Vérifier d'abord les indices de section spéciale pour le format 64 bits */
-            if (symbol.st_shndx == SHN_UNDEF)
+            /* on s'assure que les symboles faibles non définis sont correctement marqués comme 'w' avant d'attribuer 'U' aux symboles indéfinis */
+            if (ELF64_ST_BIND(symbol.st_info) == STB_WEAK)
+            {
+                symbol_type = symbol.st_shndx == SHN_UNDEF ? 'w' : 'W';
+            }
+            /* indices de sections speciales */
+            else if (symbol.st_shndx == SHN_UNDEF)
+            {
                 symbol_type = 'U';
+            }
             else if (symbol.st_shndx == SHN_ABS)
+            {
                 symbol_type = 'A';
+            }
             else if (symbol.st_shndx == SHN_COMMON)
+            {
                 symbol_type = 'C';
+            }
             else if (symbol.st_shndx < SHN_LORESERVE)
             {
                 /* S'il ne s'agit pas d'une section spéciale, récupérer alors l'en-tête de la section */
                 Elf64_Shdr symbol_section = section_headers[symbol.st_shndx];
+
                 /* Vérifier les symboles faibles et uniques */
                 if (ELF64_ST_BIND(symbol.st_info) == STB_GNU_UNIQUE)
+                {
                     symbol_type = 'u';
-                else if (ELF64_ST_BIND(symbol.st_info) == STB_WEAK && ELF64_ST_TYPE(symbol.st_info) == STT_OBJECT)
-                    symbol_type = symbol.st_shndx == SHN_UNDEF ? 'v' : 'V';
-                else if (ELF64_ST_BIND(symbol.st_info) == STB_WEAK)
-                    symbol_type = symbol.st_shndx == SHN_UNDEF ? 'w' : 'W';
+                }
                     /* Vérifier les types de section et les flags */
                 else if (symbol_section.sh_type == SHT_NOBITS && symbol_section.sh_flags == (SHF_ALLOC | SHF_WRITE))
+                {
                     symbol_type = 'B';
+                }
                 else if (symbol_section.sh_type == SHT_PROGBITS)
                 {
-                    if (symbol_section.sh_flags == SHF_ALLOC)
-                        symbol_type = 'R';
-                    else if (symbol_section.sh_flags == (SHF_ALLOC | SHF_WRITE))
-                        symbol_type = 'D';
-                    else if (symbol_section.sh_flags == (SHF_ALLOC | SHF_EXECINSTR))
+                    if (symbol_section.sh_flags == (SHF_ALLOC | SHF_EXECINSTR))
+                    {
                         symbol_type = 'T';
+                    }
+                    else if (symbol_section.sh_flags == SHF_ALLOC)
+                    {
+                        symbol_type = 'R';
+                    }
+                    else if (symbol_section.sh_flags == (SHF_ALLOC | SHF_WRITE))
+                    {
+                        symbol_type = 'D';
+                    }
                 }
                 else if (symbol_section.sh_type == SHT_DYNAMIC)
+                {
                     symbol_type = 'D';
+                }
                 else
+                {
                     symbol_type = 't';
+                }
             }
+
             /* Convertir en minuscule si le symbole est local */
             if (ELF64_ST_BIND(symbol.st_info) == STB_LOCAL)
             {
@@ -64,6 +89,7 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
         }
     }
 }
+
 
 
 void process_elf_file64(char *file_path)
