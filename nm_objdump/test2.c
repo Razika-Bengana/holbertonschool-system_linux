@@ -44,6 +44,8 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
                 }
                 else if (symbol_section.sh_type == SHT_DYNAMIC)
                     symbol_type = 'D';
+                else
+                    symbol_type = 't';
             }
             /* Convertir en minuscule si le symbole est local */
             if (ELF64_ST_BIND(symbol.st_info) == STB_LOCAL)
