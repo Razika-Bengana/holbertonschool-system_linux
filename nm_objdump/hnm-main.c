@@ -1,4 +1,4 @@
-#include "main.h"
+#include "hnm.h"
 
 int main(int argc, char *argv[])
 {
@@ -7,14 +7,14 @@ int main(int argc, char *argv[])
     if (argc < 2)
     {
         printf("Il faut fournir un fichier ELF !\n");
-        return 0;
+        return (0);
     }
 
     FILE *file = fopen(file_path, "rb");
     if (file == NULL)
     {
         printf("Il y a une erreur pour de l'ouverture du fichier\n");
-        return 0;
+        return (0);
     }
 
     Elf64_Ehdr elf_header;

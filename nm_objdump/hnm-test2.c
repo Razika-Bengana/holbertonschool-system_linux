@@ -1,4 +1,4 @@
-#include "main.h"
+#include "hnm.h"
 
 void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, char *string_table, Elf64_Shdr *section_headers)
 {

@@ -1,4 +1,4 @@
-#include "main.h"
+#include "hnm.h"
 
 void print_symbol_table32(Elf32_Shdr *section_header, Elf32_Sym *symbol_table, char *string_table, Elf32_Shdr *section_headers)
 {

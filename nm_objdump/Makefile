@@ -3,10 +3,10 @@ CFLAGS = -Wall -Werror -Wextra -pedantic -std=c99
 DEBUGFLAGS = -g
 
 TARGET_0 = hnm
-TARGET_1 =
+TARGET_1 = hobjdump
 
-SOURCE_0 = test2.c test3.c nm-main.c main.h
-SOURCE_1 =
+SOURCE_0 = hnm-test2.c hnm-test3.c hnm-main.c hnm.h
+SOURCE_1 = hobjdump-main.c hobjdump-flags.c hobjdump-section_content.c hobjdump.h hobjdump-endianness.c
 
 
 all: $(TARGET_0) $(TARGET_1)
