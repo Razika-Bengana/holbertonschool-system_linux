@@ -144,7 +144,7 @@ void print_elf_info32(Elf32_Ehdr header, const char *filename, Elf32_Shdr *secti
     uint32_t flags = convert_endianness32(header.e_flags, is_little_endian, is_big_endian);
     uint32_t entry_point = convert_endianness32(header.e_entry, is_little_endian, is_big_endian);
 
-    printf("%s:     file format elf32-little\n", filename);
+    printf("%s:     file format elf32-i386\n", filename);
 
     printf("architecture: ");
 
