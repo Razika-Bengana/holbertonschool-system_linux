@@ -198,6 +198,8 @@ void print_elf_info64(Elf64_Ehdr header, const char *filename, Elf64_Shdr *secti
 void read_and_process_sections64(FILE *file, Elf64_Ehdr header)
 {
     int i;
+    int is_little_endian = header.e_ident[EI_DATA] == ELFDATA2LSB;
+    int is_big_endian = header.e_ident[EI_DATA] == ELFDATA2MSB;
 
     Elf64_Shdr *sections = malloc(header.e_shnum * sizeof(Elf64_Shdr));
 
@@ -244,7 +246,7 @@ void read_and_process_sections64(FILE *file, Elf64_Ehdr header)
         }
         char *section_name = &section_names[sections[i].sh_name];
 
-        print_section_content(file, &sections[i], 1, section_name);
+        print_section_content(file, &sections[i], 1, section_name, is_little_endian, is_big_endian);
     }
 
     free(section_names);
@@ -254,6 +256,8 @@ void read_and_process_sections64(FILE *file, Elf64_Ehdr header)
 void read_and_process_sections32(FILE *file, Elf32_Ehdr header)
 {
     int i;
+    int is_little_endian = header.e_ident[EI_DATA] == ELFDATA2LSB;
+    int is_big_endian = header.e_ident[EI_DATA] == ELFDATA2MSB;
 
     Elf32_Shdr *sections = malloc(header.e_shnum * sizeof(Elf32_Shdr));
     if (!sections)
@@ -296,7 +300,7 @@ void read_and_process_sections32(FILE *file, Elf32_Ehdr header)
 
         char *section_name = &section_names[sections[i].sh_name];
 
-        print_section_content(file, &sections[i], 1, section_name);
+        print_section_content(file, &sections[i], 0, section_name, is_little_endian, is_big_endian);
     }
 
     free(section_names);

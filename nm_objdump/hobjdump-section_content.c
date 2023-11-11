@@ -1,7 +1,9 @@
 #include "hobjdump.h"
 
-void print_section_content(FILE *file, void *shdr_generic, int is_64, const char *section_name)
+void print_section_content(FILE *file, void *shdr_generic, int is_64, const char *section_name, int is_little_endian, int is_big_endian)
 {
+    size_t i, j;
+
     if (strcmp(section_name, BSS_SECTION_NAME) == 0 ||
         strcmp(section_name, SHSTRTAB_SECTION_NAME) == 0 ||
         strcmp(section_name, SYMTAB_SECTION_NAME) == 0 ||
@@ -12,16 +14,21 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
 
     printf("Contents of section %s:\n", section_name);
 
-    size_t i;
+    size_t size = is_64 ? convert_endianness64(((Elf64_Shdr *) shdr_generic)->sh_size, is_little_endian, is_big_endian)
+                        : convert_endianness32(((Elf32_Shdr *) shdr_generic)->sh_size, is_little_endian, is_big_endian);
 
-    Elf64_Shdr *shdr64 = is_64 ? (Elf64_Shdr *)shdr_generic : NULL;
-    Elf32_Shdr *shdr32 = is_64 ? NULL : (Elf32_Shdr *)shdr_generic;
+    uint64_t offset = is_64 ? convert_endianness64(((Elf64_Shdr *) shdr_generic)->sh_offset, is_little_endian, is_big_endian)
+                            : convert_endianness32(((Elf32_Shdr *) shdr_generic)->sh_offset, is_little_endian, is_big_endian);
+
+    uint64_t addr = is_64 ? convert_endianness64(((Elf64_Shdr *) shdr_generic)->sh_addr, is_little_endian, is_big_endian)
+                          : convert_endianness32(((Elf32_Shdr *) shdr_generic)->sh_addr, is_little_endian, is_big_endian);
 
 
-    size_t size = is_64 ? shdr64->sh_size : shdr32->sh_size;
-    uint64_t offset = is_64 ? shdr64->sh_offset : shdr32->sh_offset;
-    uint64_t addr = is_64 ? shdr64->sh_addr : shdr32->sh_addr;
-
+    if (size == 0)
+    {
+        printf("Section %s is empty or size is zero.\n", section_name);
+        return;
+    }
 
     unsigned char *buf = malloc(size);
     if (!buf)
@@ -29,7 +36,6 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
         perror("Failed to allocate memory for section content");
         return;
     }
-
 
     fseek(file, offset, SEEK_SET);
     if (fread(buf, 1, size, file) != size)
@@ -39,50 +45,36 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
         return;
     }
 
-
     for (i = 0; i < size; i++)
     {
-
         if (i % 16 == 0)
         {
-            printf(" %06lx ", addr + i);
+            printf(is_64 ? " %016lx " : " %08lx ", addr + i);
         }
 
-
         printf("%02x", buf[i]);
-
 
         if (i % 4 == 3)
         {
             printf(" ");
         }
 
-
         if ((i % 16 == 15) || (i == size - 1))
         {
-            size_t line_start = i - (i % 16);
-            size_t line_end = (i % 16 == 15) ? i : size - 1;
-
-
-            if (i % 16 != 15)
+            printf(" ");
+            for (j = i - (i % 16); j <= i; j++)
             {
-                for (size_t k = 0; k < ((15 - (i % 16)) / 4); k++)
+                if (j < size)
                 {
-                    printf("         ");
+                    printf("%c", isprint(buf[j]) ? buf[j] : '.');
+                }
+                else
+                {
+                    printf(" ");
                 }
             }
-
-
-            printf(" ");
-            for (size_t j = line_start; j <= line_end; j++)
-            {
-                printf("%c", isprint(buf[j]) ? buf[j] : '.');
-            }
-
             printf("\n");
         }
     }
-
     free(buf);
 }
-

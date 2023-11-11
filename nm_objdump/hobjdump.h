@@ -37,7 +37,7 @@ uint32_t setFileFlags(Elf_Ehdr header, void *section_headers, int is_64);
 uint32_t convert_endianness32(uint32_t value, int is_little_endian, int is_big_endian);
 uint64_t convert_endianness64(uint64_t value, int is_little_endian, int is_big_endian);
 
-void print_section_content(FILE *file, void *shdr_generic, int is_64, const char *section_name);
+void print_section_content(FILE *file, void *shdr_generic, int is_64, const char *section_name, int is_little_endian, int is_big_endian);
 
 void process_elf_file(const char *filename);
 void process_elf_header32(FILE *file, const char *filename);
