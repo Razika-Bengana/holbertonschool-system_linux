@@ -9,6 +9,7 @@
 #include <byteswap.h>
 #include <endian.h>
 #include <stdint.h>
+#include <ctype.h>
 
 
 #define HAS_RELOC 0x01
@@ -16,6 +17,11 @@
 #define HAS_SYMS  0x10
 #define D_PAGED   0x100
 #define DYNAMIC   0x40
+
+#define BSS_SECTION_NAME ".bss"
+#define SHSTRTAB_SECTION_NAME ".shstrtab"
+#define SYMTAB_SECTION_NAME ".symtab"
+#define STRTAB_SECTION_NAME ".strtab"
 
 
 typedef union
@@ -31,7 +37,7 @@ uint32_t setFileFlags(Elf_Ehdr header, void *section_headers, int is_64);
 uint32_t convert_endianness32(uint32_t value, int is_little_endian, int is_big_endian);
 uint64_t convert_endianness64(uint64_t value, int is_little_endian, int is_big_endian);
 
-void print_section_content(FILE *file, void *shdr_generic, int is_64);
+void print_section_content(FILE *file, void *shdr_generic, int is_64, const char *section_name);
 
 void process_elf_file(const char *filename);
 void process_elf_header32(FILE *file, const char *filename);

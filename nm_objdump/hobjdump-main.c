@@ -244,8 +244,7 @@ void read_and_process_sections64(FILE *file, Elf64_Ehdr header)
         }
         char *section_name = &section_names[sections[i].sh_name];
 
-        printf("Contents of section %s:\n", section_name);
-        print_section_content(file, &sections[i], 1);
+        print_section_content(file, &sections[i], 1, section_name);
     }
 
     free(section_names);
@@ -297,8 +296,7 @@ void read_and_process_sections32(FILE *file, Elf32_Ehdr header)
 
         char *section_name = &section_names[sections[i].sh_name];
 
-        printf("Contents of section %s:\n", section_name);
-        print_section_content(file, &sections[i], 0);
+        print_section_content(file, &sections[i], 1, section_name);
     }
 
     free(section_names);
