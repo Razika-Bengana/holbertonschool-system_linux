@@ -79,7 +79,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
             space_to_fill = bytes_missing * 2;
             /* Ajouter un espace supplémentaire pour chaque groupe de 4 octets dans les octets manquants */
             space_to_fill += bytes_missing / 4;
-            if ((i % 16 != 15)
+            if (i % 16 != 15)
             {
                 printf("you"); /* Test to debug */
                 printf("%*s", (i % 16 == 15 && i + 1 == size) ? space_to_fill + 1 : space_to_fill, "");
