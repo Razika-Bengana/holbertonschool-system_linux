@@ -81,7 +81,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
             space_to_fill += bytes_missing / 4;
             if (i % 16 != 15)
             {
-                printf("you");
+                printf(" "); /* Test to debug */
                 printf("%*s", space_to_fill, "");
             }
 
