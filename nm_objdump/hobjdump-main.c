@@ -160,7 +160,7 @@ void print_elf_info32(Elf32_Ehdr header, const char *filename, Elf32_Shdr *secti
     }
     Elf_Ehdr header_union;
     header_union.elf32 = &header;
-    flags = setFileFlags(header_union, sections, 0);
+    flags = setFileFlags(header_union, sections, 0, is_little_endian, is_big_endian);
     print_flags(flags);
     printf("start address 0x%08x\n\n", entry_point);
 }
@@ -188,7 +188,7 @@ void print_elf_info64(Elf64_Ehdr header, const char *filename, Elf64_Shdr *secti
     }
     Elf_Ehdr header_union;
     header_union.elf64 = &header;
-    flags = setFileFlags(header_union, sections, 1);
+    flags = setFileFlags(header_union, sections, 1, is_little_endian, is_big_endian);
     print_flags(flags);
     printf("start address 0x%016lx\n\n", entry_point);
 }

@@ -1,6 +1,6 @@
 #include "hobjdump.h"
 
-uint32_t setFileFlags(Elf_Ehdr header, void *section_headers, int is_64)
+uint32_t setFileFlags(Elf_Ehdr header, void *section_headers, int is_64, int is_little_endian, int is_big_endian)
 {
     uint32_t flags = 0;
 
@@ -34,7 +34,17 @@ uint32_t setFileFlags(Elf_Ehdr header, void *section_headers, int is_64)
 
     for (i = 0; i < num_sections; ++i)
     {
-        uint32_t section_type = is_64 ? sections64[i].sh_type : sections32[i].sh_type;
+        uint32_t section_type;
+
+        if (is_64)
+        {
+            section_type = convert_endianness64(sections64[i].sh_type, is_little_endian, is_big_endian);
+        }
+        else
+        {
+            section_type = convert_endianness32(sections32[i].sh_type, is_little_endian, is_big_endian);
+        }
+
         if (section_type == SHT_SYMTAB)
         {
             symtab_found = 1;
@@ -54,18 +64,48 @@ void print_flags(uint32_t flags)
 {
     printf("flags 0x%08x:\n", flags);
 
-    if ((flags & EXEC_P) != 0)
+    bool has_exec_p = (flags & EXEC_P) != 0;
+    bool has_syms = (flags & HAS_SYMS) != 0;
+    bool has_reloc = (flags & HAS_RELOC) != 0;
+    bool has_dyn = (flags & DYNAMIC) != 0;
+    bool has_paged = (flags & D_PAGED) != 0;
+    bool is_unknown = !(has_exec_p || has_syms || has_reloc || has_dyn || has_paged);
+
+    /* Buffer pour stocker les flags */
+    char buffer[256] = {0}; /* S'assurer que le buffer est assez grand */
+    char* ptr = buffer;
+
+    if (has_reloc)
     {
-        printf("EXEC_P, ");
+        ptr += sprintf(ptr, "HAS_RELOC, ");
     }
-    if ((flags & HAS_SYMS) != 0)
+    if (has_syms)
     {
-        printf("HAS_SYMS, ");
+        ptr += sprintf(ptr, "HAS_SYMS, ");
     }
-    if ((flags & D_PAGED) != 0)
+    if (has_exec_p)
     {
-        printf("D_PAGED");
+        ptr += sprintf(ptr, "EXEC_P, ");
     }
-    printf("\n");
+    if (has_dyn)
+    {
+        ptr += sprintf(ptr, "DYNAMIC, ");
+    }
+    if (has_paged)
+    {
+        ptr += sprintf(ptr, "D_PAGED, ");
+    }
+    if (is_unknown)
+    {
+        ptr += sprintf(ptr, "UNKNOWN, ");
+    }
+
+    /* Retirer la dernière virgule et espace si le buffer n'est pas vide */
+    if (buffer[0] != '\0')
+    {
+        ptr[-2] = '\0'; /* Écraser la dernière virgule par la terminaison de la chaîne */
+    }
+
+    printf("%s\n", buffer);
 }
 

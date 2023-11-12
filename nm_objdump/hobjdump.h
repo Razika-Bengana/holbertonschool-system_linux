@@ -10,6 +10,7 @@
 #include <endian.h>
 #include <stdint.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 
 #define HAS_RELOC 0x01
@@ -37,7 +38,7 @@ typedef union
 
 
 void print_flags(uint32_t flags);
-uint32_t setFileFlags(Elf_Ehdr header, void *section_headers, int is_64);
+uint32_t setFileFlags(Elf_Ehdr header, void *section_headers, int is_64, int is_little_endian, int is_big_endian);
 
 uint32_t convert_endianness32(uint32_t value, int is_little_endian, int is_big_endian);
 uint64_t convert_endianness64(uint64_t value, int is_little_endian, int is_big_endian);
