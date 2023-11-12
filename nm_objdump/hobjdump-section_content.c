@@ -47,7 +47,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
     }
 
     char address_buffer[20];
-    sprintf(address_buffer, "%08lx", addr + size - 1);
+    sprintf(address_buffer, "%04lx", addr + size - 1);
     int address_width = strlen(address_buffer);
 
     for (i = 0; i < size; i++)
@@ -57,7 +57,6 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
             printf(" ");
             printf("%0*lx ", address_width, addr + i);
         }
-
         printf("%02x", buf[i]);
 
         if (i % 4 == 3)
@@ -67,9 +66,15 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
 
         if ((i % 16 == 15) || (i == size - 1))
         {
-            space_to_fill = (16 - (i % 16)) * 2 + (16 - (i % 16)) / 4;
+            int missing_hex_chars = (16 - (i % 16)) * 2;
+            int missing_spaces = 3 - (i % 16) / 4;
 
-            printf("%*s", space_to_fill, "");
+            space_to_fill = missing_hex_chars + missing_spaces;
+
+            if (i % 16 != 15)
+            {
+                printf("%*s", space_to_fill, "");
+            }
 
             for (j = i - (i % 16); j <= i; j++)
             {
@@ -77,6 +82,10 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
                 {
                     printf("%c", isprint(buf[j]) ? buf[j] : '.');
                 }
+                /*else
+                {
+                    printf(" ");
+                }*/
             }
             printf("\n");
         }
