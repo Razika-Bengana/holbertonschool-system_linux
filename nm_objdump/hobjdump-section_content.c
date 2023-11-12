@@ -89,7 +89,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
 
             if (i % 16 != 15)
             {
-                int padding_for_alignment = (16 - (i % 16)) * 2;
+                int padding_for_alignment = (16 - (i % 16));
                 printf("%*s", padding_for_alignment, "");
             }
 
