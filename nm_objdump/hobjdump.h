@@ -18,10 +18,15 @@
 #define D_PAGED   0x100
 #define DYNAMIC   0x40
 
-#define BSS_SECTION_NAME ".bss"
-#define SHSTRTAB_SECTION_NAME ".shstrtab"
-#define SYMTAB_SECTION_NAME ".symtab"
-#define STRTAB_SECTION_NAME ".strtab"
+#define BSS_SECTION ".bss"
+#define SHSTRTAB_SECTION ".shstrtab"
+#define SYMTAB_SECTION ".symtab"
+#define STRTAB_SECTION ".strtab"
+#define TM_CLONE_TABLE_SECTION ".tm_clone_table"
+#define REL_TEXT_SECTION ".rel.text"
+#define REL_DATA_SECTION ".rel.data"
+#define RELA_EH_FRAME_SECTION ".rela.eh_frame"
+#define RELA_TEXT_STARTUP_SECTION ".rela.text.startup"
 
 
 typedef union

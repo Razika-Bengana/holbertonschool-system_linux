@@ -5,10 +5,16 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
     size_t i, j;
     int space_to_fill;
 
-    if (strcmp(section_name, BSS_SECTION_NAME) == 0 ||
-        strcmp(section_name, SHSTRTAB_SECTION_NAME) == 0 ||
-        strcmp(section_name, SYMTAB_SECTION_NAME) == 0 ||
-        strcmp(section_name, STRTAB_SECTION_NAME) == 0)
+    if (strcmp(section_name, BSS_SECTION) == 0 ||
+        strcmp(section_name, SHSTRTAB_SECTION) == 0 ||
+        strcmp(section_name, SYMTAB_SECTION) == 0 ||
+        strcmp(section_name, STRTAB_SECTION) == 0 ||
+
+        strcmp(section_name, TM_CLONE_TABLE_SECTION) == 0 ||
+        strcmp(section_name, REL_TEXT_SECTION) == 0 ||
+        strcmp(section_name, REL_DATA_SECTION) == 0 ||
+        strcmp(section_name, RELA_EH_FRAME_SECTION) == 0 ||
+        strcmp(section_name, RELA_TEXT_STARTUP_SECTION) == 0)
     {
         return;
     }
@@ -73,9 +79,9 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
             space_to_fill = bytes_missing * 2;
             /* Ajouter un espace supplémentaire pour chaque groupe de 4 octets dans les octets manquants */
             space_to_fill += bytes_missing / 4;
-
             if (i % 16 != 15)
             {
+                printf("you");
                 printf("%*s", space_to_fill, "");
             }
 
