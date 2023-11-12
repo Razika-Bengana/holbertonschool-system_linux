@@ -79,13 +79,13 @@ void print_flags(uint32_t flags)
     {
         ptr += sprintf(ptr, "HAS_RELOC, ");
     }
-    if (has_syms)
-    {
-        ptr += sprintf(ptr, "HAS_SYMS, ");
-    }
     if (has_exec_p)
     {
         ptr += sprintf(ptr, "EXEC_P, ");
+    }
+    if (has_syms)
+    {
+        ptr += sprintf(ptr, "HAS_SYMS, ");
     }
     if (has_dyn)
     {
