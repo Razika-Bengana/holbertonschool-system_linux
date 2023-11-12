@@ -82,7 +82,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
             if (i % 16 != 15)
             {
                 printf(" "); /* Test to debug */
-                printf("%*s", (i % 16 == 15) ? space_to_fill : space_to_fill - 1, "");
+                printf("%*s", (i % 16 == 15) ? space_to_fill : space_to_fill + ((i == size) ? 1 : 0), "");
             }
             for (j = i - (i % 16); j <= i; j++)
             {
