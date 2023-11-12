@@ -3,6 +3,7 @@
 void print_section_content(FILE *file, void *shdr_generic, int is_64, const char *section_name, int is_little_endian, int is_big_endian)
 {
     size_t i, j;
+    int space_to_fill;
 
     if (strcmp(section_name, BSS_SECTION_NAME) == 0 ||
         strcmp(section_name, SHSTRTAB_SECTION_NAME) == 0 ||
@@ -49,6 +50,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
     {
         if (i % 16 == 0)
         {
+            printf(" ");
             printf("%04lx ", addr + i);
         }
 
@@ -61,7 +63,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
 
         if ((i % 16 == 15) || (i == size - 1))
         {
-            int space_to_fill = ((16 - (i % 16)) - 1) * 2 + ((16 - (i % 16)) - 1) / 4;
+            space_to_fill = ((16 - (i % 16)) - 1) * 2 + ((16 - (i % 16)) / 4);
             if (i % 16 != 15)
             {
                 printf("%*s", space_to_fill, "");
