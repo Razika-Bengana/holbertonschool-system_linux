@@ -66,11 +66,12 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
 
         if ((i % 16 == 15) || (i == size - 1))
         {
-            printf(" ");
-            int missing_hex_chars = (16 - (i % 16)) * 2;
-            int missing_spaces = 3 - (i % 16) / 4;
-
-            space_to_fill = missing_hex_chars + missing_spaces;
+            /* Combien d'octets sont manquants pour compléter une ligne de 16 octets */
+            int bytes_missing = 16 - ((i % 16) + 1);
+            /* Chaque octet manquant correspond à 2 caractères hexadécimaux. */
+            space_to_fill = bytes_missing * 2;
+            /* Ajouter un espace supplémentaire pour chaque groupe de 4 octets dans les octets manquants */
+            space_to_fill += bytes_missing / 4;
 
             if (i % 16 != 15)
             {
@@ -83,11 +84,14 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
                 {
                     printf("%c", isprint(buf[j]) ? buf[j] : '.');
                 }
-                /*else
-                {
-                    printf(" ");
-                }*/
             }
+
+            if (i % 16 != 15)
+            {
+                int padding_for_alignment = (16 - (i % 16)) * 2;
+                printf("%*s", padding_for_alignment, "");
+            }
+
             printf("\n");
         }
     }
