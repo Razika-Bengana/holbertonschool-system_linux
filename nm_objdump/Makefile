@@ -6,7 +6,7 @@ TARGET_0 = hnm
 TARGET_1 = hobjdump
 
 SOURCE_0 = hnm-64.c hnm-32.c hnm-main.c hnm.h
-SOURCE_1 = hobjdump-main.c
+SOURCE_1 = hobjdump.c
 
 
 all: $(TARGET_0) $(TARGET_1)

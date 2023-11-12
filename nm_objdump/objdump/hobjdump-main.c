@@ -1,4 +1,4 @@
-#include "hobjdump.h"
+#include "../hobjdump.h"
 
 int main(int argc, char *argv[])
 {

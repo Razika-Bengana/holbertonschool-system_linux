@@ -1,4 +1,4 @@
-#include "hobjdump.h"
+#include "../hobjdump.h"
 
 uint32_t setFileFlags(Elf_Ehdr header, void *section_headers, int is_64, int is_little_endian, int is_big_endian)
 {

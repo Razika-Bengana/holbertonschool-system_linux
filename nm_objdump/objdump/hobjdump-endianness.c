@@ -1,4 +1,4 @@
-#include "hobjdump.h"
+#include "../hobjdump.h"
 
 uint32_t convert_endianness32(uint32_t value, int is_little_endian, int is_big_endian)
 {

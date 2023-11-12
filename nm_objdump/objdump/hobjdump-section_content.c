@@ -1,9 +1,14 @@
-#include "hobjdump.h"
+#include "../hobjdump.h"
 
 void print_section_content(FILE *file, void *shdr_generic, int is_64, const char *section_name, int is_little_endian, int is_big_endian)
 {
     size_t i, j;
     int space_to_fill;
+    int bytes_missing;
+    int is_last_byte_of_line;
+    int is_last_byte_of_data;
+    int is_complete_line;
+    int padding_for_alignment;
 
     if (strcmp(section_name, BSS_SECTION) == 0 ||
         strcmp(section_name, SHSTRTAB_SECTION) == 0 ||
@@ -61,7 +66,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
         if (i % 16 == 0)
         {
             printf(" ");
-            printf("%0*lx ", address_width, addr + i);
+            printf("%04x ", address_width);
         }
         printf("%02x", buf[i]);
 
@@ -72,45 +77,40 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
 
         if ((i % 16 == 15) || (i == size - 1))
         {
-            /* Combien d'octets sont manquants pour compléter une ligne de 16 octets */
-            int bytes_missing = 16 - ((i % 16) + 1);
-            /* Chaque octet manquant correspond à 2 caractères hexadécimaux. */
-            space_to_fill = bytes_missing * 2;
-            /* Ajouter un espace supplémentaire pour chaque groupe de 4 octets dans les octets manquants */
-            space_to_fill += bytes_missing / 4;
+            bytes_missing = 16 - ((i % 16) + 1);
+            space_to_fill = bytes_missing * 2 + bytes_missing / 4;
 
+            is_last_byte_of_line = (i % 16 == 15);
+            is_last_byte_of_data = (i == size - 1);
+            is_complete_line = (is_last_byte_of_line && is_last_byte_of_data);
 
-                int remaining = 16 - (i % 16) - 1;
-
-                /* Si c'est la fin d'une ligne complète, ou la fin des données */
-                if (remaining == 0)
-                {
-                    /* Pas besoin d'espace supplémentaire */
-                    space_to_fill = space_to_fill;
-                }
-                else if (i % 16 != 15)
-                {
-                    space_to_fill += 1; /* Ajouter un espace pour les adresses incomplètes */
-                }
-                printf("%*s", space_to_fill, "");
-
-            printf(" ");
-
-
-            for (j = i - (i % 16); j <= i; j++)
+            if (!is_complete_line)
             {
-                if (j < size)
-                {
+                space_to_fill++; // Add an extra space for incomplete addresses.
+            }
+
+            // Adjust space_to_fill if it's the last byte of data and we have a complete line.
+            printf("%*s", is_complete_line ? space_to_fill - 1 : space_to_fill, "");
+
+            if (!is_last_byte_of_line || is_last_byte_of_data) {
+                printf(" "); // Add a space if it's not the end of a line or it is the last byte of data.
+            }
+
+            for (j = i - (i % 16); j <= i; j++) {
+                if (j < size) {
                     printf("%c", isprint(buf[j]) ? buf[j] : '.');
                 }
             }
-            if (i % 16 != 15)
-            {
-                int padding_for_alignment = (16 - (i % 16)) - 1;
+
+            // Add padding for alignment if not the end of a line
+            if (!is_last_byte_of_line) {
+                padding_for_alignment = (16 - (i % 16)) - 1;
                 printf("%*s", padding_for_alignment, "");
             }
             printf("\n");
         }
+
     }
+
     free(buf);
 }
