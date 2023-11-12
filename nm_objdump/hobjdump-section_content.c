@@ -66,6 +66,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
 
         if ((i % 16 == 15) || (i == size - 1))
         {
+            printf(" ");
             /* Combien d'octets sont manquants pour compléter une ligne de 16 octets */
             int bytes_missing = 16 - ((i % 16) + 1);
             /* Chaque octet manquant correspond à 2 caractères hexadécimaux. */
