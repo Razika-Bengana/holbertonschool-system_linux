@@ -78,14 +78,24 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
             space_to_fill = bytes_missing * 2;
             /* Ajouter un espace supplémentaire pour chaque groupe de 4 octets dans les octets manquants */
             space_to_fill += bytes_missing / 4;
-            if (i % 16 != 15)
+
+            if ((i % 16 == 15) || (i == size - 1))
             {
-                space_to_fill += 1;
+                int remaining = 16 - (i % 16) - 1;
+
+                /* Si c'est la fin d'une ligne complète, ou la fin des données */
+                if (remaining == 0)
+                {
+                    /* Pas besoin d'espace supplémentaire */
+                    space_to_fill = space_to_fill;
+                }
+                else
+                {
+                    space_to_fill += 1;/* Ajouter un espace pour les adresses incomplètes */
+
+                }
+                printf("%*s", space_to_fill, "");
             }
-
-            printf("%*s", space_to_fill, "");
-
-            printf (" ");
 
 
             for (j = i - (i % 16); j <= i; j++)
