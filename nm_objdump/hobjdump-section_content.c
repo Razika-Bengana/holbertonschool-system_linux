@@ -79,14 +79,13 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
             space_to_fill = bytes_missing * 2;
             /* Ajouter un espace supplémentaire pour chaque groupe de 4 octets dans les octets manquants */
             space_to_fill += bytes_missing / 4;
-            if (i % 16 != 15)
+            if ((i % 16 != 15)
             {
-                printf(" "); /* Test to debug */
-                printf("%*s", (i % 16 == 15) ? space_to_fill : space_to_fill + ((i == size) ? 1 : 0), "");
-                //printf("%*s", (i % 16 == 15) ? space_to_fill : space_to_fill + ((i % 16 != 15 && i != size - 1) ? 1 : 0), "");
-
+                printf("you"); /* Test to debug */
+                printf("%*s", (i % 16 == 15 && i + 1 == size) ? space_to_fill + 1 : space_to_fill, "");
 
             }
+
             for (j = i - (i % 16); j <= i; j++)
             {
                 if (j < size)
@@ -94,7 +93,6 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
                     printf("%c", isprint(buf[j]) ? buf[j] : '.');
                 }
             }
-
             if (i % 16 != 15)
             {
                 int padding_for_alignment = (16 - (i % 16)) - 1;
