@@ -63,6 +63,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
 
         if ((i % 16 == 15) || (i == size - 1))
         {
+            printf(" ");
             space_to_fill = ((16 - (i % 16)) - 1) * 2 + ((16 - (i % 16)) / 4);
             if (i % 16 != 15)
             {
