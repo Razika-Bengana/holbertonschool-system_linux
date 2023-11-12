@@ -3,7 +3,7 @@
 /**
  * print_symbol_table64 - program that prints the symbol table for a 64-bit ELF file
  *
- * This function iterates over the symbols in the given symbol table and prints
+ * this function iterates over the symbols in the given symbol table and prints
  * details about each symbol, such as its name, type, and associated section
  *
  * @section_header: a pointer to the section header of the symbol table
@@ -118,7 +118,7 @@ void print_symbol_table64(Elf64_Shdr *section_header, Elf64_Sym *symbol_table, c
 /**
  * process_elf_file64 - program that processes a 64-bit ELF file located at the given file path
  *
- * This function opens the file, verifies its format and endianness, and reads the section headers;
+ * this function opens the file, verifies its format and endianness, and reads the section headers;
  * it locates the symbol table within the section headers and reads it;
  * finally, it reads the associated string table and calls print_symbol_table64 to print the symbols
  *
