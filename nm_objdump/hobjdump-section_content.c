@@ -96,6 +96,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
                 }
                 printf("%*s", space_to_fill, "");
             }
+            printf(" ");
 
 
             for (j = i - (i % 16); j <= i; j++)
