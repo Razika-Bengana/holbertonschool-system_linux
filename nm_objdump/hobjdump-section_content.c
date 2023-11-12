@@ -66,6 +66,7 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
 
         if ((i % 16 == 15) || (i == size - 1))
         {
+            printf(" ");
             int missing_hex_chars = (16 - (i % 16)) * 2;
             int missing_spaces = 3 - (i % 16) / 4;
 
