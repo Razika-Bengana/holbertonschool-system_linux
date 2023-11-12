@@ -64,7 +64,8 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
         if ((i % 16 == 15) || (i == size - 1))
         {
             printf(" ");
-            space_to_fill = ((16 - (i % 16)) - 1) * 2 + ((16 - (i % 16)) / 4);
+            space_to_fill = (16 - (i % 16)) * 2 + 1;
+
             if (i % 16 != 15)
             {
                 printf("%*s", space_to_fill, "");
@@ -76,11 +77,6 @@ void print_section_content(FILE *file, void *shdr_generic, int is_64, const char
                 {
                     printf("%c", isprint(buf[j]) ? buf[j] : '.');
                 }
-            }
-
-            if (i % 16 != 15)
-            {
-                printf("%*s", (int)(16 - (i % 16)), "");
             }
 
             printf("\n");
