@@ -18,5 +18,13 @@
 int traceSyscalls(pid_t childPid);
 int executeAndTrace(const char *command, char *const args[]);
 
+/* task 1 + task 2 */
+int traceProcess(char *args[], char *env[]);
+int waitSyscall(pid_t child);
+
+/* task 3 */
+void print_params(struct user_regs_struct *regs);
+int trace_loop(pid_t child_pid);
+
 
 #endif /* STRACE_H */
