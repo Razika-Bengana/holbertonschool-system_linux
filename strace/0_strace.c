@@ -1,24 +1,69 @@
 #include "strace.h"
 
+void executeChildProcess(char **arguments, char **environment);
+void monitorChildProcess(pid_t childProcessID);
+int waitForSystemCall(pid_t childProcessID);
+
 /**
- * execute_and_trace_process - program that executes and traces a child process
+ * main - the entry point
  *
- * this function is responsible for setting up tracing for a child process
- * and executing a given command;
- * it also handles errors during execution
+ * @argumentCount: the count of arguments passed
+ * @arguments: the argument vector
+ * @environment: environment variables
  *
- * @command_args: argument vector for execve
- * @environment: environment for execve
+ * Return: EXIT_SUCCESS on success, otherwise EXIT_FAILURE on failure
+ */
+
+int main(int argumentCount, char **arguments, char **environment)
+{
+	pid_t childProcessID;
+
+	if (argumentCount < 2)
+	{
+		printf("Usage: %s command [args...]\n", arguments[0]);
+		return (EXIT_FAILURE);
+	}
+
+	setbuf(stdout, NULL);
+	childProcessID = fork();
+
+	if (childProcessID == -1)
+	{
+		fprintf(stderr, "Fork failed: %d\n", errno);
+		exit(EXIT_FAILURE);
+	}
+
+	else if (childProcessID == 0)
+	{
+		executeChildProcess(arguments, environment);
+	}
+
+	else
+	{
+		monitorChildProcess(childProcessID);
+	}
+	return (EXIT_SUCCESS);
+}
+
+
+
+/**
+ * executeChildProcess - program that executes the child process
+ *
+ * this function sets up the tracing for the child process and executes the command
+ *
+ * @arguments: the argument vector for execve
+ * @environment: the environment variables for execve
  *
  * Return: nothing (void)
  */
 
-void execute_and_trace_process(char **command_args, char **environment)
+void executeChildProcess(char **arguments, char **environment)
 {
 	ptrace(PTRACE_TRACEME, 0, 0, 0);
 	kill(getpid(), SIGSTOP);
 
-	if (execve(command_args[1], command_args + 1, environment) == -1)
+	if (execve(arguments[1], arguments + 1, environment) == -1)
 	{
 		fprintf(stderr, "Exec failed: %d\n", errno);
 		exit(EXIT_FAILURE);
@@ -28,84 +73,62 @@ void execute_and_trace_process(char **command_args, char **environment)
 
 
 /**
- * monitor_and_trace_syscalls - program that monitors and traces system calls of a child process
+ * monitorChildProcess - program that monitors the child process
  *
- * this function handles tracing of system calls made by the child process;
- * it waits for system call events from the child and prints them
+ * this function handles the tracing of system calls made by the child process
  *
- * @child_pid: PID of the child process to monitor
+ * @childProcessID: PID of the child process
  *
  * Return: nothing (void)
  */
 
-void monitor_and_trace_syscalls(pid_t child_pid)
+void monitorChildProcess(pid_t childProcessID)
 {
 	int status;
-	struct user_regs_struct regs;
-	int is_syscall_entry = 1;
+	struct user_regs_struct registerValues;
 
-	waitpid(child_pid, &status, 0);
-	ptrace(PTRACE_SETOPTIONS, child_pid, 0, PTRACE_O_TRACESYSGOOD);
+	waitpid(childProcessID, &status, 0);
+	ptrace(PTRACE_SETOPTIONS, childProcessID, 0, PTRACE_O_TRACESYSGOOD);
 
 	while (1)
 	{
-		ptrace(PTRACE_SYSCALL, child_pid, 0, 0);
-		waitpid(child_pid, &status, 0);
-
-		if (WIFEXITED(status))
+		if (waitForSystemCall(childProcessID))
 			break;
 
-		if (WIFSTOPPED(status) && WSTOPSIG(status) & 0x80)
-		{
-			if (is_syscall_entry)
-			{
-				memset(&regs, 0, sizeof(regs));
-				ptrace(PTRACE_GETREGS, child_pid, 0, &regs);
-				printf("%lu\n", (unsigned long)regs.orig_rax);
-			}
-			is_syscall_entry = !is_syscall_entry;
-		}
+		memset(&registerValues, 0, sizeof(registerValues));
+		ptrace(PTRACE_GETREGS, childProcessID, 0, &registerValues);
+		printf("%lu\n", (long)registerValues.orig_rax);
+
+		if (waitForSystemCall(childProcessID))
+			break;
 	}
 }
 
+
+
 /**
- * main - the entry point
+ * waitForSystemCall - program that waits for a system call from the child process
  *
- * this function is the starting point of the program;
- * it forks the process into a parent and child;
- * the child process executes the command, and the parent traces the child's system calls
+ * this function pauses execution until a system call is made by the child process
  *
- * @argc: argument count
- * @argv: argument vector
- * @envp: environment variables
+ * @childProcessID: PID of the child process
  *
- * Return: EXIT_SUCCESS on successful execution, otherwise EXIT_FAILURE
+ * Return: 0 if a system call is made, otherwise 1 if the child process exits
  */
 
-int main(int argc, char **argv, char **envp)
+int waitForSystemCall(pid_t childProcessID)
 {
-	pid_t child_pid;
+	int status;
 
-	if (argc < 2)
+	while (1)
 	{
-		printf("Usage: %s command [args...]\n", argv[0]);
-		return (EXIT_FAILURE);
-	}
+		ptrace(PTRACE_SYSCALL, childProcessID, 0, 0);
+		waitpid(childProcessID, &status, 0);
 
-	child_pid = fork();
-	if (child_pid == -1)
-	{
-		fprintf(stderr, "Fork failed: %d\n", errno);
-		exit(EXIT_FAILURE);
-	}
-	else if (child_pid == 0)
-	{
-		execute_and_trace_process(argv, envp);
-	}
-	else
-	{
-		monitor_and_trace_syscalls(child_pid);
-	}
+		if (WIFSTOPPED(status) && WSTOPSIG(status) & 0x80)
+			return (0);
 
-	return (EXIT_SUCCESS);
+		if (WIFEXITED(status))
+			return (1);
+	}
 }
