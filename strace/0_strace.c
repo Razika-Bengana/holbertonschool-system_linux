@@ -1,93 +1,100 @@
 #include "strace.h"
 
 /**
- * traceSyscalls - program that traces the system calls made by a child process
+ * execute_trace - program that combines tracing of child and parent process
  *
- * @childPid: PID of the child process to trace
+ * this function handles both child and parent process tracing;
+ * for the child, it sets up the tracing and executes the given command;
+ * for the parent, it handles the syscall tracing and output
  *
- * Return: 0 on success, 1 on failure.
+ * @args: argument vector for execve
+ * @env: environ for execve
+ * @child_pid: pid of child, 0 if current process is child
+ *
+ * Return: nothing (void)
  */
 
-int traceSyscalls(pid_t childPid)
+void execute_trace(char **args, char **env, pid_t child_pid)
 {
-	int status, isSyscallEntry;
+	int status;
+	struct user_regs_struct regs;
+	int in_syscall = 0;
 
-	isSyscallEntry = 0;
+	if (child_pid == 0)
+	{  /* Child process */
+		ptrace(PTRACE_TRACEME);
+		kill(getpid(), SIGSTOP);
 
-	while (1)
-	{
-		if (wait(&status) == -1)
-			return (1);
-
-		if (WIFEXITED(status))
-			break;
-
-		if (!isSyscallEntry)
+		if (execve(args[1], args + 1, env) == -1)
 		{
-			struct user_regs_struct regs;
-
-			if (ptrace(PTRACE_GETREGS, childPid, NULL, &regs) == -1)
-				return (1);
-
-			printf("%lu\n", (unsigned long)regs.orig_rax);
-			fflush(stdout);
+			fprintf(stderr, "Exec failed: %d\n", errno);
+			exit(EXIT_FAILURE);
 		}
-
-		if (ptrace(PTRACE_SYSCALL, childPid, NULL, NULL) == -1)
-			return (1);
-
-		isSyscallEntry = !isSyscallEntry;
 	}
 
-	return (0);
+	else
+	{  /* Parent process */
+		waitpid(child_pid, &status, 0);
+		ptrace(PTRACE_SETOPTIONS, child_pid, 0, PTRACE_O_TRACESYSGOOD);
+
+		while (1)
+		{
+			ptrace(PTRACE_SYSCALL, child_pid, 0, 0);
+			waitpid(child_pid, &status, 0);
+
+			if (WIFEXITED(status)) break;
+
+			if (WIFSTOPPED(status) && WSTOPSIG(status) & 0x80)
+			{
+				if (in_syscall)
+				{
+					memset(&regs, 0, sizeof(regs));
+					ptrace(PTRACE_GETREGS, child_pid, 0, &regs);
+					printf("%lu\n", (unsigned long)regs.orig_rax);
+				}
+				in_syscall = !in_syscall;
+			}
+		}
+	}
 }
 
-/**
- * executeAndTrace - program that executes a command and traces
- * its system calls
- *
- * @command: the command to execute
- * @args: the arguments for the command
- *
- * Return: 0 on success, 1 on failure
- */
 
-int executeAndTrace(const char *command, char *const args[])
-{
-	pid_t childPid;
-
-	switch (childPid = fork())
-	{
-		case -1:
-			return (1);
-		case 0:
-			if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1)
-				return (1);
-			if (execvp(command, args) == -1)
-				return (1);
-		default:
-			break;
-	}
-
-	return (traceSyscalls(childPid));
-}
 
 /**
- * main - the entry point of the strace_0 program
+ * main - the entry point
  *
- * @argc: the number of command-line arguments
- * @argv: an array of strings containing the command-line arguments
+ * this function is the starting point of the program;
+ * it initializes the process, decides if the current process is the parent or the child for tracing,
+ * and then calls the "execute_trace" function to perform the actual tracing
  *
- * Return: 0 on success, 1 on failure
+ * @argc: the argument count
+ * @argv: the argument vector
+ * @envp: environment variables
+ *
+ * Return: EXIT_SUCCESS on successful execution, otherwise EXIT_FAILURE
  */
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv, char **envp)
 {
-	if (argc < 2 || !argv)
+	pid_t child_pid;
+
+	if (argc < 2)
 	{
-		fprintf(stderr, "usage: %s <prog> <prog args>...\n", argv[0]);
-		return (1);
+		printf("Usage: %s command [args...]\n", argv[0]);
+		return (EXIT_FAILURE);
 	}
 
-	return (executeAndTrace(argv[1], argv + 1));
+	setvbuf(stdout, NULL, _IONBF, 0);
+
+	child_pid = fork();
+
+	if (child_pid == -1)
+	{
+		fprintf(stderr, "Fork failed: %d\n", errno);
+		exit(EXIT_FAILURE);
+	}
+
+	execute_trace(argv, envp, child_pid);
+
+	return (EXIT_SUCCESS);
 }
