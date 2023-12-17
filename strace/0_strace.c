@@ -7,11 +7,23 @@ int waitForSystemCall(pid_t childProcessID);
 /**
  * main - the entry point
  *
- * @argumentCount: the count of arguments passed
- * @arguments: the argument vector
- * @environment: environment variables
+ * this function starts the process tracing program;
  *
- * Return: EXIT_SUCCESS on success, otherwise EXIT_FAILURE on failure
+ * it initializes the program by checking if the required arguments are passed;
+ * if not, it displays the usage format and exits with failure;
+ * it disables stdout buffering for real-time output;
+ * then, it creates a child process using fork();
+ * on fork failure, it reports an error and exits
+ *
+ * depending on the process type:
+ * - in the child process, it calls "executeChildProcess()" to execute the command;
+ * - in the parent process, it calls "monitorChildProcess()" to monitor the child
+ *
+ * @argumentCount: the number of command-line arguments
+ * @arguments: the command-line arguments
+ * @environment: the environment variables
+ *
+ * @return: EXIT_SUCCESS on success, otherwise EXIT_FAILURE on error
  */
 
 int main(int argumentCount, char **arguments, char **environment)
