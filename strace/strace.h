@@ -12,11 +12,11 @@
 #include <sys/user.h>
 #include <sys/reg.h>
 #include <string.h>
+#include <errno.h>
 
 
 /* task 0 */
-int traceSyscalls(pid_t childPid);
-int executeAndTrace(const char *command, char *const args[]);
+void execute_trace(char **args, char **env, pid_t child_pid);
 
 /* task 1 + task 2 */
 int traceProcess(char *args[], char *env[]);
