@@ -16,8 +16,9 @@
 
 
 /* task 0 */
-void execute_and_trace_process(char **command_args, char **environment);
-void monitor_and_trace_syscalls(pid_t child_pid);
+void executeChildProcess(char **arguments, char **environment);
+void monitorChildProcess(pid_t childProcessID);
+int waitForSystemCall(pid_t childProcessID);
 
 /* task 1 + task 2 */
 int traceProcess(char *args[], char *env[]);
