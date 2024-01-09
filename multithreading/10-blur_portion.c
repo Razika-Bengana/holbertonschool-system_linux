@@ -6,8 +6,7 @@ void blur_portion(blur_portion_t const *portion)
 	size_t x, y;
 	float weight;
 	size_t kx, ky;
-	int pixel_x, pixel_y;
-	int adjusted_kx, adjusted_ky;
+	int pixel_x, pixel_y, adjusted_kx, adjusted_ky;
 	pixel_t current_pixel, *blurred_pixel;
 
 	for (y = portion->y; y < end_y; y++)
@@ -19,7 +18,6 @@ void blur_portion(blur_portion_t const *portion)
 			for (ky = 0; ky < portion->kernel->size; ky++)
 			{
 				adjusted_ky = ky - portion->kernel->size / 2;
-
 				for (kx = 0; kx < portion->kernel->size; kx++)
 				{
 					adjusted_kx = kx - portion->kernel->size / 2;
@@ -32,7 +30,6 @@ void blur_portion(blur_portion_t const *portion)
 						current_pixel = portion->img->pixels
 							[pixel_y * portion->img->w + pixel_x];
 						weight = portion->kernel->matrix[ky][kx];
-
 						totalR += current_pixel.r * weight;
 						totalG += current_pixel.g * weight;
 						totalB += current_pixel.b * weight;
@@ -40,7 +37,6 @@ void blur_portion(blur_portion_t const *portion)
 					}
 				}
 			}
-			/* Assign new values to the blurred image */
 			blurred_pixel = &portion->img_blur->pixels[y * portion->img_blur->w + x];
 			blurred_pixel->r = totalR / totalWeight;
 			blurred_pixel->g = totalG / totalWeight;
