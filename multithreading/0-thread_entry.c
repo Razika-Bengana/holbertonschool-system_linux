@@ -23,5 +23,6 @@ void *thread_entry(void *arg)
 		pthread_exit(NULL);
 
 	printf("%s\n", (char *)arg);
+
 	pthread_exit(NULL);
 }
