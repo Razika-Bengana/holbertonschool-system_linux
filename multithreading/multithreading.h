@@ -1,10 +1,9 @@
 #ifndef MULTITHREADING_H
 #define MULTITHREADING_H
 
-
-#include <stdio.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdarg.h>
 #include <pthread.h>
 
@@ -77,6 +76,9 @@ void *thread_entry(void *arg);
 
 /* task 1 */
 int tprintf(char const *format, ...);
+
+/* task 2 */
+void blur_portion(blur_portion_t const *portion);
 
 
 #endif /* MULTITHREADING_H */
