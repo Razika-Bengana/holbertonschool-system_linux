@@ -1,5 +1,31 @@
 #include "multithreading.h"
 
+/**
+ * blur_portion - program that applies a Gaussian blur to a specified portion of an image
+ *
+ * this function iterates over the specified portion of the image;
+ * for each pixel in this region, it applies a Gaussian blur using the provided convolution kernel;
+ * the blur is achieved by computing a weighted average of the pixel's color value and the color values
+ * of its neighboring pixels;
+ * the weights are determined by the convolution kernel;
+ * this process modifies the color values of the pixels in the specified portion of the image, resulting
+ * in a blurred effect;
+ *
+ * the function handles boundary conditions and ensures that pixel manipulations stay within the bounds
+ * of the image;
+ * the resultant blurred image is stored in img_blur
+ *
+ * @portion: a pointer to a blur_portion_t structure containing all necessary information.
+ *           This structure includes:
+ *           - img: A pointer to the original image (img_t)
+ *           - img_blur: A pointer to the destination image for storing blurred results (img_t)
+ *           - x, y: The top-left coordinates of the portion of the image to be blurred
+ *           - w, h: The width and height of the portion to be blurred
+ *           - kernel: A pointer to the convolution kernel to be used for blurring (kernel_t)
+ *
+ * Return: This function returns nothing (void).
+ */
+
 void blur_portion(blur_portion_t const *portion)
 {
 	size_t end_x = portion->x + portion->w, end_y = portion->y + portion->h;
