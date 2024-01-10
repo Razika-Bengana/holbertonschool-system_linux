@@ -80,5 +80,13 @@ int tprintf(char const *format, ...);
 /* task 2 */
 void blur_portion(blur_portion_t const *portion);
 
+/* task 3 */
+
+
+/* task 4 */
+void init_mutex();
+void destroy_mutex();
+int tprintf(char const *format, ...);
+
 
 #endif /* MULTITHREADING_H */
