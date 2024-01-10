@@ -9,7 +9,8 @@
  * it initializes a static 'pthread_mutex_t', ensuring it's done only once
  * across all function calls;
  * the static keyword ensures the mutex persists in memory throughout the
- * program's execution, but is only accessible within the scope of this function
+ * program's execution, but is only accessible within the scope of this
+ * function
  */
 
 __attribute__((constructor))
