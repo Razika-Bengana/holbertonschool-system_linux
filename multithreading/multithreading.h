@@ -84,8 +84,8 @@ void blur_portion(blur_portion_t const *portion);
 
 
 /* task 4 */
-void init_mutex();
-void destroy_mutex();
+void init_mutex(void);
+void destroy_mutex(void);
 int tprintf(char const *format, ...);
 
 
