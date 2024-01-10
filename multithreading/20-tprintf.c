@@ -19,9 +19,9 @@ void destroy_mutex()
 /* Thread-safe printf function */
 int tprintf(char const *format, ...)
 {
+	int ret;
 	va_list args;
 	va_start(args, format);
-	int ret;
 
 	pthread_mutex_lock(&print_mutex);
 	printf("[%lu] ", pthread_self());
