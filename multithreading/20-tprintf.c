@@ -5,7 +5,7 @@ __attribute__((constructor))
 void init_mutex(void)
 {
 	static pthread_mutex_t print_mutex;
-	static int initialized = 0;
+	static int initialized;
 
 	if (!initialized)
 	{
@@ -19,6 +19,7 @@ __attribute__((destructor))
 void destroy_mutex(void)
 {
 	static pthread_mutex_t print_mutex;
+
 	pthread_mutex_destroy(&print_mutex);
 }
 
