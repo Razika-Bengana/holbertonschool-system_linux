@@ -4,14 +4,14 @@ pthread_mutex_t print_mutex;
 
 /* Initialize the mutex */
 __attribute__((constructor))
-void init_mutex()
+void init_mutex(void)
 {
 	pthread_mutex_init(&print_mutex, NULL);
 }
 
 /* Destroy the mutex */
 __attribute__((destructor))
-void destroy_mutex()
+void destroy_mutex(void)
 {
 	pthread_mutex_destroy(&print_mutex);
 }
