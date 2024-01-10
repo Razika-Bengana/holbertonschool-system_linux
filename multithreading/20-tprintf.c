@@ -1,6 +1,5 @@
 #include "multithreading.h"
 
-pthread_mutex_t print_mutex;
 
 /* Initialize the mutex */
 __attribute__((constructor))
@@ -21,6 +20,7 @@ int tprintf(char const *format, ...)
 {
 	int ret;
 	va_list args;
+
 	va_start(args, format);
 
 	pthread_mutex_lock(&print_mutex);
