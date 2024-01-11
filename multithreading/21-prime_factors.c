@@ -67,7 +67,7 @@ int add_to_list(list_t *list, unsigned long factor)
  * @s: a pointer to a character array representing the input number
  *
  * Return: a pointer to a 'list_t' structure containing the prime factors,
- * 	   or NULL if an error occurs
+ *         or NULL if an error occurs
  */
 
 list_t *prime_factors(char const *s)
