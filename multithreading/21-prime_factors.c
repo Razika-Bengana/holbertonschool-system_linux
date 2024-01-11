@@ -66,8 +66,8 @@ int add_to_list(list_t *list, unsigned long factor)
  *
  * @s: a pointer to a character array representing the input number
  *
- * Return: a pointer to a 'list_t' structure containing the prime factors if successful,
- * or NULL if an error occurs
+ * Return: a pointer to a 'list_t' structure containing the prime factors,
+ * 	   or NULL if an error occurs
  */
 
 list_t *prime_factors(char const *s)
@@ -111,10 +111,11 @@ list_t *prime_factors(char const *s)
 
 
 /**
- * free_list - program that frees the memory occupied by a linked list and its contents
+ * free_list - program that frees the memory occupied by a linked list
+ * and its contents
  *
- * this function takes a pointer to a 'list_t' structure and deallocates all memory
- * used by the linked list and its elements
+ * this function takes a pointer to a 'list_t' structure and deallocates
+ * all memory used by the linked list and its elements
  *
  * @list: a pointer to the 'list_t' structure representing the linked list
  *
