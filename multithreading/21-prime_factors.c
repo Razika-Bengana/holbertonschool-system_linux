@@ -18,12 +18,17 @@ void free_list(list_t *list);
 
 int add_to_list(list_t *list, unsigned long factor)
 {
-	unsigned long *content = malloc(sizeof(*content));
+	unsigned long *content;
+	node_t *new_node;
+
+	content = malloc(sizeof(*content));
+
 	if (!content)
 		return (0);
 
 	*content = factor;
-	node_t *new_node = malloc(sizeof(*new_node));
+	new_node = malloc(sizeof(*new_node));
+
 	if (!new_node)
 	{
 		free(content);
@@ -38,10 +43,12 @@ int add_to_list(list_t *list, unsigned long factor)
 	{
 		list->tail->next = new_node;
 	}
+
 	else
 	{
 		list->head = new_node;
 	}
+
 	list->tail = new_node;
 	list->size++;
 
