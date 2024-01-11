@@ -7,6 +7,9 @@
 #include <stdarg.h>
 #include <pthread.h>
 
+#include "list.h"
+
+
 
 /**
  * struct pixel_s - RGB pixel
@@ -15,12 +18,15 @@
  * @g: Green component
  * @b: Blue component
  */
+
 typedef struct pixel_s
 {
     uint8_t r;
     uint8_t g;
     uint8_t b;
 } pixel_t;
+
+
 
 /**
  * struct img_s - Image
@@ -29,6 +35,7 @@ typedef struct pixel_s
  * @h:      Image height
  * @pixels: Array of pixels
  */
+
 typedef struct img_s
 {
     size_t w;
@@ -36,17 +43,22 @@ typedef struct img_s
     pixel_t *pixels;
 } img_t;
 
+
+
 /**
  * struct kernel_s - Convolution kernel
  *
  * @size:   Size of the matrix (both width and height)
  * @matrix: Kernel matrix
  */
+
 typedef struct kernel_s
 {
     size_t size;
     float **matrix;
 } kernel_t;
+
+
 
 /**
  * struct blur_portion_s - Information needed to blur a portion of an image
@@ -59,6 +71,7 @@ typedef struct kernel_s
  * @h:        Height of the portion
  * @kernel:   Convolution kernel to use
  */
+
 typedef struct blur_portion_s
 {
     img_t const *img;
@@ -71,14 +84,18 @@ typedef struct blur_portion_s
 } blur_portion_t;
 
 
+
 /* task 0 */
 void *thread_entry(void *arg);
+
 
 /* task 1 */
 int tprintf(char const *format, ...);
 
+
 /* task 2 */
 void blur_portion(blur_portion_t const *portion);
+
 
 /* task 3 */
 
@@ -87,6 +104,12 @@ void blur_portion(blur_portion_t const *portion);
 void init_mutex(void);
 void destroy_mutex(void);
 int tprintf(char const *format, ...);
+
+
+/* task 5 */
+int add_to_list(list_t *list, unsigned long factor);
+list_t *prime_factors(char const *s);
+void free_list(list_t *list);
 
 
 #endif /* MULTITHREADING_H */
