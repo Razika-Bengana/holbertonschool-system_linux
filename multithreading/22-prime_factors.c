@@ -50,11 +50,16 @@ void enqueue_task(task_t *task)
 
 task_t *dequeue_task()
 {
+	task_node_t *node;
+	task_t *task;
+
 	pthread_mutex_lock(&queue.lock);
-	task_node_t *node = queue.head;
+	node = queue.head;
+
 	if (node != NULL)
 	{
 		queue.head = node->next;
+
 		if (queue.head == NULL)
 		{
 			queue.tail = NULL;
@@ -62,7 +67,7 @@ task_t *dequeue_task()
 	}
 	pthread_mutex_unlock(&queue.lock);
 
-	task_t *task = NULL;
+	task = NULL;
 	if (node != NULL)
 	{
 		task = node->task;
