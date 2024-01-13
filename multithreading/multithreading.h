@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 #include <pthread.h>
 
@@ -112,5 +113,68 @@ int add_to_list(list_t *list, unsigned long factor);
 list_t *prime_factors(char const *s);
 void free_list(list_t *list);
 
+
+/* task 6 */
+
+
+typedef void *(*task_entry_t)(void *);
+
+/**
+ * enum task_status_e - Task statuses
+ *
+ * @PENDING: Task is pending
+ * @STARTED: Task has been started
+ * @SUCCESS: Task has completed successfully
+ * @FAILURE: Task has completed with issues
+ */
+
+typedef enum task_status_e
+{
+    PENDING = 0,
+    STARTED,
+    SUCCESS,
+    FAILURE
+} task_status_t;
+
+
+
+/**
+ * struct task_s - Executable task structure
+ *
+ * @entry:  Pointer to a function to serve as the task entry
+ * @param:  Address to a custom content to be passed to the entry function
+ * @status: Task status, default to PENDING
+ * @result: Stores the return value of the entry function
+ * @lock:   Task mutex
+ */
+
+typedef struct task_s
+{
+    task_entry_t    entry;
+    void        *param;
+    task_status_t   status;
+    void        *result;
+    pthread_mutex_t lock;
+} task_t;
+
+typedef struct task_node_s {
+    task_t *task;
+    struct task_node_s *next;
+} task_node_t;
+
+typedef struct {
+    task_node_t *head;
+    task_node_t *tail;
+    pthread_mutex_t lock;
+} task_queue_t;
+
+task_queue_t queue;
+
+
+task_t *create_task(task_entry_t entry, void *param);
+void destroy_task(task_t *task);
+void enqueue_task(task_t *task);
+task_t *dequeue_task();
+void *exec_tasks(void *arg);
 
 #endif /* MULTITHREADING_H */
