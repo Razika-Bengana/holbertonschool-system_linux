@@ -15,7 +15,7 @@
 int main(void)
 {
 	int server_fd, opt = 1;
-	/* Déclaration des descripteurs de fichier pour le serveur et une option pour le socket */
+	/* Déclaration des descripteurs de fichier pour le serveur + option pour le socket */
 	struct sockaddr_in address;
 	/* Déclaration d'une structure pour stocker les informations d'adresse */
 
@@ -25,37 +25,32 @@ int main(void)
 		perror("socket failed");
 		exit(EXIT_FAILURE);
 	}
-
 	/* Configuration du socket pour réutiliser l'adresse et le port */
-	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+		       &opt, sizeof(opt)))
 	{
 		perror("setsockopt");
 		exit(EXIT_FAILURE);
 	}
-
 	/* Configuration de la structure d'adresse pour le serveur */
 	address.sin_family = AF_INET; /* Famille d'adresses IPv4 */
-
 	address.sin_addr.s_addr = INADDR_ANY;
 	/* Accepte les connexions de toutes les interfaces réseau */
-
 	address.sin_port = htons(12345);
 	/* Port sur lequel le serveur écoutera les connexions */
 
 	/* Association du socket à l'adresse et au port spécifiés */
-	if (bind(server_fd, (struct sockaddr *)&address, sizeof(address))<0)
+	if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
 	{
 		perror("bind failed");
 		exit(EXIT_FAILURE);
 	}
-
 	/* Mise en écoute des connexions entrantes */
 	if (listen(server_fd, 3) < 0)
 	{
 		perror("listen");
 		exit(EXIT_FAILURE);
 	}
-
 	printf("Server listening on port 12345...\n");
 
 	/* Boucle infinie pour maintenir le serveur en attente de connexions */
@@ -63,6 +58,5 @@ int main(void)
 	{
 		sleep(60); /* Pause pendant 60 secondes avant de vérifier à nouveau */
 	}
-
 	return (0);
 }
