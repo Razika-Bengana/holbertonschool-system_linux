@@ -17,7 +17,6 @@ int main(void)
 	int server_fd, opt = 1;
 	struct sockaddr_in address;
 
-	/* Création du descripteur de fichier pour le socket */
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_fd == 0)
 	{
