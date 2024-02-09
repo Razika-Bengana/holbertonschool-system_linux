@@ -14,8 +14,10 @@
 
 int main(void)
 {
-	int server_fd, opt = 1; /* Déclaration des descripteurs de fichier pour le serveur et une option pour le socket */
-	struct sockaddr_in address; /* Déclaration d'une structure pour stocker les informations d'adresse */
+	int server_fd, opt = 1;
+	/* Déclaration des descripteurs de fichier pour le serveur et une option pour le socket */
+	struct sockaddr_in address;
+	/* Déclaration d'une structure pour stocker les informations d'adresse */
 
 	/* Création du descripteur de fichier pour le socket */
 	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -33,8 +35,12 @@ int main(void)
 
 	/* Configuration de la structure d'adresse pour le serveur */
 	address.sin_family = AF_INET; /* Famille d'adresses IPv4 */
-	address.sin_addr.s_addr = INADDR_ANY; /* Accepte les connexions de toutes les interfaces réseau */
-	address.sin_port = htons(12345); /* Port sur lequel le serveur écoutera les connexions */
+
+	address.sin_addr.s_addr = INADDR_ANY;
+	/* Accepte les connexions de toutes les interfaces réseau */
+
+	address.sin_port = htons(12345);
+	/* Port sur lequel le serveur écoutera les connexions */
 
 	/* Association du socket à l'adresse et au port spécifiés */
 	if (bind(server_fd, (struct sockaddr *)&address, sizeof(address))<0)
