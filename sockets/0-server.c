@@ -18,7 +18,8 @@ int main(void)
 	struct sockaddr_in address;
 
 	/* Création du descripteur de fichier pour le socket */
-	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+	server_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (server_fd == 0)
 	{
 		perror("socket failed");
 		exit(EXIT_FAILURE);
