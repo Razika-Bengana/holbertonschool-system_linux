@@ -4,7 +4,6 @@
 #define PORT 12345
 
 
-
 /**
  * create_socket - program that creates a TCP socket using the IPv4 protocol
  *
@@ -119,7 +118,6 @@ void start_listening(int sockfd)
  * Return: always returns 0, although this program is designed to run
  *         indefinitely and only terminate upon receiving a 'kill' signal
  */
-
 
 int main(void)
 {
