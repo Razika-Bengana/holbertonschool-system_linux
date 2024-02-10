@@ -22,6 +22,7 @@ int main(void)
 	struct sockaddr_in address;
 	int opt = 1;
 	int addrlen = sizeof(address);
+	char client_ip;
 
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_fd == 0)
@@ -58,7 +59,7 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	char client_ip[INET_ADDRSTRLEN];
+	client_ip[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 	printf("Client connected: %s\n", client_ip);
 
