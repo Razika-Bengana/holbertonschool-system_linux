@@ -19,7 +19,8 @@
 
 int main(void)
 {
-	int server_fd, new_socket, opt = 1, addrlen = sizeof(address);
+	int server_fd, new_socket, opt = 1;
+	int addrlen = sizeof(address);
 	struct sockaddr_in address;
 	char client_ip[INET_ADDRSTRLEN];
 
