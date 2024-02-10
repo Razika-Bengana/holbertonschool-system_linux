@@ -31,15 +31,16 @@ int create_socket(void)
 
 
 /**
- * setup_address - program that initializes the provided 'sockaddr_in' structure
- * with the server's address settings;
- * this function sets the address family to AF_INET (IPv4), allows the socket
- * to bind to all IP addresses available on the machine, and sets the port number
- * to a predefined value (PORT), converting it from host byte order to network
- * byte order using htons()
+ * setup_address - program that initializes the provided 'sockaddr_in'
+ * structure with the server's address settings
  *
- * @address: a pointer to a 'sockaddr_in' structure that will be initialized
- *           with the server's address settings
+ * this function sets the address family to AF_INET (IPv4), allows
+ * the socket to bind to all IP addresses available on the machine,
+ * and sets the port number to a predefined value (PORT), converting
+ * it from host byte order to network byte order using htons()
+ *
+ * @address: a pointer to a 'sockaddr_in' structure that will be
+ *           initialized with the server's address settings
  *
  * Return: nothing (void)
  */
@@ -55,8 +56,9 @@ void setup_address(struct sockaddr_in *address)
 
 
 /**
- * bind_socket - program that binds the server socket to the specified IP address
- * and port number contained within the 'sockaddr_in' structure;
+ * bind_socket - program that binds the server socket to the specified
+ * IP address and port number contained within the 'sockaddr_in' structure
+ *
  * if the socket cannot be bound (the address is in use), the function prints
  * an error message and exits the program
  *
@@ -79,16 +81,16 @@ void bind_socket(int sockfd, struct sockaddr_in *address)
 
 
 /**
- * start_listening - program that places the server socket in a listening state,
- * where it can accept connection requests
+ * start_listening - program that places the server socket in a listening
+ * state, where it can accept connection requests
  *
- * this function allows the socket to queue up to 5 incoming connection requests
- * before refusing additional requests;
- * if an error occurs while attempting to listen on the socket, an error message
- * is printed and the program terminates
+ * this function allows the socket to queue up to 5 incoming connection
+ * requests before refusing additional requests;
+ * if an error occurs while attempting to listen on the socket, an error
+ * message is printed and the program terminates
  *
- * @sockfd: the socket file descriptor on which the server will listen for
- *          incoming connections
+ * @sockfd: the socket file descriptor on which the server will listen
+ *          for incoming connections
  *
  * Return: nothing (void)
  */
@@ -116,8 +118,6 @@ void start_listening(int sockfd)
  *
  * Return: always returns 0, although this program is designed to run indefinitely
  *         and only terminate upon receiving a 'kill' signal
- *
- * Return: nothing (void)
  */
 
 
