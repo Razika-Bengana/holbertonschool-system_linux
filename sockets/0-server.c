@@ -65,28 +65,12 @@ int setup_server_socket(struct sockaddr_in *address)
 
 
 /**
- * main - the entry point
  *
- * this program orchestrates the entire server setup and then enters an indefinite loop
- * where the server remains idle, simulating a state where it can handle tasks
- * like accepting connections;
- * so it effectively demonstrates the lifecycle of a server ready to accept connections,
- * awaiting integration with functionality to handle client requests
- *
- * Here's a breakdown of its operations:
- * 1. declares and initializes a 'sockaddr_in' structure for storing the server's network address settings
- * 2. calls 'setup_server_socket' to prepare a server socket that listens on the predefined port
- * 3. enters an infinite loop, pausing for 60 seconds in each iteration;
- *    this simulates ongoing server activity, like periodically checking for new connections
- *    or performing maintenance tasks
- *
- * Return: 0 (success), although this server is designed to run indefinitely
+ * @return
  */
 
 int main(void)
 {
-	struct sockaddr_in address;
-
 	while (1)
 	{
 		sleep(60);
