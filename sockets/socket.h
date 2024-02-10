@@ -9,12 +9,12 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+
 /* task 0 */
-int create_server_socket(void);
-void configure_server_socket(int server_fd);
-void initialize_address(struct sockaddr_in *address);
-void bind_server_socket(int server_fd, struct sockaddr_in *address);
-void start_listening(int server_fd);
+int create_socket(void);
+void setup_address(struct sockaddr_in *address);
+void bind_socket(int sockfd, struct sockaddr_in *address);
+void start_listening(int sockfd);
 
 
 /* task 1 */
