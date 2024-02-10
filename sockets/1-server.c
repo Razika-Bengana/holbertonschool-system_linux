@@ -47,7 +47,7 @@ int create_and_setup_server_socket(struct sockaddr_in *address)
 	int server_fd, opt = 1;
 
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if ((server_fd < 0)
+	if (server_fd < 0)
 	{
 		perror("socket failed");
 		exit(EXIT_FAILURE);
