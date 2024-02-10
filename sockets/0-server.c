@@ -126,6 +126,7 @@ int main(void)
 	struct sockaddr_in address;
 
 	int sockfd = create_socket();
+
 	setup_address(&address);
 	bind_socket(sockfd, &address);
 	start_listening(sockfd);
