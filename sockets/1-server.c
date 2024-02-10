@@ -20,6 +20,7 @@
 int main(void) {
 	struct sockaddr_in address = {0};
 	int server_fd, new_socket, opt = 1;
+	int addrlen = sizeof(address);
 	char client_ip[INET_ADDRSTRLEN];
 
 	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -44,7 +45,6 @@ int main(void) {
 	}
 	printf("Server listening on port 12345\n");
 
-	int addrlen = sizeof(address);
 	if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0) {
 		perror("accept");
 		exit(EXIT_FAILURE);
