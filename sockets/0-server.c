@@ -63,8 +63,8 @@ void setup_address(struct sockaddr_in *address)
  * an error message and exits the program
  *
  * @sockfd: the socket file descriptor returned by create_socket()
- * @address: a pointer to a 'sockaddr_in' structure that contains the IP address
- *           and port number to which the socket will be bound
+ * @address: a pointer to a 'sockaddr_in' structure that contains the
+ *           IP address and port number to which the socket will be bound
  *
  * Return: nothing (void)
  */
@@ -111,13 +111,13 @@ void start_listening(int sockfd)
  * main - the entry point
  *
  * this program orchestrates the process of creating a socket, setting up
- * the server's address, binding the socket, and starting to listen for incoming
- * connections on port 12345;
- * after setup, the program enters an infinite loop, simulating a server that runs
- * indefinitely until it is terminated by an external signal
+ * the server's address, binding the socket, and starting to listen for
+ * incoming connections on port 12345;
+ * after setup, the program enters an infinite loop, simulating a server
+ * that runs indefinitely until it is terminated by an external signal
  *
- * Return: always returns 0, although this program is designed to run indefinitely
- *         and only terminate upon receiving a 'kill' signal
+ * Return: always returns 0, although this program is designed to run
+ *         indefinitely and only terminate upon receiving a 'kill' signal
  */
 
 
