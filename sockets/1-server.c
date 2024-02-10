@@ -101,8 +101,9 @@ int main(void)
 
 	printf("Server listening on port %d\n", PORT);
 
-	if ((new_socket = accept(server_fd, (struct sockaddr *)&address,
-		(socklen_t *)&addrlen)) < 0)
+	new_socket = accept(server_fd, (struct sockaddr *)&address,
+			    (socklen_t *)&addrlen);
+	if (new_socket < 0)
 	{
 		perror("accept");
 		exit(EXIT_FAILURE);
