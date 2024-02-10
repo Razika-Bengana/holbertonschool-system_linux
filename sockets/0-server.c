@@ -87,8 +87,6 @@ int main(void)
 {
 	struct sockaddr_in address;
 
-	int server_fd = setup_server_socket(&address);
-
 	while (1)
 	{
 		sleep(60);
