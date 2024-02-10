@@ -13,7 +13,7 @@
  * binding, listening for connections, and accepting connections
  *
  * Return: 0 on successful execution,
- * 	   or exits with a failure status if any socket operation fails
+ *         or exits with a failure status if any socket operation fails
  */
 
 int main(void)
@@ -22,7 +22,7 @@ int main(void)
 	struct sockaddr_in address;
 	int opt = 1;
 	int addrlen = sizeof(address);
-	char client_ip;
+	char client_ip[INET_ADDRSTRLEN];
 
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_fd == 0)
@@ -59,7 +59,6 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	client_ip[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 	printf("Client connected: %s\n", client_ip);
 
