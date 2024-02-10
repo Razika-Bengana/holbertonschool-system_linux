@@ -20,8 +20,8 @@
 int main(void)
 {
 	int server_fd, new_socket, opt = 1;
-	int addrlen = sizeof(address);
 	struct sockaddr_in address;
+	int addrlen = sizeof(address);
 	char client_ip[INET_ADDRSTRLEN];
 
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
