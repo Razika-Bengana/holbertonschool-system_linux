@@ -28,8 +28,8 @@ void initialize_address(struct sockaddr_in *address)
 
 
 /**
- * create_and_setup_server_socket - program that creates and sets up a server socket
- * for listening to incoming connections
+ * create_and_setup_server_socket - program that creates and sets up a server
+ * socket for listening to incoming connections
  *
  * this function encapsulates the creation of a socket, setting socket options,
  * binding it to a specified address, and setting it to listen for connections
@@ -38,15 +38,16 @@ void initialize_address(struct sockaddr_in *address)
  * settings (port, IP) the server will use
  *
  * Return: the file descriptor for the created server socket;
- * 	   the program exits if any step fails
- * 	   (socket creation, setting options, binding, or listening)
+ *	   the program exits if any step fails
+ *	   (socket creation, setting options, binding, or listening)
  */
 
 int create_and_setup_server_socket(struct sockaddr_in *address)
 {
 	int server_fd, opt = 1;
 
-	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+	server_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if ((server_fd < 0)
 	{
 		perror("socket failed");
 		exit(EXIT_FAILURE);
@@ -78,13 +79,13 @@ int create_and_setup_server_socket(struct sockaddr_in *address)
 /**
  * main - the entry point
  *
- * This program demonstrates setting up a TCP server that listens on a predefined port,
- * accepts an incoming connection, retrieves and prints the client's IP address,
- * and then closes the connection
+ * This program demonstrates setting up a TCP server that listens on
+ * a predefined port, accepts an incoming connection, retrieves and prints
+ * the client's IP address, and then closes the connection
  *
  * Return: 0 upon successful execution,
- * 	   or exits with a failure status if any critical operation fails
- * 	   (accepting a connection)
+ *	   or exits with a failure status if any critical operation fails
+ *	   (accepting a connection)
  */
 
 int main(void)
@@ -100,7 +101,8 @@ int main(void)
 
 	printf("Server listening on port %d\n", PORT);
 
-	if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0)
+	if ((new_socket = accept(server_fd, (struct sockaddr *)&address,
+		(socklen_t *)&addrlen)) < 0)
 	{
 		perror("accept");
 		exit(EXIT_FAILURE);
