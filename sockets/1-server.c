@@ -23,7 +23,8 @@ int main(void)
 	int server_fd, new_socket, opt = 1, addrlen = sizeof(address);
 	char client_ip[INET_ADDRSTRLEN];
 
-	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+	server_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (server_fd < 0)
 	{
 		perror("socket failed");
 		exit(EXIT_FAILURE);
@@ -42,12 +43,14 @@ int main(void)
 		perror("bind failed");
 		exit(EXIT_FAILURE);
 	}
-	if (listen(server_fd, 3) < 0) {
+	if (listen(server_fd, 3) < 0)
+	{
 		perror("listen");
 		exit(EXIT_FAILURE);
 	}
 	printf("Server listening on port 12345\n");
-	if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
+	new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
+	if (new_socket < 0)
 	{
 		perror("accept");
 		exit(EXIT_FAILURE);
