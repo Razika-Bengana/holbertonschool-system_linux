@@ -5,10 +5,12 @@
 
 
 /**
- * create_server_socket - program that creates a socket for the server to listen on
+ * create_server_socket - program that creates a socket for the server
+ * to listen on
  *
  * this function sets up a stream socket using the IPv4 protocol;
- * if the socket cannot be created, the program prints an error message and exits
+ * if the socket cannot be created, the program prints an error message
+ * and exits
  *
  * Return: the file descriptor for the newly created socket
  */
@@ -16,6 +18,7 @@
 int create_server_socket(void)
 {
 	int server_fd = socket(AF_INET, SOCK_STREAM, 0);
+
 	if (server_fd == 0)
 	{
 		perror("socket failed");
@@ -40,7 +43,8 @@ int create_server_socket(void)
 void configure_server_socket(int server_fd)
 {
 	int opt = 1;
-	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+		       &opt, sizeof(opt)))
 	{
 		perror("setsockopt");
 		exit(EXIT_FAILURE);
@@ -53,8 +57,8 @@ void configure_server_socket(int server_fd)
  * initialize_address - program that initializes the 'sockaddr_in' structure
  * with settings for the server
  *
- * this function sets the family to IPv4, the address to listen on any interface,
- * and the port to a predefined value;
+ * this function sets the family to IPv4, the address to listen on any
+ * interface, and the port to a predefined value;
  * the port number is converted from host byte order to network byte order
  *
  * @address: a pointer to the 'sockaddr_in' structure to be initialized
@@ -79,7 +83,8 @@ void initialize_address(struct sockaddr_in *address)
  * for incoming connections
  *
  * @server_fd: the file descriptor of the server socket to bind
- * @address: a pointer to the 'sockaddr_in' structure containing the address to bind to
+ * @address: a pointer to the 'sockaddr_in' structure containing the address
+ * 	     to bind to
  *
  * Return: nothing (void)
  */
