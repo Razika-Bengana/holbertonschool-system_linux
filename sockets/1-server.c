@@ -9,8 +9,9 @@
  * upon a successful connection, it retrieves and prints the IP address
  * of the connected client;
  * the server then closes the client socket and terminates;
- * this server demonstrates basic socket programming concepts such as socket creation,
- * binding, listening for connections, and accepting connections
+ * this server demonstrates basic socket programming concepts such as
+ * socket creation, binding, listening for connections, and accepting
+ * connections
  *
  * Return: 0 on successful execution,
  *         or exits with a failure status if any socket operation fails
@@ -18,10 +19,8 @@
 
 int main(void)
 {
-	int server_fd, new_socket;
+	int server_fd, new_socket, opt = 1, addrlen = sizeof(address);
 	struct sockaddr_in address;
-	int opt = 1;
-	int addrlen = sizeof(address);
 	char client_ip[INET_ADDRSTRLEN];
 
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -30,8 +29,8 @@ int main(void)
 		perror("socket failed");
 		exit(EXIT_FAILURE);
 	}
-
-	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR |SO_REUSEPORT,
+		       &opt, sizeof(opt)))
 	{
 		perror("setsockopt");
 		exit(EXIT_FAILURE);
@@ -50,15 +49,14 @@ int main(void)
 		perror("listen");
 		exit(EXIT_FAILURE);
 	}
-
 	printf("Server listening on port 12345\n");
 
-	if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0)
+	if ((new_socket = accept(server_fd, (struct sockaddr *)&address,
+		(socklen_t *)&addrlen)) < 0)
 	{
 		perror("accept");
 		exit(EXIT_FAILURE);
 	}
-
 	inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 	printf("Client connected: %s\n", client_ip);
 
