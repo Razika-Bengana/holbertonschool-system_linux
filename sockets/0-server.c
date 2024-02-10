@@ -43,6 +43,7 @@ int create_server_socket(void)
 void configure_server_socket(int server_fd)
 {
 	int opt = 1;
+
 	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
 		       &opt, sizeof(opt)))
 	{
@@ -84,7 +85,7 @@ void initialize_address(struct sockaddr_in *address)
  *
  * @server_fd: the file descriptor of the server socket to bind
  * @address: a pointer to the 'sockaddr_in' structure containing the address
- * 	     to bind to
+ *	     to bind to
  *
  * Return: nothing (void)
  */
@@ -126,10 +127,12 @@ void start_listening(int server_fd)
 /**
  * main - the entry point
  *
- * this program orchestrates the creation, configuration, and listening of a server socket;
- * it initializes the address for the server, binds the server socket, and starts listening
- * for incoming connections;
- * the server runs indefinitely, pausing for 60 seconds in each iteration of the loop
+ * this program orchestrates the creation, configuration, and listening
+ * of a server socket;
+ * it initializes the address for the server, binds the server socket,
+ * and starts listening for incoming connections;
+ * the server runs indefinitely, pausing for 60 seconds in each iteration
+ * of the loop
  *
  * Return: 0 (success))
  */
@@ -139,6 +142,7 @@ int main(void)
 	struct sockaddr_in address;
 
 	int server_fd = create_server_socket();
+
 	configure_server_socket(server_fd);
 	initialize_address(&address);
 	bind_server_socket(server_fd, &address);
