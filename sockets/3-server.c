@@ -26,6 +26,7 @@ void initialize_server(int *server_fd)
 	struct sockaddr_in address;
 
 	*server_fd = socket(AF_INET, SOCK_STREAM, 0);
+
 	if (*server_fd == -1)
 	{
 		perror("socket failed");
@@ -71,7 +72,10 @@ int accept_connection(int server_fd)
 {
 	struct sockaddr_in client_address;
 	socklen_t client_address_len = sizeof(client_address);
-	int new_socket = accept(server_fd, (struct sockaddr *)&client_address, &client_address_len);
+	char client_ip[INET_ADDRSTRLEN];
+	int new_socket;
+
+	new_socket = accept(server_fd, (struct sockaddr *)&client_address, &client_address_len);
 
 	if (new_socket < 0)
 	{
@@ -79,7 +83,6 @@ int accept_connection(int server_fd)
 		exit(EXIT_FAILURE);
 	}
 
-	char client_ip[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &client_address.sin_addr, client_ip, INET_ADDRSTRLEN);
 	printf("Client connected: %s\n", client_ip);
 	return (new_socket);
@@ -136,11 +139,15 @@ void handle_client(int client_socket)
 int main(void)
 {
 	int server_fd;
+	int client_socket;
+
 	initialize_server(&server_fd);
 
-	int client_socket = accept_connection(server_fd);
+	client_socket = accept_connection(server_fd);
+
 	handle_client(client_socket);
 
 	close(server_fd);
+
 	return (0);
 }
