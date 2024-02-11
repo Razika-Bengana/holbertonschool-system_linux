@@ -78,7 +78,8 @@ int accept_connection(int server_fd)
 	char client_ip[INET_ADDRSTRLEN];
 	int new_socket;
 
-	new_socket = accept(server_fd, (struct sockaddr *)&client_address, &client_address_len);
+	new_socket = accept(server_fd, (struct sockaddr *)&client_address,
+		&client_address_len);
 
 	if (new_socket < 0)
 	{
