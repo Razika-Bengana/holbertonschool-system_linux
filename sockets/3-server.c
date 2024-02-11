@@ -6,17 +6,19 @@
 
 
 /**
- * initialize_server - program that initializes the server by creating a TCP socket,
- * binding it to a specific port and setting it to listen for incoming connections
+ * initialize_server - program that initializes the server by creating
+ * a TCP socket, binding it to a specific port and setting it to listen
+ * for incoming connections
  *
- * this function sets up the server's address to accept connections on any network
- * interface;
- * if socket creation, binding, or listening fails, it prints an error message
- * and exits the program
+ * this function sets up the server's address to accept connections
+ * on any network interface;
+ * if socket creation, binding, or listening fails, it prints an error
+ * message and exits the program
  *
  * @server_fd: a pointer to an integer where the file descriptor of the
  *             created socket will be stored;
- *             his descriptor is used for all subsequent operations on the socket
+ *             his descriptor is used for all subsequent operations on
+ *             the socket
  *
  * Return: nothing (void)
  */
@@ -57,15 +59,16 @@ void initialize_server(int *server_fd)
  * accept_connection - program that accepts an incoming connection request
  * on the listening socket
  *
- * this function retrieves the IP address of the connecting client and prints it;
+ * this function retrieves the IP address of the connecting client and
+ * prints it;
  * it also prints the IP address of the client that just connected
  *
  * @server_fd: the file descriptor of the server socket that is listening
  *             for connections
  *
  * Return: the file descriptor of the newly accepted client socket;
- *         if accepting the client fails, the function prints an error message
- *         and exits the program
+ *         if accepting the client fails, the function prints an error
+ *         message and exits the program
  */
 
 int accept_connection(int server_fd)
@@ -91,16 +94,17 @@ int accept_connection(int server_fd)
 
 
 /**
- * handle_client - program that receives a message from the connected client,
- * prints the message, and then closes the connection with the client
+ * handle_client - program that receives a message from the connected
+ * client, prints the message, and then closes the connection with the client
  *
- * this function is responsible for handling communication with the client after
- * a connection has been established;
- * if receiving a message fails, it prints an error message and exits the program;
+ * this function is responsible for handling communication with the client
+ * after a connection has been established;
+ * if receiving a message fails, it prints an error message and exits
+ * the program;
  * after printing the received message, it closes the client socket
  *
- * @client_socket: the file descriptor of the client socket from which the
- *                 message will be received
+ * @client_socket: the file descriptor of the client socket from which
+ *                 the message will be received
  *
  * Return: nothing (void)
  */
@@ -130,10 +134,11 @@ void handle_client(int client_socket)
  * a connection from a client, handling the client's request, and then
  * cleaning up before exiting;
  * it calls 'initialize_server' to set up the listening socket, accepts
- * a connection from a client through accept_connection, handles the client's
- * message with 'handle_client', and finally closes the server socket
+ * a connection from a client through accept_connection, handles the
+ * client's message with 'handle_client', and finally closes the server
+ * socket
  *
- * @Return: 0 (success)
+ * Return: 0 (success)
  */
 
 int main(void)
