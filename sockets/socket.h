@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 
 
 /* task 0 */
@@ -20,6 +21,12 @@ void start_listening(int sockfd);
 /* task 1 */
 void initialize_address(struct sockaddr_in *address);
 int create_and_setup_server_socket(struct sockaddr_in *address);
+
+
+/* task 2 */
+void parse_arguments(int argc, char *argv[], char **host, int *port);
+int create_socket(void);
+void connect_to_server(int sockfd, const char *host, int port);
 
 
 #endif /* SOCKET_H */
