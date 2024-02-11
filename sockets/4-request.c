@@ -23,6 +23,7 @@ void start_server(int *server_fd)
 	struct sockaddr_in address;
 
 	*server_fd = socket(AF_INET, SOCK_STREAM, 0);
+
 	if (*server_fd == -1)
 	{
 		perror("Socket creation failed");
@@ -66,9 +67,10 @@ void accept_connections(int server_fd)
 {
 	struct sockaddr_in client_address;
 	socklen_t client_address_len = sizeof(client_address);
-	char client_ip[INET_ADDRSTRLEN];
+	char client_ip[INET_ADDRSTRLEN] = 0;
 
 	int client_fd = accept(server_fd, (struct sockaddr *)&client_address, &client_address_len);
+
 	if (client_fd < 0)
 	{
 		perror("Accept failed");
@@ -100,8 +102,11 @@ void accept_connections(int server_fd)
 
 void process_request(int client_fd)
 {
-	char buffer[BUFFER_SIZE];
-	ssize_t bytes_read = recv(client_fd, buffer, BUFFER_SIZE, 0);
+	char buffer[BUFFER_SIZE] = 0;
+	ssize_t bytes_read = 0;
+	char *line_end = 0;
+
+	bytes_read = recv(client_fd, buffer, BUFFER_SIZE, 0);
 
 	if (bytes_read < 0)
 	{
@@ -110,9 +115,11 @@ void process_request(int client_fd)
 	}
 
 	buffer[bytes_read] = '\0';
+
 	printf("Raw request: \"%s\"\n", buffer);
 
-	char *line_end = strstr(buffer, "\r\n");
+	line_end = strstr(buffer, "\r\n");
+
 	if (line_end)
 	{
 		*line_end = '\0';
@@ -138,6 +145,7 @@ void process_request(int client_fd)
 void send_response(int client_fd)
 {
 	char *response = "HTTP/1.1 200 OK\r\n\r\n";
+
 	send(client_fd, response, strlen(response), 0);
 }
 
@@ -156,6 +164,7 @@ void send_response(int client_fd)
 int main(void)
 {
 	int server_fd;
+
 	start_server(&server_fd);
 
 	while(1)
