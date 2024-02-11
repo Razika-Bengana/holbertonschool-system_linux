@@ -30,6 +30,9 @@ void handle_client(int client_socket);
 
 
 /* task 3 */
+void initialize_server(int *server_fd);
+int accept_connection(int server_fd);
+void handle_client(int client_socket);
 
 
 #endif /* SOCKET_H */
