@@ -67,7 +67,7 @@ void accept_connections(int server_fd)
 {
 	struct sockaddr_in client_address;
 	socklen_t client_address_len = sizeof(client_address);
-	char client_ip[INET_ADDRSTRLEN] = 0;
+	char client_ip[INET_ADDRSTRLEN];
 
 	int client_fd = accept(server_fd, (struct sockaddr *)&client_address, &client_address_len);
 
@@ -102,7 +102,7 @@ void accept_connections(int server_fd)
 
 void process_request(int client_fd)
 {
-	char buffer[BUFFER_SIZE] = 0;
+	char buffer[BUFFER_SIZE];
 	ssize_t bytes_read = 0;
 	char *line_end = 0;
 
