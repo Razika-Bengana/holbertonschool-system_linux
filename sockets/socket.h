@@ -1,6 +1,7 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -24,15 +25,23 @@ int create_and_setup_server_socket(struct sockaddr_in *address);
 
 
 /* task 2 */
-void initialize_server(int *server_fd);
-int accept_connection(int server_fd);
-void handle_client(int client_socket);
+void parse_arguments(int argc, char *argv[], char **host, int *port);
+int create_socket(void);
+void connect_to_server(int sockfd, const char *host, int port);
 
 
 /* task 3 */
 void initialize_server(int *server_fd);
 int accept_connection(int server_fd);
 void handle_client(int client_socket);
+
+
+/* task 4 */
+void start_server(int *server_fd);
+void accept_connections(int server_fd);
+void process_request(int client_fd);
+void send_response(int client_fd);
+
 
 
 #endif /* SOCKET_H */
