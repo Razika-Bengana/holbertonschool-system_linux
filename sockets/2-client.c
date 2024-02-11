@@ -4,8 +4,8 @@
  * parse_arguments - program that parses the command-line arguments to extract
  * the host and port number
  *
- * if the number of arguments is incorrect, the function prints the correct usage
- * format and exits the program
+ * if the number of arguments is incorrect, the function prints the correct
+ * usage format and exits the program
  *
  * @argc: the number of command-line arguments
  * @argv: the array of command-line arguments
@@ -99,14 +99,14 @@ void connect_to_server(int sockfd, const char *host, int port)
 /**
  * main - the entry point
  *
- * this program parses command-line arguments to extract the host name and port number,
- * creates a socket, connects to the server at the specified host and port, and then
- * closes the socket;
+ * this program parses command-line arguments to extract the host name and
+ * port number, creates a socket, connects to the server at the specified host
+ * and port, and then closes the socket;
  *
- * this function orchestrates the setup and tear-down process for the client-side of
- * a TCP connection
+ * this function orchestrates the setup and tear-down process for the
+ * client-side of a TCP connection
  *
- * @rgc: the number of command-line arguments
+ * @argc: the number of command-line arguments
  * @argv: the array of command-line arguments
  *
  * Return: 0 (success)
