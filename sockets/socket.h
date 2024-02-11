@@ -24,9 +24,12 @@ int create_and_setup_server_socket(struct sockaddr_in *address);
 
 
 /* task 2 */
-void parse_arguments(int argc, char *argv[], char **host, int *port);
-int create_socket(void);
-void connect_to_server(int sockfd, const char *host, int port);
+void initialize_server(int *server_fd);
+int accept_connection(int server_fd);
+void handle_client(int client_socket);
+
+
+/* task 3 */
 
 
 #endif /* SOCKET_H */
