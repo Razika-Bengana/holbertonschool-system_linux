@@ -79,7 +79,7 @@ int create_and_setup_server_socket(struct sockaddr_in *address)
 /**
  * main - the entry point
  *
- * This program demonstrates setting up a TCP server that listens on
+ * this program demonstrates setting up a TCP server that listens on
  * a predefined port, accepts an incoming connection, retrieves and prints
  * the client's IP address, and then closes the connection
  *
