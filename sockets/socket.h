@@ -37,10 +37,7 @@ void handle_client(int client_socket);
 
 
 /* task 4 */
-void start_server(int *server_fd);
-void accept_connections(int server_fd);
-void process_request(int client_fd);
-void send_response(int client_fd);
+void handle_connection(int client_socket);
 
 
 
